@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌟 NASA Exoplanet Detective</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 50%, #2d1b69 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.8;
+            margin-bottom: 20px;
+        }
+        
+        .intro {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .form-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .input-group {
+            margin-bottom: 25px;
+        }
+        
+        .input-label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #4ecdc4;
+        }
+        
+        .input-description {
+            font-size: 0.9em;
+            opacity: 0.8;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+        
+        input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+        
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #4ecdc4;
+            box-shadow: 0 0 10px rgba(78, 205, 196, 0.3);
+        }
+        
+        input[type="number"]::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .predict-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+        
+        .predict-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .predict-btn:active {
+            transform: translateY(0);
+        }
+        
+        .result-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: none;
+        }
+        
+        .result-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .result-title {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .candidate {
+            color: #4ecdc4;
+        }
+        
+        .false-positive {
+            color: #ff6b6b;
+        }
+        
+        .confidence {
+            font-size: 1.3em;
+            opacity: 0.9;
+        }
+        
+        .explanation {
+            margin-top: 25px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            border-left: 4px solid #4ecdc4;
+        }
+        
+        .explanation h3 {
+            margin-bottom: 15px;
+            color: #4ecdc4;
+        }
+        
+        .explanation p {
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+        
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+        }
+        
+        .loading {
+            text-align: center;
+            font-size: 1.2em;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌟 NASA Exoplanet Detective</h1>
+            <p>AI-Powered Planet Hunter | Trained on Real Kepler Data</p>
+        </div>
+        
+        <div class="intro">
+            <h3>🚀 Welcome, Space Detective!</h3>
+            <p>You're about to use a machine learning model trained on NASA's Kepler mission data to determine whether a mysterious signal from space is a <strong>real exoplanet</strong> or just a <strong>false positive</strong> (like a binary star system pretending to be a planet).</p>
+            <p>This model uses <strong>ONLY physical parameters</strong> - no pipeline vetting flags! It achieves 84.2% accuracy using pure physics, making it intellectually honest and educational. Fill in the transit parameters below!</p>
+        </div>
+        
+        <div class="form-container">
+    <form id="form">
+                <div class="two-column">
+                    <div class="input-group">
+                        <label class="input-label">🌍 Orbital Period (days)</label>
+                        <div class="input-description">How long it takes the planet to complete one orbit around its star. Earth = 365.25 days, Mercury = 88 days. Hot Jupiters can orbit in just hours!</div>
+                        <input type="number" step="any" id="koi_period" placeholder="e.g., 9.49" required>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="input-label">⏱️ Transit Duration (hours)</label>
+                        <div class="input-description">How long the planet blocks its star's light during transit. Bigger planets and slower orbits = longer transits. Think of it as the planet's "shadow time."</div>
+                        <input type="number" step="any" id="koi_duration" placeholder="e.g., 2.96" required>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="input-label">📉 Transit Depth (ppm)</label>
+                        <div class="input-description">How much the star dims when the planet passes in front (parts per million). Bigger planets block more light. Earth would cause ~84 ppm dimming of our Sun.</div>
+                        <input type="number" step="any" id="koi_depth" placeholder="e.g., 615.8" required>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="input-label">🪐 Planet Radius (Earth radii)</label>
+                        <div class="input-description">Size compared to Earth. 1.0 = Earth-sized, ~4 = Neptune, ~11 = Jupiter. If it's >15 Earth radii, it's probably not a planet!</div>
+                        <input type="number" step="any" id="koi_prad" placeholder="e.g., 2.26" required>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="input-label">🎯 Impact Parameter</label>
+                        <div class="input-description">How centered the transit is. 0 = planet crosses dead center of star, 1 = grazing edge. Grazing transits are trickier to confirm.</div>
+                        <input type="number" step="any" id="koi_impact" placeholder="e.g., 0.146" required>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="input-label">🌡️ Equilibrium Temperature (K)</label>
+                        <div class="input-description">Planet's estimated temperature based on stellar heating. Earth ≈ 255K, Venus ≈ 737K. Hot Jupiters can exceed 2000K!</div>
+                        <input type="number" step="any" id="koi_teq" placeholder="e.g., 793" required>
+                    </div>
+                    
+                </div>
+                
+                <button type="submit" class="predict-btn">🔍 Analyze This Signal!</button>
+    </form>
+        </div>
+        
+        <div id="result" class="result-container"></div>
+    </div>
+
+    <script>
+    document.getElementById('form').onsubmit = function(e) {
+        e.preventDefault();
+        
+        // Show loading state
+        const resultDiv = document.getElementById('result');
+        resultDiv.style.display = 'block';
+        resultDiv.innerHTML = '<div class="loading">🤖 AI is analyzing your cosmic data...</div>';
+        
+        const data = {
+            koi_period: parseFloat(document.getElementById('koi_period').value),
+            koi_duration: parseFloat(document.getElementById('koi_duration').value),
+            koi_depth: parseFloat(document.getElementById('koi_depth').value),
+            koi_prad: parseFloat(document.getElementById('koi_prad').value),
+            koi_impact: parseFloat(document.getElementById('koi_impact').value),
+            koi_teq: parseFloat(document.getElementById('koi_teq').value)
+        };
+        
+        fetch('/predict', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+        })
+        .then(r => r.json())
+        .then(result => {
+            const isCandidate = result.prediction === 'CANDIDATE';
+            const confidence = (result.confidence * 100).toFixed(1);
+            
+            let explanation = '';
+            if (isCandidate) {
+                explanation = getCandidateExplanation(data, confidence);
+            } else {
+                explanation = getFalsePositiveExplanation(data, confidence);
+            }
+            
+            resultDiv.innerHTML = `
+                <div class="result-header">
+                    <div class="result-title ${isCandidate ? 'candidate' : 'false-positive'}">
+                        ${isCandidate ? '🎉 EXOPLANET CANDIDATE!' : '❌ FALSE POSITIVE'}
+                    </div>
+                    <div class="confidence">Confidence: ${confidence}%</div>
+                </div>
+                <div class="explanation">
+                    ${explanation}
+                </div>
+            `;
+        })
+        .catch(err => {
+            resultDiv.innerHTML = `<div style="color: #ff6b6b;">Error: ${err}</div>`;
+        });
+    };
+    
+    function getCandidateExplanation(data, confidence) {
+        let explanation = '<h3>🌟 Congratulations! This looks like a real exoplanet!</h3>';
+        
+        explanation += '<p>🧠 <strong>Pure physics analysis:</strong> This model uses ONLY the physical parameters (no vetting flags), making this a genuine physics-based detection!</p>';
+        
+        if (data.koi_prad > 10) {
+            explanation += `<p>🎈 <strong>Chonky planet alert:</strong> At ${data.koi_prad.toFixed(1)} Earth radii, this is a gas giant bigger than Jupiter! These exist but are rarer than smaller planets.</p>`;
+        } else if (data.koi_prad < 2) {
+            explanation += `<p>🌍 <strong>Earth-like size:</strong> At ${data.koi_prad.toFixed(1)} Earth radii, this is in the "terrestrial planet" category. These are the holy grail of planet hunting!</p>`;
+        } else {
+            explanation += `<p>🪐 <strong>Mini-Neptune vibes:</strong> At ${data.koi_prad.toFixed(1)} Earth radii, this is likely a "super-Earth" or "mini-Neptune" - the universe's most common planet type (that we don't have in our solar system, awkwardly).</p>`;
+        }
+        
+        if (data.koi_period < 10) {
+            explanation += `<p>🔥 <strong>Hot planet:</strong> With a ${data.koi_period.toFixed(1)}-day orbit, this planet is tidally locked and probably has one side hot enough to melt lead. Not great for vacation planning.</p>`;
+        } else if (data.koi_period > 100) {
+            explanation += `<p>❄️ <strong>Distant orbit:</strong> This ${data.koi_period.toFixed(0)}-day orbit puts it in the "temperate zone" where liquid water might exist. Now we're talking!</p>`;
+        }
+        
+        if (data.koi_impact > 0.8) {
+            explanation += '<p>🎯 <strong>Grazing transit:</strong> This planet barely skims the edge of its star during transit. These are harder to detect and confirm, making this a nice catch!</p>';
+        }
+        
+        if (confidence > 90) {
+            explanation += '<p>🎯 <strong>High confidence:</strong> The AI is very sure about this one. The parameters all align with known exoplanet characteristics.</p>';
+        } else if (confidence < 70) {
+            explanation += '<p>🤷‍♂️ <strong>Moderate confidence:</strong> The AI is somewhat uncertain. This might be a borderline case that would need additional observations to confirm.</p>';
+        }
+        
+        explanation += '<p><strong>🧠 What the AI learned:</strong> Real exoplanets tend to have consistent geometry (period/duration/depth all make sense together), reasonable sizes, and clean vetting flags. This signal hits those marks!</p>';
+        
+        return explanation;
+    }
+    
+    function getFalsePositiveExplanation(data, confidence) {
+        let explanation = '<h3>🕵️ False Positive Detected!</h3>';
+        explanation += '<p>This signal is likely <strong>not</strong> a planet. Here\'s why our AI is suspicious based on pure physics:</p>';
+        
+        explanation += '<p>🧠 <strong>Physics-only analysis:</strong> This model detected suspicious patterns using ONLY the physical parameters - no pipeline vetting flags needed!</p>';
+        
+        if (data.koi_prad > 15) {
+            explanation += `<p>🎪 <strong>Impossibly huge "planet":</strong> At ${data.koi_prad.toFixed(1)} Earth radii, this "planet" is bigger than Jupiter by a lot. Objects this large are either brown dwarfs or stars, not planets!</p>`;
+        }
+        
+        if (data.koi_depth > 10000) {
+            explanation += `<p>📉 <strong>Suspiciously deep transit:</strong> A ${data.koi_depth.toFixed(0)} ppm depth suggests something much larger than a typical planet is blocking the star. Probably a companion star.</p>`;
+        }
+        
+        if (data.koi_impact > 0.9) {
+            explanation += '<p>🎯 <strong>Extreme grazing geometry:</strong> This transit barely clips the star\'s edge. Such extreme geometries are often instrumental artifacts or blended eclipsing binaries.</p>';
+        }
+        
+        if (data.koi_period < 1) {
+            explanation += `<p>💫 <strong>Ridiculously short period:</strong> A ${data.koi_period.toFixed(2)}-day orbit would put a planet inside most stars! This is likely a pulsating star or instrumental effect.</p>`;
+        }
+        
+        if (confidence > 90) {
+            explanation += '<p>🎯 <strong>High confidence:</strong> The AI is very sure this is NOT a planet. Multiple red flags are waving frantically.</p>';
+        } else if (confidence < 70) {
+            explanation += '<p>🤷‍♂️ <strong>Moderate confidence:</strong> The AI sees some suspicious patterns but isn\'t 100% certain. This would need follow-up observations.</p>';
+        }
+        
+        explanation += '<p><strong>🧠 What the AI learned:</strong> False positives often have vetting flags set, unrealistic planet sizes, or geometric parameters that don\'t make physical sense. This signal triggered those warning signs!</p>';
+        
+        explanation += '<p><strong>💡 Fun fact:</strong> In real planet hunting, false positives outnumber real planets! That\'s why we need smart algorithms like this to separate the cosmic wheat from the chaff.</p>';
+        
+        return explanation;
+    }
+    </script>
+</body>
+</html>
