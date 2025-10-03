@@ -99,7 +99,6 @@ def predict_llm():
         if prediction == "ERROR":
             return jsonify({'error': 'LLM classification failed'}), 500
         
-        print(prediction)
         # For LLM, we don't have a traditional confidence score
         # Instead, we'll indicate high confidence since it achieved 98% accuracy
         confidence = 0.95 if prediction in ["CANDIDATE", "FALSE POSITIVE"] else 0.5
