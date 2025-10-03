@@ -82,17 +82,16 @@ def predict_llm():
     try:
         start_time = time.time()
         data = request.get_json()
-        
+
         # Convert to the format expected by LLM classifier
         query_row = {
-            'koi_period': float(data['koi_period']),
-            'koi_duration': float(data['koi_duration']),
-            'koi_depth': float(data['koi_depth']),
-            'koi_prad': float(data['koi_prad']),
-            'koi_impact': float(data['koi_impact']),
-            'koi_teq': float(data['koi_teq'])
+            'period': float(data['koi_period']),
+            'duration': float(data['koi_duration']),
+            'depth': float(data['koi_depth']),
+            'prad': float(data['koi_prad']),
+            'teq': float(data['koi_teq'])
         }
-        
+
         # Get prediction from LLM classifier
         prediction = llm_classifier.classify(query_row, k=25)
         processing_time = time.time() - start_time
@@ -100,6 +99,7 @@ def predict_llm():
         if prediction == "ERROR":
             return jsonify({'error': 'LLM classification failed'}), 500
         
+        print(prediction)
         # For LLM, we don't have a traditional confidence score
         # Instead, we'll indicate high confidence since it achieved 98% accuracy
         confidence = 0.95 if prediction in ["CANDIDATE", "FALSE POSITIVE"] else 0.5

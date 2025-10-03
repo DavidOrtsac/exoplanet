@@ -30,12 +30,11 @@ class LLMInContextClassifier:
     def _format_row_for_embedding(self, row):
         """Creates a compact, descriptive string from a data row."""
         return (
-            f"period={row['koi_period']:.2f}, "
-            f"duration={row['koi_duration']:.3f}, "
-            f"depth={row['koi_depth']:.1f}, "
-            f"radius={row['koi_prad']:.2f}, "
-            f"impact={row['koi_impact']:.3f}, "
-            f"temp={row['koi_teq']:.0f}"
+            f"period={row['period']:.2f}, "
+            f"duration={row['duration']:.3f}, "
+            f"depth={row['depth']:.1f}, "
+            f"radius={row['prad']:.2f}, "
+            f"temp={row['teq']:.0f}"
         )
 
     def _get_embeddings(self, texts):
@@ -80,10 +79,9 @@ class LLMInContextClassifier:
 
         print("INFO: No cached vector store found. Creating a new one...")
         print("INFO: Loading koi_data.csv...")
-        df = pd.read_csv('data/koi_data.csv', comment='#')
-        df_clean = df[df['koi_pdisposition'].isin(['CANDIDATE', 'FALSE POSITIVE'])].dropna(
-            subset=['koi_period', 'koi_duration', 'koi_depth', 'koi_prad', 'koi_impact', 'koi_teq']
-        )
+        df = pd.read_csv('data/dataset.csv', comment='#')
+        df_clean = df.dropna(subset=['period', 'duration', 'depth', 'prad', 'teq'])
+
         self.original_data = df_clean.to_dict('records')
 
         print(f"INFO: Creating text representations for {len(df_clean)} samples...")
@@ -127,7 +125,7 @@ class LLMInContextClassifier:
         user_prompt = "--- SIMILAR EXAMPLES ---\n"
         for example in similar_examples:
             example_text = self._format_row_for_embedding(example)
-            label = example['koi_pdisposition']
+            label = "FALSE POSITIVE" if example['disposition'] == 0 else "CANDIDATE"
             user_prompt += f"- {example_text} -> {label}\n"
         
         user_prompt += "\n--- QUERY ---\n"

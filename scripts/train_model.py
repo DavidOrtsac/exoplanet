@@ -32,7 +32,7 @@ y_pred = model.predict(X_test_scaled)
 print(f"Accuracy: {accuracy_score(y_test, y_pred):.3f}")
 
 # Save
-with open('model../models/.pkl', 'wb') as f:
+with open('models/model.pkl', 'wb') as f:
     pickle.dump(model, f)
-with open('scaler../models/.pkl', 'wb') as f:
+with open('models/scaler.pkl', 'wb') as f:
     pickle.dump(scaler, f)

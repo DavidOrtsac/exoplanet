@@ -11,7 +11,7 @@ print("TRAINING MODEL WITHOUT VETTING FLAGS")
 print("=" * 50)
 
 # Load data
-df = pd.read_csv('../data/koi_data.csv', comment='#')
+df = pd.read_csv('./data/koi_data.csv', comment='#')
 
 # Select raw features (no vetting flags) and compute engineered features
 features = RAW_FEATURES
@@ -69,9 +69,9 @@ for i, (feature, importance) in enumerate(zip(features, importances), 1):
 print()
 
 # Save the new model
-with open('model_no_flags../models/.pkl', 'wb') as f:
+with open('models/model_no_flags.pkl', 'wb') as f:
     pickle.dump(model, f)
-with open('scaler_no_flags../models/.pkl', 'wb') as f:
+with open('models/scaler_no_flags.pkl', 'wb') as f:
     pickle.dump(scaler, f)
 
 print("Saved model_no_flags.pkl and scaler_no_flags.pkl")
