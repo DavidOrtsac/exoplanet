@@ -1,0 +1,196 @@
+======================================================================
+🧪 TESTING LLM CLASSIFIER ON ALL THREE MISSIONS
+======================================================================
+
+📊 Loading dataset...
+Total samples: 17589
+
+🚀 Mission breakdown:
+  - KEPLER: 9564 samples
+  - TESS: 7703 samples
+  - K2: 322 samples
+
+After removing missing values: 16464 samples
+
+📦 Splitting data (80% train / 20% test)...
+Test set size: 3293 samples
+
+🧪 Test set breakdown by mission:
+  - KEPLER: 1838 samples
+  - TESS: 1391 samples
+  - K2: 64 samples
+
+🧠 Initializing LLM classifier...
+INFO: Loading cached FIXED vector store...
+INFO: FIXED vector store loaded successfully.
+✅ LLM classifier ready!
+
+======================================================================
+🎯 TESTING ACCURACY BY MISSION
+======================================================================
+
+======================================================================
+Testing KEPLER mission...
+======================================================================
+Test samples: 1838
+  - Actual CANDIDATEs: 903
+  - Actual FALSE POSITIVEs: 935
+
+🧪 Testing on 20 random samples (to save API costs)...
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.07it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.07it/s]
+  ✅ K00791.01            | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.16it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.16it/s]
+  ✅ K03787.01            | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  3.27it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  3.27it/s]
+  ✅ K06359.01            | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.58it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.58it/s]
+  ✅ K00597.03            | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  3.26it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  3.26it/s]
+  ✅ K01445.02            | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.95it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.94it/s]
+  ✅ K06061.01            | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.99it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.98it/s]
+  ✅ K06762.01            | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.46it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.46it/s]
+  ✅ K06047.01            | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  3.50it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  3.50it/s]
+  ✅ K08232.01            | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:01<00:00,  1.23s/it]Embedding Batches: 100%|██████████| 1/1 [00:01<00:00,  1.23s/it]
+  ✅ K02250.02            | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.69it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.68it/s]
+  ✅ K05773.01            | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.76it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.76it/s]
+  ✅ K04082.01            | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.30it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.30it/s]
+  ✅ K06355.02            | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.39it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.39it/s]
+  ✅ K01764.01            | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.32it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.32it/s]
+  ✅ K03525.01            | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.87it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.87it/s]
+  ✅ K04132.01            | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  3.02it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  3.01it/s]
+  ✅ K02198.01            | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.25it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.25it/s]
+  ✅ K07605.01            | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.66it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.65it/s]
+  ✅ K02489.01            | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.77it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.77it/s]
+  ❌ K03491.01            | Actual: FALSE POSITIVE  | Predicted: CANDIDATE      
+
+📊 KEPLER Accuracy: 19/20 = 95.0%
+
+======================================================================
+Testing TESS mission...
+======================================================================
+Test samples: 1391
+  - Actual CANDIDATEs: 1201
+  - Actual FALSE POSITIVEs: 190
+
+🧪 Testing on 20 random samples (to save API costs)...
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  3.13it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  3.12it/s]
+  ✅ TOI-509.01           | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.16it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.15it/s]
+  ✅ TOI-2354.01          | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.84it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.84it/s]
+  ✅ TOI-5624.01          | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  3.00it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  3.00it/s]
+  ✅ TOI-5542.01          | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.71it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.71it/s]
+  ✅ TOI-837.01           | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.47it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.46it/s]
+  ✅ TOI-2141.01          | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.89it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.89it/s]
+  ✅ TOI-1619.01          | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.93it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.92it/s]
+  ✅ TOI-5698.01          | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.91it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.91it/s]
+  ✅ TOI-3500.01          | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.70it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.69it/s]
+  ✅ TOI-1930.01          | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.42it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.41it/s]
+  ✅ TOI-2093.01          | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  3.03it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  3.03it/s]
+  ✅ TOI-451.03           | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.19it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.19it/s]
+  ✅ TOI-3830.01          | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.04it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.04it/s]
+  ✅ TOI-5953.01          | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.34it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.34it/s]
+  ✅ TOI-6934.01          | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.08it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.08it/s]
+  ✅ TOI-6581.01          | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.25it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.25it/s]
+  ✅ TOI-6100.01          | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.41it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.41it/s]
+  ✅ TOI-4530.01          | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  3.01it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  3.00it/s]
+  ✅ TOI-6522.01          | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.85it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.85it/s]
+  ✅ TOI-3605.01          | Actual: CANDIDATE       | Predicted: CANDIDATE      
+
+📊 TESS Accuracy: 20/20 = 100.0%
+
+======================================================================
+Testing K2 mission...
+======================================================================
+Test samples: 64
+  - Actual CANDIDATEs: 64
+  - Actual FALSE POSITIVEs: 0
+
+🧪 Testing on 20 random samples (to save API costs)...
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.85it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.85it/s]
+  ✅ EPIC 201274010.01    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.42it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.41it/s]
+  ✅ K2-241 b             | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.97it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.97it/s]
+  ✅ EPIC 228846243.01    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.43it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.43it/s]
+  ✅ EPIC 211315836.01    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.36it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.36it/s]
+  ✅ K2-181 b             | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.88it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.88it/s]
+  ✅ EPIC 201352100.01    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.59it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.59it/s]
+  ✅ K2-31 b              | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.44it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.44it/s]
+  ✅ K2-45 b              | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.82it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.82it/s]
+  ✅ K2-419 A b           | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.76it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.76it/s]
+  ✅ K2-260 b             | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.35it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.35it/s]
+  ✅ EPIC 229103251.01    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.37it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.37it/s]
+  ✅ HAT-P-54 b           | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.60it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.60it/s]
+  ✅ K2-321 b             | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.69it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.69it/s]
+  ✅ EPIC 211724246.01    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.11it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.11it/s]
+  ✅ EPIC 201390927.01    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.64it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.64it/s]
+  ✅ K2-178 b             | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.89it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.89it/s]
+  ✅ K2-167 b             | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:01<00:00,  1.42s/it]Embedding Batches: 100%|██████████| 1/1 [00:01<00:00,  1.42s/it]
+  ✅ GJ 9827 b            | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:01<00:00,  1.17s/it]Embedding Batches: 100%|██████████| 1/1 [00:01<00:00,  1.17s/it]
+  ✅ EPIC 201392505.01    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.69it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.69it/s]
+  ✅ HD 80653 b           | Actual: CANDIDATE       | Predicted: CANDIDATE      
+
+📊 K2 Accuracy: 20/20 = 100.0%
+
+======================================================================
+📊 OVERALL SUMMARY
+======================================================================
+KEPLER   | Tested:  20 | Correct:  19 | Accuracy:  95.0%
+TESS     | Tested:  20 | Correct:  20 | Accuracy: 100.0%
+K2       | Tested:  20 | Correct:  20 | Accuracy: 100.0%
+
+🎯 COMBINED ACCURACY: 59/60 = 98.3%
+
+======================================================================
+✅ Testing complete!
+======================================================================

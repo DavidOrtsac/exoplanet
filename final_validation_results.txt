@@ -1,0 +1,566 @@
+================================================================================
+🚀 INITIATING FINAL VALIDATION TEST FOR NASA SPACE APPS 🚀
+================================================================================
+
+[1/5] Loading environment and initializing LLM Classifier...
+INFO: Loading cached FIXED vector store...
+INFO: FIXED vector store loaded successfully.
+✅ LLM Classifier initialized successfully.
+
+[2/5] Performing canonical 80/20 split to isolate held-out test data...
+✅ Held-out test set isolated: 3293 samples.
+
+[3/5] Selecting the 264-sample definitive test cohort...
+✅ Test cohort selected:
+  - 100 Kepler samples
+  - 100 TESS samples
+  - 64 K2 samples (all available)
+
+[4/5] Running predictions on the 264 unseen exoplanets...
+(This will take a few minutes and use OpenAI API credits)
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:01<00:00,  1.89s/it]Embedding Batches: 100%|██████████| 1/1 [00:01<00:00,  1.89s/it]
+  ✅ K00791.01            | Mission: kepler  | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.84it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.84it/s]
+  ✅ K03787.01            | Mission: kepler  | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.00it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.00it/s]
+  ✅ K06359.01            | Mission: kepler  | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.90it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.90it/s]
+  ✅ K00597.03            | Mission: kepler  | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.23it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.22it/s]
+  ✅ K01445.02            | Mission: kepler  | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.19it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.19it/s]
+  ✅ K06061.01            | Mission: kepler  | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.03it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.03it/s]
+  ✅ K06762.01            | Mission: kepler  | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.88it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.88it/s]
+  ✅ K06047.01            | Mission: kepler  | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:01<00:00,  1.06s/it]Embedding Batches: 100%|██████████| 1/1 [00:01<00:00,  1.06s/it]
+  ✅ K08232.01            | Mission: kepler  | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.73it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.72it/s]
+  ✅ K02250.02            | Mission: kepler  | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.59it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.59it/s]
+  ✅ K05773.01            | Mission: kepler  | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.18it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.18it/s]
+  ✅ K04082.01            | Mission: kepler  | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.72it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.72it/s]
+  ✅ K06355.02            | Mission: kepler  | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.58it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.58it/s]
+  ✅ K01764.01            | Mission: kepler  | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.96it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.96it/s]
+  ✅ K03525.01            | Mission: kepler  | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.43it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.43it/s]
+  ✅ K04132.01            | Mission: kepler  | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.31it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.31it/s]
+  ✅ K02198.01            | Mission: kepler  | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.51it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.51it/s]
+  ✅ K07605.01            | Mission: kepler  | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.87it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.87it/s]
+  ✅ K02489.01            | Mission: kepler  | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:01<00:00,  1.15s/it]Embedding Batches: 100%|██████████| 1/1 [00:01<00:00,  1.15s/it]
+  ❌ K03491.01            | Mission: kepler  | Actual: FALSE POSITIVE  | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.80it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.80it/s]
+  ✅ K08218.01            | Mission: kepler  | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.59it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.59it/s]
+  ✅ K02237.01            | Mission: kepler  | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.41it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.41it/s]
+  ✅ K00202.01            | Mission: kepler  | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.75it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.75it/s]
+  ✅ K03323.01            | Mission: kepler  | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.70it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.70it/s]
+  ✅ K00041.02            | Mission: kepler  | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.23it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.23it/s]
+  ✅ K02698.01            | Mission: kepler  | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.03it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.03it/s]
+  ✅ K01777.01            | Mission: kepler  | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.52it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.52it/s]
+  ✅ K04131.01            | Mission: kepler  | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.25it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.25it/s]
+  ✅ K01957.02            | Mission: kepler  | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.95it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.95it/s]
+  ✅ K00898.01            | Mission: kepler  | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.27it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.27it/s]
+  ✅ K04502.01            | Mission: kepler  | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.60it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.59it/s]
+  ✅ K03726.01            | Mission: kepler  | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.53it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.52it/s]
+  ✅ K01599.01            | Mission: kepler  | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:01<00:00,  1.13s/it]Embedding Batches: 100%|██████████| 1/1 [00:01<00:00,  1.13s/it]
+  ✅ K04637.01            | Mission: kepler  | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.50it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.50it/s]
+  ✅ K01236.04            | Mission: kepler  | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.32it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.32it/s]
+  ✅ K02473.01            | Mission: kepler  | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.80it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.80it/s]
+  ✅ K00850.01            | Mission: kepler  | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.27it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.26it/s]
+  ✅ K06283.01            | Mission: kepler  | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.48it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.48it/s]
+  ✅ K08203.01            | Mission: kepler  | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.61it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.61it/s]
+  ✅ K00475.02            | Mission: kepler  | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.52it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.52it/s]
+  ✅ K03945.01            | Mission: kepler  | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:01<00:00,  1.57s/it]Embedding Batches: 100%|██████████| 1/1 [00:01<00:00,  1.57s/it]
+  ✅ K03175.01            | Mission: kepler  | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  3.16it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  3.15it/s]
+  ✅ K03630.01            | Mission: kepler  | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.11it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.11it/s]
+  ✅ K01490.01            | Mission: kepler  | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.22it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.22it/s]
+  ✅ K04798.01            | Mission: kepler  | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.48it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.48it/s]
+  ✅ K06355.01            | Mission: kepler  | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.82it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.81it/s]
+  ✅ K02677.01            | Mission: kepler  | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.41it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.41it/s]
+  ❌ K05446.01            | Mission: kepler  | Actual: CANDIDATE       | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.44it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.44it/s]
+  ✅ K05573.01            | Mission: kepler  | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.75it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.75it/s]
+  ✅ K04107.01            | Mission: kepler  | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.66it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.66it/s]
+  ✅ K07521.02            | Mission: kepler  | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.61it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.60it/s]
+  ✅ K06361.01            | Mission: kepler  | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  3.00it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  3.00it/s]
+  ✅ K07399.01            | Mission: kepler  | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.82it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.81it/s]
+  ✅ K05329.01            | Mission: kepler  | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.54it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.54it/s]
+  ✅ K01451.01            | Mission: kepler  | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.17it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.17it/s]
+  ✅ K01214.01            | Mission: kepler  | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.25it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.25it/s]
+  ✅ K05436.01            | Mission: kepler  | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.92it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.92it/s]
+  ✅ K03017.01            | Mission: kepler  | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.11it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.11it/s]
+  ✅ K01567.04            | Mission: kepler  | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.66it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.66it/s]
+  ✅ K08051.01            | Mission: kepler  | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.63it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.63it/s]
+  ✅ K02787.01            | Mission: kepler  | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.25it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.25it/s]
+  ✅ K02220.05            | Mission: kepler  | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.62it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.62it/s]
+  ✅ K06067.01            | Mission: kepler  | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.87it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.87it/s]
+  ✅ K06089.01            | Mission: kepler  | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.94it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.94it/s]
+  ✅ K03398.02            | Mission: kepler  | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.63it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.63it/s]
+  ✅ K03111.02            | Mission: kepler  | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.58it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.58it/s]
+  ✅ K02362.02            | Mission: kepler  | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.61it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.61it/s]
+  ✅ K00440.02            | Mission: kepler  | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.69it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.69it/s]
+  ✅ K06323.01            | Mission: kepler  | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.64it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.64it/s]
+  ✅ K01427.01            | Mission: kepler  | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.09it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.09it/s]
+  ✅ K06199.01            | Mission: kepler  | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.42it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.42it/s]
+  ✅ K04954.01            | Mission: kepler  | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.26it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.26it/s]
+  ✅ K04706.01            | Mission: kepler  | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.89it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.89it/s]
+  ✅ K05798.01            | Mission: kepler  | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.48it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.48it/s]
+  ✅ K02339.01            | Mission: kepler  | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.67it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.67it/s]
+  ✅ K00732.01            | Mission: kepler  | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.33it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.32it/s]
+  ✅ K07631.01            | Mission: kepler  | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.98it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.98it/s]
+  ✅ K00806.03            | Mission: kepler  | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.97it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.97it/s]
+  ✅ K00808.01            | Mission: kepler  | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.60it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.59it/s]
+  ✅ K08081.01            | Mission: kepler  | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.51it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.51it/s]
+  ✅ K06008.01            | Mission: kepler  | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.69it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.69it/s]
+  ✅ K07522.01            | Mission: kepler  | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.52it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.52it/s]
+  ❌ K02691.01            | Mission: kepler  | Actual: CANDIDATE       | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.73it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.73it/s]
+  ✅ K03425.03            | Mission: kepler  | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.30it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.30it/s]
+  ✅ K04019.01            | Mission: kepler  | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.18it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.18it/s]
+  ✅ K01258.02            | Mission: kepler  | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.88it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.88it/s]
+  ✅ K00984.01            | Mission: kepler  | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.52it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.52it/s]
+  ✅ K00224.01            | Mission: kepler  | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.46it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.46it/s]
+  ✅ K01248.01            | Mission: kepler  | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.00it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.00it/s]
+  ✅ K04325.01            | Mission: kepler  | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.23it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.23it/s]
+  ✅ K02809.01            | Mission: kepler  | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.77it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.77it/s]
+  ✅ K06342.01            | Mission: kepler  | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.45it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.45it/s]
+  ✅ K07761.01            | Mission: kepler  | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.74it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.74it/s]
+  ✅ K06782.01            | Mission: kepler  | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.41it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.41it/s]
+  ✅ K05672.01            | Mission: kepler  | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.66it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.66it/s]
+  ✅ K01808.01            | Mission: kepler  | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.97it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.97it/s]
+  ✅ K05870.01            | Mission: kepler  | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.78it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.78it/s]
+  ✅ K01423.01            | Mission: kepler  | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.68it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.68it/s]
+  ✅ K00853.01            | Mission: kepler  | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.46it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.45it/s]
+  ❌ K02671.01            | Mission: kepler  | Actual: CANDIDATE       | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.94it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.94it/s]
+  ✅ TOI-509.01           | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.51it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.51it/s]
+  ✅ TOI-2354.01          | Mission: tess    | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.30it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.30it/s]
+  ✅ TOI-5624.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.57it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.57it/s]
+  ✅ TOI-5542.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.02it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.02it/s]
+  ✅ TOI-837.01           | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.42it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.42it/s]
+  ✅ TOI-2141.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.13it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.13it/s]
+  ✅ TOI-1619.01          | Mission: tess    | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.78it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.78it/s]
+  ✅ TOI-5698.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.64it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.63it/s]
+  ✅ TOI-3500.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.80it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.80it/s]
+  ✅ TOI-1930.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.25it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.25it/s]
+  ✅ TOI-2093.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.17it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.17it/s]
+  ✅ TOI-451.03           | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.40it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.40it/s]
+  ✅ TOI-3830.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.79it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.79it/s]
+  ✅ TOI-5953.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.82it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.82it/s]
+  ✅ TOI-6934.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.85it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.85it/s]
+  ✅ TOI-6581.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.62it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.62it/s]
+  ✅ TOI-6100.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.53it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.53it/s]
+  ❌ TOI-4530.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.74it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.74it/s]
+  ✅ TOI-6522.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.68it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.68it/s]
+  ✅ TOI-3605.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.09it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.09it/s]
+  ✅ TOI-4417.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.30it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.30it/s]
+  ✅ TOI-6379.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.62it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.62it/s]
+  ✅ TOI-7269.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.45it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.45it/s]
+  ✅ TOI-5685.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.40it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.40it/s]
+  ✅ TOI-188.01           | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:01<00:00,  1.46s/it]Embedding Batches: 100%|██████████| 1/1 [00:01<00:00,  1.46s/it]
+  ✅ TOI-1840.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.62it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.61it/s]
+  ✅ TOI-2877.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.55it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.55it/s]
+  ✅ TOI-2525.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.57it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.57it/s]
+  ✅ TOI-2122.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.60it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.60it/s]
+  ✅ TOI-4875.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.45it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.45it/s]
+  ✅ TOI-1233.02          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.55it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.55it/s]
+  ✅ TOI-2373.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.99it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.99it/s]
+  ✅ TOI-5107.01          | Mission: tess    | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.48it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.48it/s]
+  ✅ TOI-5384.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.27it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.27it/s]
+  ❌ TOI-5205.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.34it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.33it/s]
+  ✅ TOI-5399.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.67it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.67it/s]
+  ✅ TOI-4748.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.27it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.27it/s]
+  ✅ TOI-6032.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.12it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.12it/s]
+  ✅ TOI-5487.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.47it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.47it/s]
+  ✅ TOI-6962.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.62it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.62it/s]
+  ✅ TOI-1225.02          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.37it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.37it/s]
+  ❌ TOI-5538.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.60it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.60it/s]
+  ✅ TOI-3906.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.71it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.71it/s]
+  ✅ TOI-4543.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.48it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.48it/s]
+  ✅ TOI-294.01           | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.19it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.19it/s]
+  ✅ TOI-6710.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.35it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.35it/s]
+  ✅ TOI-2059.01          | Mission: tess    | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.58it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.58it/s]
+  ❌ TOI-2228.01          | Mission: tess    | Actual: FALSE POSITIVE  | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.68it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.68it/s]
+  ✅ TOI-4831.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.93it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.92it/s]
+  ✅ TOI-6832.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.09it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.09it/s]
+  ✅ TOI-3673.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.46it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.45it/s]
+  ✅ TOI-6320.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.64it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.64it/s]
+  ✅ TOI-737.01           | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.49it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.49it/s]
+  ✅ TOI-990.01           | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:02<00:00,  3.00s/it]Embedding Batches: 100%|██████████| 1/1 [00:02<00:00,  3.00s/it]
+  ✅ TOI-5256.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.24it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.24it/s]
+  ✅ TOI-213.02           | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.49it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.49it/s]
+  ✅ TOI-209.01           | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.98it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.98it/s]
+  ✅ TOI-5200.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.34it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.34it/s]
+  ✅ TOI-6858.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:01<00:00,  1.40s/it]Embedding Batches: 100%|██████████| 1/1 [00:01<00:00,  1.40s/it]
+  ✅ TOI-3611.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  3.01it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  3.01it/s]
+  ✅ TOI-175.01           | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.64it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.63it/s]
+  ✅ TOI-6768.01          | Mission: tess    | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.45it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.45it/s]
+  ✅ TOI-2011.02          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.93it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.92it/s]
+  ✅ TOI-4263.01          | Mission: tess    | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.73it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.72it/s]
+  ✅ TOI-6472.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.89it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.89it/s]
+  ✅ TOI-6240.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.91it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.91it/s]
+  ✅ TOI-492.01           | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.65it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.65it/s]
+  ✅ TOI-987.01           | Mission: tess    | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.22it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.22it/s]
+  ✅ TOI-3616.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.00it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.99it/s]
+  ✅ TOI-5611.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.31it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.30it/s]
+  ✅ TOI-2491.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.98it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.98it/s]
+  ✅ TOI-4420.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.49it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.49it/s]
+  ✅ TOI-5112.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.53it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.53it/s]
+  ✅ TOI-376.01           | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.33it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.33it/s]
+  ✅ TOI-6031.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.24it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.24it/s]
+  ✅ TOI-6133.01          | Mission: tess    | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.89it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.89it/s]
+  ✅ TOI-2440.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.46it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.46it/s]
+  ✅ TOI-4870.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.46it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.46it/s]
+  ✅ TOI-3192.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.46it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.46it/s]
+  ✅ TOI-3723.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.49it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.49it/s]
+  ✅ TOI-173.02           | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.73it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.73it/s]
+  ✅ TOI-5539.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.27it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.27it/s]
+  ✅ TOI-4592.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.37it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.37it/s]
+  ✅ TOI-4087.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.71it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.71it/s]
+  ✅ TOI-2701.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.32it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.32it/s]
+  ✅ TOI-7076.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.75it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.74it/s]
+  ✅ TOI-3851.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.10it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.10it/s]
+  ✅ TOI-3315.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.66it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.66it/s]
+  ✅ TOI-5088.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.73it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.72it/s]
+  ❌ TOI-3468.01          | Mission: tess    | Actual: FALSE POSITIVE  | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.28it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.28it/s]
+  ✅ TOI-5177.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.53it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.53it/s]
+  ✅ TOI-5242.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.94it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.93it/s]
+  ✅ TOI-5479.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:01<00:00,  1.59s/it]Embedding Batches: 100%|██████████| 1/1 [00:01<00:00,  1.59s/it]
+  ✅ TOI-2572.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.48it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.48it/s]
+  ✅ TOI-3914.01          | Mission: tess    | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.31it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.31it/s]
+  ✅ TOI-1270.01          | Mission: tess    | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.61it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.61it/s]
+  ✅ TOI-6382.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.54it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.54it/s]
+  ✅ TOI-7193.01          | Mission: tess    | Actual: FALSE POSITIVE  | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.54it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.54it/s]
+  ✅ TOI-1960.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.69it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.69it/s]
+  ✅ TOI-4446.01          | Mission: tess    | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.70it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.70it/s]
+  ✅ EPIC 201274010.01    | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.33it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.33it/s]
+  ✅ K2-241 b             | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.83it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.83it/s]
+  ✅ EPIC 228846243.01    | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.62it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.62it/s]
+  ✅ EPIC 211315836.01    | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.15it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.15it/s]
+  ✅ K2-181 b             | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.39it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.39it/s]
+  ✅ EPIC 201352100.01    | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.76it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.76it/s]
+  ✅ K2-31 b              | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.90it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.90it/s]
+  ✅ K2-45 b              | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.85it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.85it/s]
+  ✅ K2-419 A b           | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.18it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.18it/s]
+  ✅ K2-260 b             | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.39it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.39it/s]
+  ✅ EPIC 229103251.01    | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.72it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.72it/s]
+  ✅ HAT-P-54 b           | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.56it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.55it/s]
+  ✅ K2-321 b             | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  3.06it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  3.06it/s]
+  ✅ EPIC 211724246.01    | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.02it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.02it/s]
+  ✅ EPIC 201390927.01    | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.68it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.68it/s]
+  ✅ K2-178 b             | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.62it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.62it/s]
+  ✅ K2-167 b             | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.72it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.72it/s]
+  ✅ GJ 9827 b            | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.99it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.98it/s]
+  ✅ EPIC 201392505.01    | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.55it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.55it/s]
+  ✅ HD 80653 b           | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  3.06it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  3.06it/s]
+  ✅ K2-158 c             | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.81it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.81it/s]
+  ✅ TRAPPIST-1 e         | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.03it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.03it/s]
+  ✅ K2-28 b              | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.19it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.19it/s]
+  ✅ K2-266 d             | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.60it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.60it/s]
+  ✅ K2-285 c             | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.79it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.79it/s]
+  ✅ K2-180 b             | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.90it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.90it/s]
+  ❌ K2-7 b               | Mission: k2      | Actual: CANDIDATE       | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.36it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.36it/s]
+  ❌ K2-271 b             | Mission: k2      | Actual: CANDIDATE       | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.44it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.44it/s]
+  ✅ K2-29 b              | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.87it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.87it/s]
+  ✅ K2-321 b             | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.73it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.73it/s]
+  ✅ K2-291 b             | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.72it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.72it/s]
+  ✅ HD 89345 b           | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.60it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.60it/s]
+  ✅ K2-224 c             | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.08it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.08it/s]
+  ✅ K2-182 b             | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.55it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.55it/s]
+  ✅ HIP 41378 b          | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.72it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.72it/s]
+  ✅ K2-223 b             | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.70it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.70it/s]
+  ✅ WASP-47 b            | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.61it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.61it/s]
+  ✅ K2-133 d             | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.61it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.60it/s]
+  ✅ TRAPPIST-1 f         | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.20it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.20it/s]
+  ✅ K2-250 b             | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.72it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.72it/s]
+  ✅ K2-153 b             | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.70it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.70it/s]
+  ✅ K2-295 b             | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.20it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.20it/s]
+  ❌ K2-239 b             | Mission: k2      | Actual: CANDIDATE       | Predicted: FALSE POSITIVE 
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.53it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.53it/s]
+  ✅ EPIC 205947161.01    | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.94it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.94it/s]
+  ✅ GJ 9827 b            | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.55it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.55it/s]
+  ✅ EPIC 211393988.01    | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.51it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.51it/s]
+  ✅ K2-43 b              | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:01<00:00,  1.06s/it]Embedding Batches: 100%|██████████| 1/1 [00:01<00:00,  1.06s/it]
+  ✅ K2-117 b             | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.72it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.72it/s]
+  ✅ EPIC 220228500.01    | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.60it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.60it/s]
+  ✅ EPIC 220674823 c     | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.19it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.19it/s]
+  ✅ K2-165 d             | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.03it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.03it/s]
+  ✅ HATS-36 b            | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.31it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.31it/s]
+  ✅ EPIC 212737443 c     | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.79it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.79it/s]
+  ✅ K2-182 b             | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.90it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.89it/s]
+  ✅ EPIC 210463428.01    | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.19it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.18it/s]
+  ✅ EPIC 228964773.01    | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.79it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.79it/s]
+  ✅ K2-254 b             | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.51it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.50it/s]
+  ✅ WASP-28 b            | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.84it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.84it/s]
+  ✅ K2-230 b             | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.22it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.22it/s]
+  ✅ EPIC 212737443 b     | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.91it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.91it/s]
+  ✅ EPIC 228758948.01    | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.57it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.57it/s]
+  ✅ EPIC 245944983.01    | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.47it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  2.47it/s]
+  ✅ K2-147 b             | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+Embedding Batches:   0%|          | 0/1 [00:00<?, ?it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.81it/s]Embedding Batches: 100%|██████████| 1/1 [00:00<00:00,  1.81it/s]
+  ✅ GJ 9827 d            | Mission: k2      | Actual: CANDIDATE       | Predicted: CANDIDATE      
+
+✅ Predictions complete. Total time: 386.89 seconds.
+
+[5/5] Generating Final Accuracy Report...
+================================================================================
+
+🎯 OVERALL ACCURACY: 252/264 = 95.45% 🎯
+================================================================================
+
+📊 ACCURACY BREAKDOWN BY MISSION:
+  - KEPLER : 96/100 correct	(96.00%)
+  - TESS   : 95/100 correct	(95.00%)
+  - K2     : 61/64 correct	(95.31%)
+
+
+================================================================================
+🔬 FINAL VALIDATION TEST COMPLETE 🔬
+================================================================================
