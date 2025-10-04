@@ -109,7 +109,9 @@ export async function loadTESSData() {
 
 export async function loadDatasetData() {
   try {
-    const response = await fetch("http://localhost:5002/api/data/dataset");
+    const response = await fetch("http://localhost:5002/data/dataset", {
+      credentials: 'include',
+    });
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);

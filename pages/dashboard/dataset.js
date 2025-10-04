@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import Head from "next/head";
 import DashboardLayout from "../../components/DashboardLayout";
 import { loadDatasetData } from "../../utils/dataLoader";
+import { saveDataset, uploadUserData } from "../../utils/datasetActions";
 import styles from "../../styles/Dataset.module.css";
 
 const measureText = (text, font) => {
@@ -142,6 +143,33 @@ export default function Dataset() {
     }
   };
 
+  const handleUploadUserData = async (file) => {
+    setLoading(true);
+    try {
+        const datasetData = await uploadUserData(file);
+        setData(datasetData);
+      } catch (error) {
+        console.error("Error loading data:", error);
+      } finally {
+        setLoading(false);
+      }
+  };
+
+
+
+  const handleSaveDataset = async () => {
+    setLoading(true);
+    try {
+      await saveDataset(data);
+   
+    } catch (error) {
+      console.error("Error saving dataset:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
   return (
     <>
       <Head>
@@ -159,9 +187,18 @@ export default function Dataset() {
           </h1>
 
           <div style={{display: "flex", justifyContent: "space-between", marginBottom: "2rem"}}>
-            <button className={styles.downloadButton}>Upload User Data to Dataset</button>
+            <button onClick={() => {
+              const fileInput = document.createElement('input');
+              fileInput.type = 'file';
+              fileInput.accept = '.csv';
+              fileInput.onchange = (e) => {
+                const file = e.target.files[0];
+                handleUploadUserData(file);
+              };
+              fileInput.click();
+            }} className={styles.downloadButton}>Upload User Data to Dataset</button>
             
-            <button className={styles.downloadButton}>Save Dataset</button>
+            <button onClick={handleSaveDataset} className={styles.downloadButton}>Save Dataset</button>
           </div>
 
           <div className={styles.tableContainer}>
