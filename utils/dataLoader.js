@@ -84,18 +84,18 @@ export async function loadTESSData() {
       .map((line) => {
         const values = line.split(",");
         return {
-          planetId: values[1] || "N/A", // toi
-          discoveryDate: values[25] ? values[25].split(" ")[0] : "N/A", // toi_created (date part only)
-          orbitalPeriod: values[13] ? parseFloat(values[13]).toFixed(2) : "N/A", // pl_orbper
-          planetRadius: values[16] ? parseFloat(values[16]).toFixed(2) : "N/A", // pl_rade
-          stellarMass: values[24] ? parseFloat(values[24]).toFixed(2) : "N/A", // st_rad (using as proxy for stellar mass)
-          equilibriumTemp: values[18]
-            ? parseFloat(values[18]).toFixed(0)
-            : "N/A", // pl_eqt
-          status: values[6] || "Unknown", // tfopwg_disp
-          ticId: values[3] || "N/A", // tid
-          stellarTemp: values[21] ? parseFloat(values[21]).toFixed(0) : "N/A", // st_teff
-          stellarRadius: values[24] ? parseFloat(values[24]).toFixed(2) : "N/A", // st_rad
+          planetId: values[1] || "N/A", // toi (index 1)
+          discoveryDate: values[25] ? values[25].split(" ")[0] : "N/A", // toi_created (index 25)
+          orbitalPeriod: values[14] ? parseFloat(values[14]).toFixed(2) : "N/A", // pl_orbper (index 14)
+          planetRadius: values[17] ? parseFloat(values[17]).toFixed(2) : "N/A", // pl_rade (index 17)
+          stellarMass: values[24] ? parseFloat(values[24]).toFixed(2) : "N/A", // st_rad (index 24)
+          equilibriumTemp: values[19]
+            ? parseFloat(values[19]).toFixed(0)
+            : "N/A", // pl_eqt (index 19)
+          status: values[6] || "Unknown", // tfopwg_disp (index 6)
+          ticId: values[3] || "N/A", // tid (index 3)
+          stellarTemp: values[22] ? parseFloat(values[22]).toFixed(0) : "N/A", // st_teff (index 22)
+          stellarRadius: values[24] ? parseFloat(values[24]).toFixed(2) : "N/A", // st_rad (index 24)
         };
       })
       .filter((item) => item.planetId !== "N/A" && item.planetId !== "");
