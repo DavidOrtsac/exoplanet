@@ -1,0 +1,96 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+#__next {
+  height: 100%;
+}
+
+.App {
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+  min-height: 100vh;
+  width: 100vw;
+}
+
+.App-header {
+  background: transparent;
+  padding: 20px;
+  color: white;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  position: relative;
+  z-index: 10;
+}
+
+h1 {
+  margin: 0;
+  font-size: 4rem;
+  font-weight: bold;
+  z-index: 10;
+  position: relative;
+}
+
+/* Stars background */
+.stars {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.star {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  animation: twinkle 2s infinite;
+  z-index: 1;
+}
+
+.star:nth-child(odd) {
+  background: #b0e0e6;
+}
+
+.star:nth-child(3n) {
+  animation-delay: 0.5s;
+}
+
+.star:nth-child(5n) {
+  animation-delay: 1s;
+}
+
+.star:nth-child(7n) {
+  animation-delay: 1.5s;
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.05);
+  }
+}
