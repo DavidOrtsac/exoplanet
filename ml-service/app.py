@@ -77,8 +77,11 @@ def predict():
             'teq': float(data['teq'])
         }
 
+        session_id = session['session_id']
+        user_vector_store_path = session.get('user_vector_store_path') if session_id else None
+
         # Get prediction from LLM classifier
-        prediction = llm_classifier.classify(query_row, k=25)
+        prediction = llm_in_context_classifier.classify(query_row,vector_store_path=user_vector_store_path, k=25)
         processing_time = time.time() - start_time
         
         if prediction == "ERROR":

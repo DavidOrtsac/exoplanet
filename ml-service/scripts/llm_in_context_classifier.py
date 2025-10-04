@@ -100,52 +100,103 @@ class LLMInContextClassifier:
             data = pickle.load(f)
             return data['vector_store_index'], data['original_data']
 
-    def _find_similar_examples(self, query_row, vector_store_index, original_data, k=25):
-        # ... (this method remains mostly the same, but receives the index and data)
+    def _find_similar_examples(self, query_row, vector_store_index, original_data, k=25, exclude_ids=None):
+        """Finds the k most similar examples from a given vector store, excluding specified IDs."""
         query_text = self._format_row_for_embedding(query_row)
         query_embedding = self._get_embeddings([query_text])[0]
-        
-        # Check if the vector store is empty
-        if not hasattr(vector_store_index, 'kneighbors') or len(original_data) == 0:
+
+        if not original_data or not hasattr(vector_store_index, 'kneighbors'):
+            print("WARNING: Vector store is empty or invalid. Cannot find similar examples.")
             return []
+
+        # Request more neighbors to account for potential filtering
+        n_to_request = min(len(original_data), k * 3)
+        
+        if n_to_request == 0:
+            return []
+
+        distances, indices = vector_store_index.kneighbors([query_embedding], n_neighbors=n_to_request)
+
+        filtered_examples = []
+        for i in indices[0]:
+            if i >= len(original_data):
+                continue
+            example = original_data[i]
             
-        distances, indices = vector_store_index.kneighbors([query_embedding], n_neighbors=min(k, len(original_data)))
-        return [original_data[i] for i in indices[0]]
+            # Skip if this example is in the excluded set
+            if exclude_ids and example.get('id') in exclude_ids:
+                continue
+                
+            filtered_examples.append(example)
+            if len(filtered_examples) >= k:
+                break
+        
+        return filtered_examples
 
     def _build_prompt(self, query_row, similar_examples):
-        # ... (this method remains the same)
+        """Builds the dynamic few-shot prompt for the LLM."""
         system_prompt = (
-            "You are an expert exoplanet classifier..." # (shortened for brevity)
+            "You are an expert exoplanet classifier. Your task is to classify a new "
+            "exoplanet candidate as either 'CANDIDATE' or 'FALSE POSITIVE' based on its "
+            "physical parameters and a set of similar, already classified examples. "
+            "Analyze the provided examples to understand the patterns, then make a final "
+            "decision on the query. Respond with only the single word 'CANDIDATE' or 'FALSE POSITIVE'."
         )
+
         user_prompt = "--- SIMILAR EXAMPLES ---\n"
         for example in similar_examples:
             example_text = self._format_row_for_embedding(example)
-            label = "CANDIDATE" if example.get('disposition') == 1 else "FALSE POSITIVE"
+            label = "FALSE POSITIVE" if example['disposition'] == 0 else "CANDIDATE"
             user_prompt += f"- {example_text} -> {label}\n"
         
         user_prompt += "\n--- QUERY ---\n"
         query_text = self._format_row_for_embedding(query_row)
         user_prompt += f"Based on the examples above, classify this query: {query_text} -> ?"
+
         return system_prompt, user_prompt
 
-    def classify(self, query_row, vector_store_path=None):
+    def classify(self, query_row, vector_store_path=None, exclude_ids=None, k=25, return_examples=False):
         """
-        Classifies a query using a specific vector store, or the default one if none is provided.
+        Classifies a single row using a dynamically loaded vector store.
+
+        Args:
+            query_row: Dictionary with the features of the item to classify.
+            vector_store_path (str, optional): Path to a specific .pkl vector store. 
+                                               If None, uses the default store.
+            exclude_ids (list, optional): A list of 'id' values to exclude from the
+                                          similar examples search.
+            k (int): Number of similar examples to retrieve.
+            return_examples (bool): If True, returns the examples used in the prompt.
+        
+        Returns:
+            The prediction string, or a tuple (prediction, similar_examples).
         """
         # Determine which vector store to use
-        path_to_load = vector_store_path if vector_store_path and os.path.exists(vector_store_path) else DEFAULT_VECTOR_STORE_PATH
+        path_to_load = vector_store_path if (vector_store_path and os.path.exists(vector_store_path)) else DEFAULT_VECTOR_STORE_PATH
+
+        print(f"INFO: Loading vector store from {path_to_load}")
         
-        print(f"INFO: Loading vector store for prediction: {path_to_load}")
+        # Load the necessary data from the chosen file
         vector_store_index, original_data = self._load_vector_store(path_to_load)
 
-        if vector_store_index is None:
-            return "ERROR: Vector store not found."
+        if not original_data:
+            print(f"ERROR: No original_data found in vector store at {path_to_load}")
+            if return_examples:
+                return "ERROR", []
+            return "ERROR"
 
-        similar_examples = self._find_similar_examples(query_row, vector_store_index, original_data)
+        # Find examples, passing in all necessary data
+        similar_examples = self._find_similar_examples(
+            query_row, 
+            vector_store_index, 
+            original_data, 
+            k=k, 
+            exclude_ids=exclude_ids
+        )
+        
         system_prompt, user_prompt = self._build_prompt(query_row, similar_examples)
 
         try:
-            # ... (API call logic remains the same)
             response = CLIENT.chat.completions.create(
                 model=CLASSIFIER_MODEL,
                 messages=[
@@ -156,7 +207,17 @@ class LLMInContextClassifier:
                 max_tokens=5,
             )
             prediction = response.choices[0].message.content.strip().upper()
-            return prediction if prediction in ["CANDIDATE", "FALSE POSITIVE"] else "ERROR"
+
+            if prediction not in ["CANDIDATE", "FALSE POSITIVE"]:
+                print(f"WARNING: Unexpected response from LLM: '{prediction}'")
+                prediction = "ERROR"
+            
+            if return_examples:
+                return prediction, similar_examples
+            return prediction
+            
         except Exception as e:
             print(f"ERROR: API call failed - {e}")
+            if return_examples:
+                return "ERROR", []
             return "ERROR"
