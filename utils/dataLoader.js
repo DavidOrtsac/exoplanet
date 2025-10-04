@@ -2,7 +2,7 @@
 
 export async function loadKOIData() {
   try {
-    const response = await fetch("/data/koi_data.csv");
+    const response = await fetch("/data/koi_data_full.csv");
     const csvText = await response.text();
     const lines = csvText.split("\n");
     const headers = lines[0].split(",");
@@ -39,7 +39,7 @@ export async function loadKOIData() {
 
 export async function loadK2Data() {
   try {
-    const response = await fetch("/data/k2_data.csv");
+    const response = await fetch("/data/k2_data_full.csv");
     const csvText = await response.text();
     const lines = csvText.split("\n");
     const headers = lines[0].split(",");
@@ -74,7 +74,7 @@ export async function loadK2Data() {
 
 export async function loadTESSData() {
   try {
-    const response = await fetch("/data/toi_data.csv");
+    const response = await fetch("/data/toi_data_full.csv");
     const csvText = await response.text();
     const lines = csvText.split("\n");
     const headers = lines[0].split(",");
@@ -103,6 +103,23 @@ export async function loadTESSData() {
     return data;
   } catch (error) {
     console.error("Error loading TESS data:", error);
+    return [];
+  }
+}
+
+export async function loadDatasetData() {
+  try {
+    const response = await fetch("http://localhost:5002/api/data/dataset");
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const text = await response.text();
+    const data = JSON.parse(text);
+    return data;
+
+  } catch (error) {
+    console.error("Error loading or parsing dataset data:", error);
     return [];
   }
 }

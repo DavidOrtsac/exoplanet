@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify, render_template
+from flask_cors import CORS
 import pickle
 import numpy as np
 import pandas as pd
@@ -17,6 +18,7 @@ from llm_in_context_classifier import LLMInContextClassifier
 from select_data import SelectData
 
 app = Flask(__name__)
+CORS(app)  # This will enable CORS for all routes
 
 # Initialize LLM classifier (this will load the vector store)
 print("🧠 Initializing LLM In-Context Classifier...")
@@ -104,8 +106,11 @@ def update_dataset():
     except Exception as e:
         return jsonify({'error': f'Dataset update failed: {str(e)}'}), 500
 
-
-
+@app.route('/api/data/dataset', methods=['GET'])
+def get_dataset_data():
+    df = pd.read_csv('data/dataset.csv')
+    df = df.replace({np.nan: None})
+    return jsonify(df.to_dict('records'))
 
 
 

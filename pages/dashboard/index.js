@@ -27,6 +27,7 @@ export default function Dashboard() {
   const [data, setData] = useState({ KOI: [], TESS: [], K2: [] });
   const [loading, setLoading] = useState(true);
 
+  console.log(data);
   useEffect(() => {
     const loadData = async () => {
       setLoading(true);
