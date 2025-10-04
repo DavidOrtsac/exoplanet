@@ -18,7 +18,7 @@ EMBEDDING_MODEL = "text-embedding-3-small"
 CLASSIFIER_MODEL = "gpt-4o-mini"
 VECTOR_STORE_PATH = "data/training_vector_store_FIXED.pkl"
 
-class LLMInContextClassifierFixed:
+class LLMInContextClassifier:
     """
     FIXED VERSION: Only uses training data (80%) for vector store.
     Test data (20%) is completely isolated.
@@ -71,48 +71,7 @@ class LLMInContextClassifierFixed:
             print("INFO: FIXED vector store loaded successfully.")
             return
 
-        print("INFO: Creating FIXED vector store (TRAINING DATA ONLY)...")
-        
-        # Load full dataset
-        df = pd.read_csv('data/dataset.csv', comment='#')
-        df_clean = df.dropna(subset=['period', 'duration', 'depth', 'prad', 'teq'])
-
-        # CRITICAL: Apply the EXACT same train/test split as training
-        features = ['period', 'duration', 'depth', 'prad', 'teq']
-        X = df_clean[features].fillna(df_clean[features].median())
-        y = (df_clean['disposition'] == 'CANDIDATE').astype(int)
-        
-        # Use IDENTICAL split parameters as training scripts
-        X_train, X_test, y_train, y_test = train_test_split(
-            X, y, test_size=0.2, random_state=42, stratify=y
-        )
-        
-        # Get the training indices
-        train_indices = X_train.index
-        
-        # ONLY use training data for vector store
-        df_training_only = df_clean.loc[train_indices]
-        self.original_data = df_training_only.to_dict('records')
-        
-        print(f"INFO: Using ONLY training data: {len(self.original_data)} samples")
-        print(f"INFO: Excluded test data: {len(df_clean) - len(self.original_data)} samples")
-
-        texts_to_embed = [self._format_row_for_embedding(row) for row in self.original_data]
-
-        print("INFO: Generating embeddings for TRAINING DATA ONLY...")
-        embeddings = self._get_embeddings(texts_to_embed)
-
-        print("INFO: Building NearestNeighbors index...")
-        self.vector_store = NearestNeighbors(n_neighbors=10, algorithm='ball_tree')
-        self.vector_store.fit(embeddings)
-
-        print(f"INFO: Saving FIXED vector store to {VECTOR_STORE_PATH}...")
-        with open(VECTOR_STORE_PATH, 'wb') as f:
-            pickle.dump({
-                'vector_store': self.vector_store,
-                'original_data': self.original_data,
-            }, f)
-        print("INFO: FIXED vector store created and saved.")
+        self.initialize_vector_store()
 
     def _find_similar_examples(self, query_row, k=50):
         """Finds the k most similar examples from the vector store."""
@@ -171,6 +130,40 @@ class LLMInContextClassifierFixed:
         except Exception as e:
             print(f"ERROR: API call failed - {e}")
             return "ERROR"
+
+    def initialize_vector_store(self):
+        """Updates vector store with current dataset without reinitializing everything"""
+        print("INFO: Updating vector store...")
+        
+        # Load current dataset
+        df = pd.read_csv('data/dataset.csv', comment='#')
+        df_clean = df.dropna(subset=['period', 'duration', 'depth', 'prad', 'teq'])
+        
+        # Use same train/test split logic
+        features = ['period', 'duration', 'depth', 'prad', 'teq']
+        X = df_clean[features].fillna(df_clean[features].median())
+        y = (df_clean['disposition'] == 'CANDIDATE').astype(int)
+        
+        X_train, _, y_train, _ = train_test_split(
+            X, y, test_size=0.2, random_state=42, stratify=y
+        )
+        
+        # Update only training data
+        train_indices = X_train.index
+        df_training_only = df_clean.loc[train_indices]
+        self.original_data = df_training_only.to_dict('records')
+        
+        # Get new embeddings and update vector store
+        texts_to_embed = [self._format_row_for_embedding(row) for row in self.original_data]
+        embeddings = self._get_embeddings(texts_to_embed)
+        self.vector_store.fit(embeddings)
+
+        with open(VECTOR_STORE_PATH, 'wb') as f:
+            pickle.dump({
+                'vector_store': self.vector_store,
+                'original_data': self.original_data,
+            }, f)
+        print("INFO: FIXED vector store created and saved.")
 
 if __name__ == '__main__':
     print("Testing FIXED classifier (no data leakage)...")
