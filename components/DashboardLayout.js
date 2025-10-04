@@ -6,8 +6,9 @@ export default function DashboardLayout({ children }) {
 
   const sidebarItems = [
     { href: "/dashboard", label: "Home", icon: "🏠" },
-    { href: "/dashboard/dataset", label: "Dataset", icon: "📊" },
     { href: "/dashboard/classify", label: "Classify", icon: "🔬" },
+    { href: "/dashboard/dataset", label: "Dataset", icon: "📊" },
+
   ];
 
   return (

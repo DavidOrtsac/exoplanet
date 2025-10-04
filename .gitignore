@@ -74,6 +74,8 @@ dist
 tmp/
 temp/
 
-training_vector_store_FIXED.pkl
+ml-service/data/user_sessions/
+
+default_vector_store.pkl
 
 __pycache__

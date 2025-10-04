@@ -96,13 +96,13 @@
 }
 
 .disposition-1 { /* Confirmed */
-  background: linear-gradient(to right, #2dd36f, #28a745);
+  background: linear-gradient(to right, #80dda1, #7fdca0);
   color: #ffffff;
   box-shadow: 0 0 8px rgba(45, 211, 111, 0.3);
 }
 
 .disposition-0 { /* False Positive */
-  background: linear-gradient(to right, #eb445a, #dc3545);
+  background: linear-gradient(to right, #f98496, #ef6f82);
   color: #ffffff;
   box-shadow: 0 0 8px rgba(235, 68, 90, 0.3);
 }
@@ -174,4 +174,108 @@
   color: #8b949e;
   font-size: 0.8rem;
   font-family: 'Roboto Mono', monospace;
+}
+
+/*
+ Styles for Custom Checkbox Filters
+*/
+.filterContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  flex-wrap: wrap; /* Allow filters to wrap on smaller screens */
+}
+
+.filterLabel {
+  display: inline-block;
+  cursor: pointer;
+  user-select: none;
+}
+
+.filterCheckbox {
+  display: none; /* Hide the default checkbox */
+}
+
+.filterPill {
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 20px;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #c9d1d9;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+}
+
+.filterCheckbox:checked + .filterPill {
+  background-color: #4A90E2;
+  color: #ffffff;
+  border-color: #4A90E2;
+  box-shadow: 0 0 10px rgba(74, 144, 226, 0.5);
+}
+
+.filterLabel:hover .filterPill {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.filterCheckbox:checked + .filterPill:hover {
+  background-color: #5a9ee8; /* Lighter blue on hover when checked */
+}
+
+/*
+ Styles for the Action Bar
+*/
+.actionBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap; /* Allow wrapping on smaller screens */
+  gap: 1.5rem;
+}
+
+.controlsGroup {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.filterTitle {
+  margin-right: 0.5rem;
+  font-weight: 500;
+  white-space: nowrap;
+  color: #c9d1d9;
+}
+
+.actionButton, .saveButton {
+  background: rgba(255, 255, 255, 0.1);
+  color: #c9d1d9;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.actionButton:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.saveButton {
+  background: rgba(74, 144, 226, 0.8);
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.saveButton:hover {
+  background: #4A90E2;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }

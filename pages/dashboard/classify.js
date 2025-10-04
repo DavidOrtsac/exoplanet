@@ -50,6 +50,7 @@ export default function Classify() {
       const response = await fetch('http://localhost:5002/predict', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({
           period: parseFloat(formData.period),
           duration: parseFloat(formData.duration),
