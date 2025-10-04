@@ -2,7 +2,4 @@ pandas
 numpy
 scikit-learn
 flask
-flask-cors
 python-dotenv
-openai
-tqdm

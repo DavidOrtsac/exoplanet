@@ -28,10 +28,6 @@ class LLMInContextClassifier:
         # The classifier no longer loads anything on initialization.
         # It's now a collection of tools.
         pass
-    
-    def set_heldout_ids(self, ids):
-        """Set which entry IDs should be excluded from the RAG vector store"""
-        self.heldout_ids = ids
 
     def _format_row_for_embedding(self, row):
         return (
@@ -109,24 +105,12 @@ class LLMInContextClassifier:
         query_text = self._format_row_for_embedding(query_row)
         query_embedding = self._get_embeddings([query_text])[0]
         
-        # Request more neighbors to account for filtering
-        n_to_request = min(len(self.original_data), k * 3)
-        distances, indices = self.vector_store.kneighbors([query_embedding], n_neighbors=n_to_request)
-        
-        # Filter out held-out examples at query time
-        filtered_examples = []
-        for i in indices[0]:
-            if i >= len(self.original_data):
-                continue
-            example = self.original_data[i]
-            # Skip if this example is in the held-out set
-            if self.heldout_ids and example.get('id') in self.heldout_ids:
-                continue
-            filtered_examples.append(example)
-            if len(filtered_examples) >= k:
-                break
-        
-        return filtered_examples
+        # Check if the vector store is empty
+        if not hasattr(vector_store_index, 'kneighbors') or len(original_data) == 0:
+            return []
+            
+        distances, indices = vector_store_index.kneighbors([query_embedding], n_neighbors=min(k, len(original_data)))
+        return [original_data[i] for i in indices[0]]
 
     def _build_prompt(self, query_row, similar_examples):
         # ... (this method remains the same)
@@ -144,17 +128,9 @@ class LLMInContextClassifier:
         user_prompt += f"Based on the examples above, classify this query: {query_text} -> ?"
         return system_prompt, user_prompt
 
-    def classify(self, query_row, k=50, return_examples=False):
+    def classify(self, query_row, vector_store_path=None):
         """
-        Classifies a single, unseen data row using the in-context learning strategy.
-        
-        Args:
-            query_row: Dictionary with keys: period, duration, depth, prad, teq
-            k: Number of similar examples to retrieve
-            return_examples: If True, returns (prediction, similar_examples)
-        
-        Returns:
-            prediction string OR tuple (prediction, similar_examples) if return_examples=True
+        Classifies a query using a specific vector store, or the default one if none is provided.
         """
         # Determine which vector store to use
         path_to_load = vector_store_path if vector_store_path and os.path.exists(vector_store_path) else DEFAULT_VECTOR_STORE_PATH
@@ -180,70 +156,7 @@ class LLMInContextClassifier:
                 max_tokens=5,
             )
             prediction = response.choices[0].message.content.strip().upper()
-            if prediction in ["CANDIDATE", "FALSE POSITIVE"]:
-                if return_examples:
-                    return prediction, similar_examples
-                return prediction
-            else:
-                if return_examples:
-                    return "ERROR", []
-                return "ERROR"
+            return prediction if prediction in ["CANDIDATE", "FALSE POSITIVE"] else "ERROR"
         except Exception as e:
             print(f"ERROR: API call failed - {e}")
-            if return_examples:
-                return "ERROR", []
             return "ERROR"
-
-    def initialize_vector_store(self):
-        """Updates vector store with current dataset without reinitializing everything"""
-        print("INFO: Updating vector store...")
-        
-        # Load current dataset
-        df = pd.read_csv('data/dataset.csv', comment='#')
-        df_clean = df.dropna(subset=['period', 'duration', 'depth', 'prad', 'teq'])
-        
-        # Exclude held-out IDs if specified
-        if self.heldout_ids:
-            print(f"INFO: Excluding {len(self.heldout_ids)} held-out entries from RAG")
-            df_clean = df_clean[~df_clean['id'].isin(self.heldout_ids)]
-        
-        # Use same train/test split logic (only if no manual held-out set)
-        features = ['period', 'duration', 'depth', 'prad', 'teq']
-        X = df_clean[features].fillna(df_clean[features].median())
-        y = (df_clean['disposition'] == 'CANDIDATE').astype(int)
-        
-        # If heldout_ids is empty, use the standard 80/20 split
-        # If heldout_ids is set, use ALL remaining data (full strength mode)
-        if not self.heldout_ids:
-            X_train, _, y_train, _ = train_test_split(
-                X, y, test_size=0.2, random_state=42, stratify=y
-            )
-            train_indices = X_train.index
-            df_training_only = df_clean.loc[train_indices]
-        else:
-            # Full strength: use all non-held-out data
-            df_training_only = df_clean
-        
-        self.original_data = df_training_only.to_dict('records')
-        
-        # Get new embeddings and update vector store
-        texts_to_embed = [self._format_row_for_embedding(row) for row in self.original_data]
-        embeddings = self._get_embeddings(texts_to_embed)
-        
-        # Initialize NearestNeighbors if it doesn't exist yet
-        if self.vector_store is None:
-            self.vector_store = NearestNeighbors(n_neighbors=50, metric='cosine')
-        
-        self.vector_store.fit(embeddings)
-
-        with open(VECTOR_STORE_PATH, 'wb') as f:
-            pickle.dump({
-                'vector_store': self.vector_store,
-                'original_data': self.original_data,
-            }, f)
-        print(f"INFO: Vector store created with {len(self.original_data)} training examples.")
-
-if __name__ == '__main__':
-    print("Testing FIXED classifier (no data leakage)...")
-    classifier = LLMInContextClassifierFixed()
-    print("\nFIXED classifier is ready.")
