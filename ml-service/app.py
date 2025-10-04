@@ -133,6 +133,18 @@ def upload_user_data():
     except Exception as e:
         return jsonify({'error': f'User data upload failed: {str(e)}'}), 500
 
+@app.route('/data/filter_data', methods=['PUT'])
+def filter_data():
+    try:
+        data = request.get_json()
+      
+        selector.update_display_type(data['display_types'])
+        df = pd.DataFrame(selector.parse_data_to_json())
+        df = df.replace({np.nan: None})
+        return jsonify(df.to_dict('records'))
+    except Exception as e:
+        return jsonify({'error': f'Data filtering failed: {str(e)}'}), 500
+
 @app.route('/data/save_dataset', methods=['PUT'])
 def save_dataset():
     try:
@@ -148,9 +160,6 @@ def save_dataset():
         selector.save_data(user_csv_path)
     
         llm_in_context_classifier.create_vector_store_from_csv(user_csv_path, user_vector_store_path)
-
-        session['user_csv_path'] = user_csv_path
-        session['user_vector_store_path'] = user_vector_store_path
         
         return jsonify({'message': 'Your data has been uploaded and your dedicated vector store has been created.'}), 200
 

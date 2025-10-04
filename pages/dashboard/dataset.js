@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import Head from "next/head";
 import DashboardLayout from "../../components/DashboardLayout";
 import { loadDatasetData } from "../../utils/dataLoader";
-import { saveDataset, uploadUserData } from "../../utils/datasetActions";
+import { filterData, saveDataset, uploadUserData } from "../../utils/datasetActions";
 import styles from "../../styles/Dataset.module.css";
 
 const measureText = (text, font) => {
@@ -19,6 +19,7 @@ export default function Dataset() {
   const [loading, setLoading] = useState(true);
   const [sortConfig, setSortConfig] = useState({ key: 'id', direction: 'ascending' });
   const [columnWidths, setColumnWidths] = useState({});
+  const [typeFilter, setTypeFilter] = useState([]);
 
   const tableColumns = [
     { key: 'type', label: 'Telescope Type' },
@@ -38,6 +39,9 @@ export default function Dataset() {
       try {
         const datasetData = await loadDatasetData();
         setData(datasetData);
+        const uniqueTypes = Array.from(new Set(datasetData.map(row => row.type))).filter(Boolean);
+
+        setTypeFilter(uniqueTypes);
       } catch (error) {
         console.error("Error loading data:", error);
       } finally {
@@ -143,6 +147,18 @@ export default function Dataset() {
     }
   };
 
+  const handleFilterChange = async (displayTypes) => {
+    setLoading(true);
+    try {
+      const datasetData = await filterData(displayTypes);
+      setData(datasetData);
+    } catch (error) {
+      console.error("Error filtering data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleUploadUserData = async (file) => {
     setLoading(true);
     try {
@@ -156,9 +172,13 @@ export default function Dataset() {
   };
 
 
-
   const handleSaveDataset = async () => {
     setLoading(true);
+    if (data.length === 0) {
+      alert("No data to save");
+      setLoading(false);
+      return;
+    }
     try {
       await saveDataset(data);
    
@@ -186,19 +206,61 @@ export default function Dataset() {
             Exoplanet Dataset
           </h1>
 
-          <div style={{display: "flex", justifyContent: "space-between", marginBottom: "2rem"}}>
-            <button onClick={() => {
-              const fileInput = document.createElement('input');
-              fileInput.type = 'file';
-              fileInput.accept = '.csv';
-              fileInput.onchange = (e) => {
-                const file = e.target.files[0];
-                handleUploadUserData(file);
-              };
-              fileInput.click();
-            }} className={styles.downloadButton}>Upload User Data to Dataset</button>
-            
-            <button onClick={handleSaveDataset} className={styles.downloadButton}>Save Dataset</button>
+          {/* Action Bar */}
+          <div className={styles.actionBar}>
+            {/* Left Side: Controls for data manipulation */}
+            <div className={styles.controlsGroup}>
+              <div className={styles.filterContainer}>
+                <span className={styles.filterTitle}>Filter by Type:</span>
+                {[
+                  { value: "koi", label: "Kepler" },
+                  { value: "toi", label: "TESS" },
+                  { value: "k2", label: "K2" },
+                ].map(option => (
+                  <label key={option.value} className={styles.filterLabel}>
+                    <input
+                      type="checkbox"
+                      className={styles.filterCheckbox}
+                      checked={typeFilter.includes(option.value)}
+                      onChange={e => {
+                        setCurrentPage(1);
+                        let selected = typeFilter ? typeFilter : [];
+                        if (e.target.checked) {
+                          selected = [...selected, option.value];
+                        } else {
+                          selected = selected.filter(v => v !== option.value);
+                        }
+                        setTypeFilter(selected.length === 0 ? [] : selected);
+                        handleFilterChange(selected);
+                      }}
+                    />
+                    <span className={styles.filterPill}>{option.label}</span>
+                  </label>
+                ))}
+              </div>
+
+              <button onClick={() => {
+                const fileInput = document.createElement('input');
+                fileInput.type = 'file';
+                fileInput.accept = '.csv';
+                fileInput.onchange = (e) => {
+                  const file = e.target.files[0];
+                  if (file) {
+                    handleUploadUserData(file);
+                  }
+                };
+                fileInput.click();
+              }} className={styles.actionButton}>
+                Upload CSV
+              </button>
+            </div>
+
+            {/* Right Side: Save action */}
+            <div className={styles.saveAction}>
+              <button onClick={handleSaveDataset} className={styles.saveButton}>
+                Save Dataset
+              </button>
+            </div>
           </div>
 
           <div className={styles.tableContainer}>

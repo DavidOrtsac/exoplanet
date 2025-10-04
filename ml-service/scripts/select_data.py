@@ -10,7 +10,6 @@ class SelectData:
             reader = csv.reader(f)
             next(reader)  # skip header
             self.data = [row for row in reader]
-        self.display_type = ["koi", "toi", "k2","user"]
 
         if not os.path.exists(DATASET_PATH):
             self.create_dataset()
@@ -44,7 +43,7 @@ class SelectData:
                 writer.writerow(row)
     
     def create_dataset(self):
-        for display_type in self.display_type:
+        for display_type in ["koi", "toi", "k2","user"]:
             with open(f'data/{display_type}_data.csv', 'r') as f:
                 reader = csv.reader(f)
                 for i, row in enumerate(reader):
@@ -74,9 +73,21 @@ class SelectData:
         #     for row in row_data:
         #         writer.writerow(row)
         
-    def update_display_type(self, display_type):
-        self.display_type = display_type
-        self.create_dataset()
+    def update_display_type(self, display_types):
+        self.data = [row for row in self.data if row[0] == "user"]
+        
+        # For each display_type, add all rows from the corresponding CSV
+        for display_type in display_types:
+            try:
+                with open(f"data/{display_type}_data.csv", "r") as f:
+                    reader = csv.reader(f)
+                    for i, row in enumerate(reader):
+                        if i == 0:
+                            continue  # skip header
+                        # Prepend the display_type as the first column
+                        self.data.append([display_type] + row)
+            except FileNotFoundError:
+                print(f"Warning: data/{display_type}_data.csv not found.")
 
 
 
