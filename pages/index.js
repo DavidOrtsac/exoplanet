@@ -9,11 +9,78 @@ import {
   loadTESSData,
   loadDatasetData,
 } from "../utils/dataLoader";
+import { RiPlanetLine, RiSatelliteLine, RiStarLine, RiDashboardLine, RiBarChartBoxLine, RiBrainLine, RiQuestionLine } from "react-icons/ri";
 import {
   filterData,
   saveDataset,
   uploadUserData,
 } from "../utils/datasetActions";
+
+// Tooltip Component
+const Tooltip = ({ children, content }) => {
+  const [isVisible, setIsVisible] = useState(false);
+  
+  return (
+    <div style={{ position: "relative", display: "inline-block" }}>
+      <div
+        onMouseEnter={() => setIsVisible(true)}
+        onMouseLeave={() => setIsVisible(false)}
+        style={{ cursor: "help" }}
+      >
+        {children}
+      </div>
+      {isVisible && (
+        <div
+          style={{
+            position: "absolute",
+            bottom: "100%",
+            left: "50%",
+            transform: "translateX(-50%) translateY(0)",
+            backgroundColor: "rgba(0, 0, 0, 0.95)",
+            color: "white",
+            padding: "0.75rem 1rem",
+            borderRadius: "0.5rem",
+            fontSize: "0.875rem",
+            zIndex: 1000,
+            marginBottom: "0.5rem",
+            maxWidth: "350px",
+            minWidth: "200px",
+            textAlign: "left",
+            boxShadow: "0 4px 16px rgba(0, 0, 0, 0.4)",
+            fontFamily: "'Inter', sans-serif",
+            lineHeight: "1.5",
+            animation: "tooltipFadeIn 0.2s ease-out",
+            pointerEvents: "none",
+          }}
+        >
+          {content}
+          <div
+            style={{
+              position: "absolute",
+              top: "100%",
+              left: "50%",
+              transform: "translateX(-50%)",
+              border: "6px solid transparent",
+              borderTopColor: "rgba(0, 0, 0, 0.95)",
+            }}
+          />
+          <style jsx>{`
+            @keyframes tooltipFadeIn {
+              from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(5px);
+              }
+              to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+              }
+            }
+          `}</style>
+        </div>
+      )}
+    </div>
+  );
+};
 
 export default function Home() {
   const earthRef = useRef(null);
@@ -484,21 +551,21 @@ export default function Home() {
       id: "KOI",
       label: "Kepler Objects of Interest",
       description: "Kepler mission candidates",
-      icon: "🪐",
+      icon: RiPlanetLine,
       color: "#8072FF",
     },
     {
       id: "TESS",
       label: "Transiting Exoplanet Survey Satellite",
       description: "TESS mission discoveries",
-      icon: "🛰️",
+      icon: RiSatelliteLine,
       color: "#675DC2",
     },
     {
       id: "K2",
       label: "Kepler Extended Mission",
       description: "K2 mission observations",
-      icon: "⭐",
+      icon: RiStarLine,
       color: "#5A4BB8",
     },
   ];
@@ -685,7 +752,7 @@ export default function Home() {
           >
             RAG + LLM based exoplanet classifier solution
           </p>
-          {/* Placeholder image with 340:142 ratio */}
+          {/* Placeholder image with 340:142 ratio
           <img
             src="/images/spaceapps_logo.jpeg"
             alt="Space Apps Logo"
@@ -696,50 +763,63 @@ export default function Home() {
               borderRadius: "0.5rem",
               margin: "0.5rem 0",
             }}
-          />
+          /> */}
           <button
             onClick={handleGetStarted}
             disabled={isAnimating}
             style={{
               display: "inline-block",
-              background: "#675DC2",
+              background: "linear-gradient(135deg, #8072FF 0%, #675DC2 100%)",
               color: "white",
               textDecoration: "none",
-              padding: "1.125rem 2.25rem",
-              borderRadius: "0.75rem",
+              padding: "1.25rem 2.5rem",
+              borderRadius: "3rem",
               fontSize: "1.375rem",
-              marginTop: "1rem",
-              transition: "all 0.4s ease",
+              marginTop: "1.5rem",
+              transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
               textAlign: "center",
               alignSelf: "flex-end",
               fontFamily: "'Inter', sans-serif",
-              fontWeight: "600",
-              border: "2px solid #675DC2",
+              fontWeight: "700",
+              border: "none",
               position: "relative",
               overflow: "hidden",
               cursor: isAnimating ? "default" : "pointer",
               opacity: isAnimating ? 0.7 : 1,
+              boxShadow: "0 4px 20px rgba(128, 114, 255, 0.4), 0 0 0 0 rgba(128, 114, 255, 0.5)",
+              animation: isAnimating ? "none" : "buttonPulse 2s ease-in-out infinite",
             }}
             onMouseEnter={(e) => {
               if (!isAnimating) {
-                e.target.style.background = "white";
-                e.target.style.color = "#675DC2";
-                e.target.style.borderColor = "white";
-                e.target.style.transform = "translateY(-2px)";
-                e.target.style.boxShadow = "0 8px 25px rgba(103, 93, 194, 0.3)";
+                e.target.style.transform = "translateY(-3px) scale(1.05)";
+                e.target.style.boxShadow = "0 8px 30px rgba(128, 114, 255, 0.6), 0 0 40px rgba(128, 114, 255, 0.3)";
               }
             }}
             onMouseLeave={(e) => {
               if (!isAnimating) {
-                e.target.style.background = "#675DC2";
-                e.target.style.color = "white";
-                e.target.style.borderColor = "#675DC2";
-                e.target.style.transform = "translateY(0)";
-                e.target.style.boxShadow = "none";
+                e.target.style.transform = "translateY(0px) scale(1)";
+                e.target.style.boxShadow = "0 4px 20px rgba(128, 114, 255, 0.4), 0 0 0 0 rgba(128, 114, 255, 0.5)";
               }
             }}
           >
-            {isAnimating ? "Transitioning..." : "Get Started"}
+            <style jsx>{`
+              @keyframes buttonPulse {
+                0%, 100% {
+                  box-shadow: 0 4px 20px rgba(128, 114, 255, 0.4), 0 0 0 0 rgba(128, 114, 255, 0.5);
+                }
+                50% {
+                  box-shadow: 0 4px 25px rgba(128, 114, 255, 0.5), 0 0 20px rgba(128, 114, 255, 0.4);
+                }
+              }
+            `}</style>
+            <span style={{ position: "relative", zIndex: 1, display: "flex", alignItems: "center", gap: "0.5rem", justifyContent: "center" }}>
+              {isAnimating ? "Transitioning..." : (
+                <>
+                  Get Started
+                  <span style={{ fontSize: "1.5rem", transition: "transform 0.3s" }}>→</span>
+                </>
+              )}
+            </span>
           </button>
         </header>
 
@@ -771,9 +851,9 @@ export default function Home() {
             }}
           >
             {[
-              { icon: "🌌", label: "Overview", id: "overview" },
-              { icon: "🤖", label: "AI", id: "ai" },
-              { icon: "📊", label: "Data", id: "data" },
+              { icon: RiDashboardLine, label: "Overview", id: "overview" },
+              { icon: RiBarChartBoxLine, label: "Data", id: "data" },
+              { icon: RiBrainLine, label: "AI Classifier", id: "ai" },
             ].map((item, index) => (
               <div
                 key={item.id}
@@ -786,11 +866,7 @@ export default function Home() {
                 onMouseLeave={() => setHoveredNavItem(null)}
               >
                 <button
-                  onClick={() => {
-                    if (!isTransitioning) {
-                      handleNavClick(item.id);
-                    }
-                  }}
+                  onClick={() => !isTransitioning && handleNavClick(item.id)}
                   disabled={isTransitioning}
                   style={{
                     background:
@@ -842,7 +918,7 @@ export default function Home() {
                       }}
                     />
                   ) : (
-                    <span style={{ fontSize: "1.5rem" }}>{item.icon}</span>
+                    <item.icon size={20} />
                   )}
                 </button>
 
@@ -944,7 +1020,7 @@ export default function Home() {
                     fontFamily: "'Inter', sans-serif",
                   }}
                 >
-                  📊 Data Explorer
+                    Data Explorer
                 </h1>
                 <p
                   style={{
@@ -1009,8 +1085,8 @@ export default function Home() {
                     ].map((option) => (
                       <label
                         key={option.value}
-                        style={{
-                          display: "inline-block",
+            style={{
+              display: "inline-block",
                           cursor: "pointer",
                           userSelect: "none",
                         }}
@@ -1176,7 +1252,20 @@ export default function Home() {
                     }}
                   >
                     <thead>
-                      <tr>
+                      <tr
+                        onMouseEnter={(e) => {
+                          const cells = e.currentTarget.querySelectorAll('th');
+                          cells.forEach(cell => {
+                            cell.style.color = "#c9d1d9";
+                          });
+                        }}
+                        onMouseLeave={(e) => {
+                          const cells = e.currentTarget.querySelectorAll('th');
+                          cells.forEach(cell => {
+                            cell.style.color = "#8b949e";
+                          });
+                        }}
+                      >
                         {datasetTableColumns.map((column) => (
                           <th
                             key={column.key}
@@ -1197,12 +1286,6 @@ export default function Home() {
                               color: "#8b949e",
                               borderBottom: "2px solid #30363d",
                               width: datasetColumnWidths[column.key] || "auto",
-                            }}
-                            onMouseEnter={(e) => {
-                              e.target.style.color = "#c9d1d9";
-                            }}
-                            onMouseLeave={(e) => {
-                              e.target.style.color = "#8b949e";
                             }}
                           >
                             <span>{column.label}</span>
@@ -1258,11 +1341,11 @@ export default function Home() {
                                   : "transparent",
                             }}
                             onMouseEnter={(e) => {
-                              e.target.style.backgroundColor =
+                              e.currentTarget.style.backgroundColor =
                                 "rgba(74, 144, 226, 0.1)";
                             }}
                             onMouseLeave={(e) => {
-                              e.target.style.backgroundColor =
+                              e.currentTarget.style.backgroundColor =
                                 rowIndex % 2 === 0
                                   ? "rgba(13, 17, 23, 0.5)"
                                   : "transparent";
@@ -1559,7 +1642,7 @@ export default function Home() {
                     fontFamily: "'Inter', sans-serif",
                   }}
                 >
-                  🔬 Classify New Exoplanets
+                  Classify New Exoplanets
                 </h1>
                 <p
                   style={{
@@ -1586,7 +1669,7 @@ export default function Home() {
                     style={{
                       background:
                         "linear-gradient(135deg, #8072FF 0%, #675DC2 100%)",
-                      color: "white",
+              color: "white",
                       padding: "0.75rem 1.5rem",
                       borderRadius: "1.5rem",
                       fontWeight: "bold",
@@ -1626,12 +1709,11 @@ export default function Home() {
               {/* Quick Examples */}
               <div
                 style={{
-                  background: "rgba(0, 0, 0, 0.6)",
-                  backdropFilter: "blur(10px)",
-                  borderRadius: "1.5rem",
+                  background: "rgba(0, 0, 0, 0.4)",
+                  borderRadius: "1rem",
                   padding: "2rem",
                   marginBottom: "2rem",
-                  border: "1px solid rgba(0, 0, 0, 0.5)",
+                  border: "1px solid rgba(255, 255, 255, 0.1)",
                   width: "100%",
                   maxWidth: "1000px",
                 }}
@@ -1645,7 +1727,7 @@ export default function Home() {
                     fontFamily: "'Inter', sans-serif",
                   }}
                 >
-                  🎯 Quick Start - Load Example Data:
+                  Quick Start - Load Example Data:
                 </h3>
                 <div
                   style={{
@@ -1659,11 +1741,11 @@ export default function Home() {
                     style={{
                       flex: "1",
                       minWidth: "180px",
-                      background: "rgba(0, 0, 0, 0.7)",
+                      background: "rgba(0, 0, 0, 0.3)",
                       color: "white",
-                      border: "2px solid rgba(0, 0, 0, 0.6)",
+                      border: "1px solid rgba(255, 255, 255, 0.2)",
                       padding: "1rem 1.5rem",
-                      borderRadius: "0.75rem",
+                      borderRadius: "0.5rem",
                       cursor: "pointer",
                       fontSize: "1rem",
                       fontWeight: "600",
@@ -1671,28 +1753,28 @@ export default function Home() {
                       fontFamily: "'Inter', sans-serif",
                     }}
                     onMouseEnter={(e) => {
-                      e.target.style.background = "rgba(0, 0, 0, 0.6)";
+                      e.target.style.background = "rgba(0, 0, 0, 0.5)";
                       e.target.style.borderColor = "#8072FF";
                       e.target.style.transform = "translateY(-2px)";
                     }}
                     onMouseLeave={(e) => {
-                      e.target.style.background = "rgba(0, 0, 0, 0.5)";
-                      e.target.style.borderColor = "rgba(0, 0, 0, 0.6)";
+                      e.target.style.background = "rgba(0, 0, 0, 0.3)";
+                      e.target.style.borderColor = "rgba(255, 255, 255, 0.2)";
                       e.target.style.transform = "translateY(0)";
                     }}
                   >
-                    🛰️ Kepler Example
+                    Kepler Example
                   </button>
                   <button
                     onClick={() => loadExample("tess")}
                     style={{
                       flex: "1",
                       minWidth: "180px",
-                      background: "rgba(0, 0, 0, 0.7)",
+                      background: "rgba(0, 0, 0, 0.3)",
                       color: "white",
-                      border: "2px solid rgba(0, 0, 0, 0.6)",
+                      border: "1px solid rgba(255, 255, 255, 0.2)",
                       padding: "1rem 1.5rem",
-                      borderRadius: "0.75rem",
+                      borderRadius: "0.5rem",
                       cursor: "pointer",
                       fontSize: "1rem",
                       fontWeight: "600",
@@ -1700,28 +1782,28 @@ export default function Home() {
                       fontFamily: "'Inter', sans-serif",
                     }}
                     onMouseEnter={(e) => {
-                      e.target.style.background = "rgba(0, 0, 0, 0.6)";
+                      e.target.style.background = "rgba(0, 0, 0, 0.5)";
                       e.target.style.borderColor = "#8072FF";
                       e.target.style.transform = "translateY(-2px)";
                     }}
                     onMouseLeave={(e) => {
-                      e.target.style.background = "rgba(0, 0, 0, 0.5)";
-                      e.target.style.borderColor = "rgba(0, 0, 0, 0.6)";
+                      e.target.style.background = "rgba(0, 0, 0, 0.3)";
+                      e.target.style.borderColor = "rgba(255, 255, 255, 0.2)";
                       e.target.style.transform = "translateY(0)";
                     }}
                   >
-                    🔭 TESS Example
+                    TESS Example
                   </button>
                   <button
                     onClick={() => loadExample("k2")}
                     style={{
                       flex: "1",
                       minWidth: "180px",
-                      background: "rgba(0, 0, 0, 0.7)",
+                      background: "rgba(0, 0, 0, 0.3)",
                       color: "white",
-                      border: "2px solid rgba(0, 0, 0, 0.6)",
+                      border: "1px solid rgba(255, 255, 255, 0.2)",
                       padding: "1rem 1.5rem",
-                      borderRadius: "0.75rem",
+                      borderRadius: "0.5rem",
                       cursor: "pointer",
                       fontSize: "1rem",
                       fontWeight: "600",
@@ -1729,115 +1811,29 @@ export default function Home() {
                       fontFamily: "'Inter', sans-serif",
                     }}
                     onMouseEnter={(e) => {
-                      e.target.style.background = "rgba(0, 0, 0, 0.6)";
+                      e.target.style.background = "rgba(0, 0, 0, 0.5)";
                       e.target.style.borderColor = "#8072FF";
                       e.target.style.transform = "translateY(-2px)";
                     }}
                     onMouseLeave={(e) => {
-                      e.target.style.background = "rgba(0, 0, 0, 0.5)";
-                      e.target.style.borderColor = "rgba(0, 0, 0, 0.6)";
+                      e.target.style.background = "rgba(0, 0, 0, 0.3)";
+                      e.target.style.borderColor = "rgba(255, 255, 255, 0.2)";
                       e.target.style.transform = "translateY(0)";
                     }}
                   >
-                    🌟 K2 Example
+                    K2 Example
                   </button>
                 </div>
-              </div>
-
-              {/* Data Reminder Card */}
-              <div
-                style={{
-                  background:
-                    "linear-gradient(135deg, rgba(34, 197, 94, 0.2) 0%, rgba(22, 163, 74, 0.3) 100%)",
-                  backdropFilter: "blur(10px)",
-                  borderRadius: "1.5rem",
-                  padding: "1.5rem 2rem",
-                  marginBottom: "2rem",
-                  border: "2px solid rgba(34, 197, 94, 0.3)",
-                  width: "100%",
-                  maxWidth: "1000px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  gap: "1.5rem",
-                }}
-              >
-                <div
-                  style={{ display: "flex", alignItems: "center", gap: "1rem" }}
-                >
-                  <div
-                    style={{
-                      fontSize: "2rem",
-                      filter: "drop-shadow(0 0 10px rgba(34, 197, 94, 0.5))",
-                    }}
-                  >
-                    💡
-                  </div>
-                  <div>
-                    <p
-                      style={{
-                        color: "white",
-                        fontSize: "1.1rem",
-                        fontWeight: "600",
-                        margin: "0 0 0.25rem 0",
-                        fontFamily: "'Inter', sans-serif",
-                      }}
-                    >
-                      Note: Want to change the data that the AI is working with?
-                    </p>
-                    <p
-                      style={{
-                        color: "rgba(255, 255, 255, 0.8)",
-                        fontSize: "0.95rem",
-                        margin: "0",
-                        fontFamily: "'Inter', sans-serif",
-                      }}
-                    >
-                      Proceed to the Data tab to upload or modify your dataset
-                    </p>
-                  </div>
-                </div>
-                <button
-                  onClick={() => handleNavClick("data")}
-                  style={{
-                    background:
-                      "linear-gradient(135deg, #22c55e 0%, #16a34a 100%)",
-                    color: "white",
-                    border: "none",
-                    padding: "0.75rem 1.5rem",
-                    borderRadius: "0.75rem",
-                    cursor: "pointer",
-                    fontSize: "1rem",
-                    fontWeight: "600",
-                    transition: "all 0.2s ease",
-                    fontFamily: "'Inter', sans-serif",
-                    boxShadow: "0 4px 12px rgba(34, 197, 94, 0.3)",
-                    whiteSpace: "nowrap",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.target.style.transform = "translateY(-2px)";
-                    e.target.style.boxShadow =
-                      "0 6px 16px rgba(34, 197, 94, 0.4)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.target.style.transform = "translateY(0)";
-                    e.target.style.boxShadow =
-                      "0 4px 12px rgba(34, 197, 94, 0.3)";
-                  }}
-                >
-                  📊 Go to Data Tab
-                </button>
               </div>
 
               {/* Classification Form */}
               <div
                 style={{
-                  background: "rgba(0, 0, 0, 0.6)",
-                  backdropFilter: "blur(10px)",
-                  borderRadius: "1.5rem",
-                  padding: "2rem",
+                  background: "rgba(0, 0, 0, 0.4)",
+                  borderRadius: "1rem",
+                  padding: "2.5rem",
                   marginBottom: "2rem",
-                  border: "1px solid rgba(0, 0, 0, 0.5)",
+                  border: "1px solid rgba(255, 255, 255, 0.1)",
                   width: "100%",
                   maxWidth: "1000px",
                 }}
@@ -1851,33 +1847,35 @@ export default function Home() {
                     fontFamily: "'Inter', sans-serif",
                   }}
                 >
-                  📝 Enter Exoplanet Parameters
+                  Enter Exoplanet Parameters
                 </h2>
 
                 <div
                   style={{
                     display: "grid",
-                    gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-                    gap: "1.5rem",
-                    marginBottom: "2rem",
+                    gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+                    gap: "2rem",
+                    marginBottom: "2.5rem",
                   }}
                 >
                   <div style={{ display: "flex", flexDirection: "column" }}>
-                    <label
-                      style={{
-                        color: "rgba(255, 255, 255, 0.9)",
-                        fontSize: "0.95rem",
-                        marginBottom: "0.5rem",
-                        fontWeight: "600",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "0.5rem",
-                        fontFamily: "'Inter', sans-serif",
-                      }}
-                    >
-                      <span style={{ fontSize: "1.2rem" }}>🌍</span>
-                      Orbital Period (days)
-                    </label>
+                    <Tooltip content="Time for the planet to complete one orbit around its star">
+                      <label
+                        style={{
+                          color: "rgba(255, 255, 255, 0.9)",
+                          fontSize: "0.95rem",
+                          marginBottom: "0.75rem",
+                          fontWeight: "600",
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "0.5rem",
+                          fontFamily: "'Inter', sans-serif",
+                        }}
+                      >
+                        Orbital Period (days)
+                        <RiQuestionLine size={14} style={{ opacity: 0.7 }} />
+                      </label>
+                    </Tooltip>
                     <input
                       type="number"
                       step="0.01"
@@ -1887,41 +1885,45 @@ export default function Home() {
                       }
                       placeholder="e.g., 9.49"
                       style={{
-                        background: "rgba(0, 0, 0, 0.7)",
-                        border: "2px solid rgba(0, 0, 0, 0.6)",
-                        borderRadius: "0.75rem",
+                        background: "rgba(0, 0, 0, 0.3)",
+                        border: "1px solid rgba(255, 255, 255, 0.2)",
+                        borderRadius: "0.5rem",
                         padding: "1rem",
                         color: "white",
                         fontSize: "1rem",
-                        transition: "border-color 0.2s",
+                        transition: "all 0.2s",
                         fontFamily: "'Inter', sans-serif",
                       }}
                       onFocus={(e) => {
                         e.target.style.outline = "none";
                         e.target.style.borderColor = "#8072FF";
+                        e.target.style.background = "rgba(0, 0, 0, 0.5)";
                       }}
                       onBlur={(e) => {
-                        e.target.style.borderColor = "rgba(0, 0, 0, 0.6)";
+                        e.target.style.borderColor = "rgba(255, 255, 255, 0.2)";
+                        e.target.style.background = "rgba(0, 0, 0, 0.3)";
                       }}
                     />
                   </div>
 
                   <div style={{ display: "flex", flexDirection: "column" }}>
-                    <label
-                      style={{
-                        color: "rgba(255, 255, 255, 0.9)",
-                        fontSize: "0.95rem",
-                        marginBottom: "0.5rem",
-                        fontWeight: "600",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "0.5rem",
-                        fontFamily: "'Inter', sans-serif",
-                      }}
-                    >
-                      <span style={{ fontSize: "1.2rem" }}>⏱️</span>
-                      Transit Duration (hours)
-                    </label>
+                    <Tooltip content="How long the planet takes to pass in front of its star">
+                      <label
+                        style={{
+                          color: "rgba(255, 255, 255, 0.9)",
+                          fontSize: "0.95rem",
+                          marginBottom: "0.75rem",
+                          fontWeight: "600",
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "0.5rem",
+                          fontFamily: "'Inter', sans-serif",
+                        }}
+                      >
+                        Transit Duration (hours)
+                        <RiQuestionLine size={14} style={{ opacity: 0.7 }} />
+                      </label>
+                    </Tooltip>
                     <input
                       type="number"
                       step="0.001"
@@ -1931,41 +1933,45 @@ export default function Home() {
                       }
                       placeholder="e.g., 2.96"
                       style={{
-                        background: "rgba(0, 0, 0, 0.7)",
-                        border: "2px solid rgba(0, 0, 0, 0.6)",
-                        borderRadius: "0.75rem",
+                        background: "rgba(0, 0, 0, 0.3)",
+                        border: "1px solid rgba(255, 255, 255, 0.2)",
+                        borderRadius: "0.5rem",
                         padding: "1rem",
                         color: "white",
                         fontSize: "1rem",
-                        transition: "border-color 0.2s",
+                        transition: "all 0.2s",
                         fontFamily: "'Inter', sans-serif",
                       }}
                       onFocus={(e) => {
                         e.target.style.outline = "none";
                         e.target.style.borderColor = "#8072FF";
+                        e.target.style.background = "rgba(0, 0, 0, 0.5)";
                       }}
                       onBlur={(e) => {
-                        e.target.style.borderColor = "rgba(0, 0, 0, 0.6)";
+                        e.target.style.borderColor = "rgba(255, 255, 255, 0.2)";
+                        e.target.style.background = "rgba(0, 0, 0, 0.3)";
                       }}
                     />
                   </div>
 
                   <div style={{ display: "flex", flexDirection: "column" }}>
-                    <label
-                      style={{
-                        color: "rgba(255, 255, 255, 0.9)",
-                        fontSize: "0.95rem",
-                        marginBottom: "0.5rem",
-                        fontWeight: "600",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "0.5rem",
-                        fontFamily: "'Inter', sans-serif",
-                      }}
-                    >
-                      <span style={{ fontSize: "1.2rem" }}>📉</span>
-                      Transit Depth (ppm)
-                    </label>
+                    <Tooltip content="Amount of starlight blocked when the planet passes in front">
+                      <label
+                        style={{
+                          color: "rgba(255, 255, 255, 0.9)",
+                          fontSize: "0.95rem",
+                          marginBottom: "0.75rem",
+                          fontWeight: "600",
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "0.5rem",
+                          fontFamily: "'Inter', sans-serif",
+                        }}
+                      >
+                        Transit Depth (ppm)
+                        <RiQuestionLine size={14} style={{ opacity: 0.7 }} />
+                      </label>
+                    </Tooltip>
                     <input
                       type="number"
                       step="0.1"
@@ -1975,41 +1981,45 @@ export default function Home() {
                       }
                       placeholder="e.g., 615.8"
                       style={{
-                        background: "rgba(0, 0, 0, 0.7)",
-                        border: "2px solid rgba(0, 0, 0, 0.6)",
-                        borderRadius: "0.75rem",
+                        background: "rgba(0, 0, 0, 0.3)",
+                        border: "1px solid rgba(255, 255, 255, 0.2)",
+                        borderRadius: "0.5rem",
                         padding: "1rem",
                         color: "white",
                         fontSize: "1rem",
-                        transition: "border-color 0.2s",
+                        transition: "all 0.2s",
                         fontFamily: "'Inter', sans-serif",
                       }}
                       onFocus={(e) => {
                         e.target.style.outline = "none";
                         e.target.style.borderColor = "#8072FF";
+                        e.target.style.background = "rgba(0, 0, 0, 0.5)";
                       }}
                       onBlur={(e) => {
-                        e.target.style.borderColor = "rgba(0, 0, 0, 0.6)";
+                        e.target.style.borderColor = "rgba(255, 255, 255, 0.2)";
+                        e.target.style.background = "rgba(0, 0, 0, 0.3)";
                       }}
                     />
                   </div>
 
                   <div style={{ display: "flex", flexDirection: "column" }}>
-                    <label
-                      style={{
-                        color: "rgba(255, 255, 255, 0.9)",
-                        fontSize: "0.95rem",
-                        marginBottom: "0.5rem",
-                        fontWeight: "600",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "0.5rem",
-                        fontFamily: "'Inter', sans-serif",
-                      }}
-                    >
-                      <span style={{ fontSize: "1.2rem" }}>🪐</span>
-                      Planetary Radius (R⊕)
-                    </label>
+                    <Tooltip content="The radius of the planet compared to Earth's radius (R⊕). Values greater than 1 indicate planets larger than Earth, while values less than 1 indicate smaller planets.">
+                      <label
+                        style={{
+                          color: "rgba(255, 255, 255, 0.9)",
+                          fontSize: "0.95rem",
+                          marginBottom: "0.75rem",
+                          fontWeight: "600",
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "0.5rem",
+                          fontFamily: "'Inter', sans-serif",
+                        }}
+                      >
+                        Planetary Radius (R⊕)
+                        <RiQuestionLine size={14} style={{ opacity: 0.7 }} />
+                      </label>
+                    </Tooltip>
                     <input
                       type="number"
                       step="0.01"
@@ -2019,41 +2029,45 @@ export default function Home() {
                       }
                       placeholder="e.g., 2.26"
                       style={{
-                        background: "rgba(0, 0, 0, 0.7)",
-                        border: "2px solid rgba(0, 0, 0, 0.6)",
-                        borderRadius: "0.75rem",
+                        background: "rgba(0, 0, 0, 0.3)",
+                        border: "1px solid rgba(255, 255, 255, 0.2)",
+                        borderRadius: "0.5rem",
                         padding: "1rem",
                         color: "white",
                         fontSize: "1rem",
-                        transition: "border-color 0.2s",
+                        transition: "all 0.2s",
                         fontFamily: "'Inter', sans-serif",
                       }}
                       onFocus={(e) => {
                         e.target.style.outline = "none";
                         e.target.style.borderColor = "#8072FF";
+                        e.target.style.background = "rgba(0, 0, 0, 0.5)";
                       }}
                       onBlur={(e) => {
-                        e.target.style.borderColor = "rgba(0, 0, 0, 0.6)";
+                        e.target.style.borderColor = "rgba(255, 255, 255, 0.2)";
+                        e.target.style.background = "rgba(0, 0, 0, 0.3)";
                       }}
                     />
                   </div>
 
                   <div style={{ display: "flex", flexDirection: "column" }}>
-                    <label
-                      style={{
-                        color: "rgba(255, 255, 255, 0.9)",
-                        fontSize: "0.95rem",
-                        marginBottom: "0.5rem",
-                        fontWeight: "600",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "0.5rem",
-                        fontFamily: "'Inter', sans-serif",
-                      }}
-                    >
-                      <span style={{ fontSize: "1.2rem" }}>🌡️</span>
-                      Equilibrium Temp (K)
-                    </label>
+                    <Tooltip content="The theoretical temperature of the planet's surface if it had no atmosphere, measured in Kelvin (K). This depends on the star's temperature and the planet's distance from it.">
+                      <label
+                        style={{
+                          color: "rgba(255, 255, 255, 0.9)",
+                          fontSize: "0.95rem",
+                          marginBottom: "0.75rem",
+                          fontWeight: "600",
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "0.5rem",
+                          fontFamily: "'Inter', sans-serif",
+                        }}
+                      >
+                        Equilibrium Temp (K)
+                        <RiQuestionLine size={14} style={{ opacity: 0.7 }} />
+                      </label>
+                    </Tooltip>
                     <input
                       type="number"
                       step="1"
@@ -2061,21 +2075,23 @@ export default function Home() {
                       onChange={(e) => handleInputChange("teq", e.target.value)}
                       placeholder="e.g., 793"
                       style={{
-                        background: "rgba(0, 0, 0, 0.7)",
-                        border: "2px solid rgba(0, 0, 0, 0.6)",
-                        borderRadius: "0.75rem",
+                        background: "rgba(0, 0, 0, 0.3)",
+                        border: "1px solid rgba(255, 255, 255, 0.2)",
+                        borderRadius: "0.5rem",
                         padding: "1rem",
                         color: "white",
                         fontSize: "1rem",
-                        transition: "border-color 0.2s",
+                        transition: "all 0.2s",
                         fontFamily: "'Inter', sans-serif",
                       }}
                       onFocus={(e) => {
                         e.target.style.outline = "none";
                         e.target.style.borderColor = "#8072FF";
+                        e.target.style.background = "rgba(0, 0, 0, 0.5)";
                       }}
                       onBlur={(e) => {
-                        e.target.style.borderColor = "rgba(0, 0, 0, 0.6)";
+                        e.target.style.borderColor = "rgba(255, 255, 255, 0.2)";
+                        e.target.style.background = "rgba(0, 0, 0, 0.3)";
                       }}
                     />
                   </div>
@@ -2099,7 +2115,7 @@ export default function Home() {
                       color: "white",
                       border: "none",
                       padding: "1rem 2rem",
-                      borderRadius: "0.75rem",
+                      borderRadius: "0.5rem",
                       fontSize: "1.15rem",
                       fontWeight: "bold",
                       cursor: isClassifying ? "not-allowed" : "pointer",
@@ -2119,18 +2135,18 @@ export default function Home() {
                     }}
                   >
                     {isClassifying
-                      ? "⏳ Classifying..."
-                      : "🚀 Classify with AI"}
+                      ? "Classifying..."
+                      : "Classify with AI"}
                   </button>
                   <button
                     onClick={resetForm}
                     style={{
                       flex: "1",
-                      background: "rgba(0, 0, 0, 0.7)",
+                      background: "rgba(0, 0, 0, 0.3)",
                       color: "white",
-                      border: "2px solid rgba(0, 0, 0, 0.6)",
+                      border: "1px solid rgba(255, 255, 255, 0.2)",
                       padding: "1rem 2rem",
-                      borderRadius: "0.75rem",
+                      borderRadius: "0.5rem",
                       fontSize: "1.15rem",
                       fontWeight: "bold",
                       cursor: "pointer",
@@ -2138,15 +2154,15 @@ export default function Home() {
                       fontFamily: "'Inter', sans-serif",
                     }}
                     onMouseEnter={(e) => {
-                      e.target.style.background = "rgba(0, 0, 0, 0.6)";
+                      e.target.style.background = "rgba(0, 0, 0, 0.5)";
                       e.target.style.borderColor = "#8072FF";
                     }}
                     onMouseLeave={(e) => {
-                      e.target.style.background = "rgba(0, 0, 0, 0.5)";
-                      e.target.style.borderColor = "rgba(0, 0, 0, 0.6)";
+                      e.target.style.background = "rgba(0, 0, 0, 0.3)";
+                      e.target.style.borderColor = "rgba(255, 255, 255, 0.2)";
                     }}
                   >
-                    🔄 Reset
+                    Reset
                   </button>
                 </div>
               </div>
@@ -2155,212 +2171,282 @@ export default function Home() {
               {result && (
                 <div
                   style={{
-                    background: "rgba(0, 0, 0, 0.6)",
-                    backdropFilter: "blur(10px)",
-                    borderRadius: "1.5rem",
-                    padding: "2rem",
+                    background: "rgba(0, 0, 0, 0.4)",
+                    borderRadius: "1rem",
+                    padding: "2.5rem",
                     marginBottom: "2rem",
-                    border: "1px solid rgba(0, 0, 0, 0.5)",
+                    border: "1px solid rgba(255, 255, 255, 0.1)",
                     width: "100%",
                     maxWidth: "1000px",
+                    animation: "resultFadeIn 0.5s ease-out",
                   }}
                 >
-                  <h2
-                    style={{
-                      color: "white",
-                      fontSize: "2rem",
-                      fontWeight: "600",
-                      margin: "0 0 1.5rem 0",
-                      fontFamily: "'Inter', sans-serif",
-                    }}
-                  >
-                    🎯 Classification Result
-                  </h2>
+                  <style jsx>{`
+                    @keyframes resultFadeIn {
+                      from {
+                        opacity: 0;
+                        transform: translateY(20px);
+                      }
+                      to {
+                        opacity: 1;
+                        transform: translateY(0);
+                      }
+                    }
+                    @keyframes pulseGlow {
+                      0%, 100% {
+                        box-shadow: 0 0 20px rgba(180, 170, 255, 0.3);
+                      }
+                      50% {
+                        box-shadow: 0 0 40px rgba(180, 170, 255, 0.4);
+                      }
+                    }
+                    @keyframes successGlow {
+                      0%, 100% {
+                        box-shadow: 0 0 30px rgba(140, 220, 170, 0.3);
+                      }
+                      50% {
+                        box-shadow: 0 0 50px rgba(140, 220, 170, 0.4);
+                      }
+                    }
+                    @keyframes falseGlow {
+                      0%, 100% {
+                        box-shadow: 0 0 30px rgba(255, 180, 180, 0.3);
+                      }
+                      50% {
+                        box-shadow: 0 0 50px rgba(255, 180, 180, 0.4);
+                      }
+                    }
+                  `}</style>
 
+                  {/* Hero Result Banner */}
                   <div
                     style={{
-                      background: "rgba(0, 0, 0, 0.6)",
+                      background:
+                        result.prediction === "CANDIDATE"
+                          ? "linear-gradient(135deg, #48bb78 0%, #38a169 100%)"
+                          : "linear-gradient(135deg, #f56565 0%, #e53e3e 100%)",
                       borderRadius: "1rem",
-                      padding: "2rem",
-                      marginBottom: "1.5rem",
-                      border: "1px solid rgba(0, 0, 0, 0.5)",
+                      padding: "3rem 2rem",
+                      marginBottom: "2rem",
+                      textAlign: "center",
+                      position: "relative",
+                      overflow: "hidden",
+                      animation:
+                        result.prediction === "CANDIDATE"
+                          ? "successGlow 2s ease-in-out infinite"
+                          : "falseGlow 2s ease-in-out infinite",
                     }}
                   >
-                    {/* Main Result */}
                     <div
                       style={{
-                        paddingBottom: "1.5rem",
-                        borderBottom: "2px solid rgba(0, 0, 0, 0.5)",
-                        marginBottom: "1.5rem",
+                        fontSize: "3.5rem",
+                        marginBottom: "1rem",
                       }}
                     >
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                          flexWrap: "wrap",
-                          gap: "1rem",
-                        }}
-                      >
-                        <span
-                          style={{
-                            background:
-                              result.prediction === "CANDIDATE"
-                                ? "#48bb78"
-                                : "#f56565",
-                            color: "white",
-                            padding: "1rem 2rem",
-                            borderRadius: "1rem",
-                            fontSize: "1.5rem",
-                            fontWeight: "bold",
-                            fontFamily: "'Inter', sans-serif",
-                          }}
-                        >
-                          {result.prediction === "CANDIDATE"
-                            ? "✅ CANDIDATE"
-                            : "❌ FALSE POSITIVE"}
-                        </span>
-                        <span
-                          style={{
-                            color: "rgba(255, 255, 255, 0.8)",
-                            fontSize: "1.3rem",
-                            fontWeight: "600",
-                            fontFamily: "'Inter', sans-serif",
-                          }}
-                        >
-                          {(result.confidence * 100).toFixed(1)}% confidence
-                        </span>
-                      </div>
+                      {result.prediction === "CANDIDATE" ? "✨" : "⚠️"}
                     </div>
-
-                    {/* Result Details */}
+                    <h2
+                      style={{
+                        color: "white",
+                        fontSize: "2.5rem",
+                        fontWeight: "800",
+                        margin: "0 0 1rem 0",
+                        fontFamily: "'Inter', sans-serif",
+                        textTransform: "uppercase",
+                        letterSpacing: "2px",
+                        textShadow: "0 2px 10px rgba(0, 0, 0, 0.3)",
+                      }}
+                    >
+                      {result.prediction === "CANDIDATE"
+                        ? "Exoplanet Candidate"
+                        : "False Positive"}
+                    </h2>
                     <div
                       style={{
-                        background: "rgba(0, 0, 0, 0.7)",
-                        padding: "1.5rem",
-                        borderRadius: "0.75rem",
-                        marginBottom: "1.5rem",
+                        fontSize: "2rem",
+                        fontWeight: "700",
+                        color: "white",
+                        fontFamily: "'Inter', sans-serif",
+                        textShadow: "0 2px 10px rgba(0, 0, 0, 0.3)",
+                      }}
+                    >
+                      {(result.confidence * 100).toFixed(1)}% Confidence
+                    </div>
+                    <div
+                      style={{
+                        marginTop: "1.5rem",
+                        fontSize: "1.1rem",
+                        color: "rgba(255, 255, 255, 0.95)",
+                        fontFamily: "'Inter', sans-serif",
+                        fontWeight: "500",
+                      }}
+                    >
+                      {result.prediction === "CANDIDATE"
+                        ? "This object shows strong characteristics of an exoplanet"
+                        : "This signal is likely not from a planetary transit"}
+                    </div>
+                  </div>
+
+                    {/* Result Details - Cards */}
+                    <div
+                      style={{
+                        display: "grid",
+                        gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+                        gap: "1rem",
+                        marginBottom: "2rem",
                       }}
                     >
                       <div
                         style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          padding: "0.75rem 0",
-                          borderBottom: "1px solid rgba(0, 0, 0, 0.5)",
+                          background: "linear-gradient(135deg, rgba(128, 114, 255, 0.2) 0%, rgba(103, 93, 194, 0.2) 100%)",
+                          border: "1px solid rgba(128, 114, 255, 0.3)",
+                          padding: "1.5rem",
+                          borderRadius: "0.75rem",
+                          textAlign: "center",
                         }}
                       >
-                        <span
+                        <div
                           style={{
-                            color: "rgba(255, 255, 255, 0.8)",
-                            fontWeight: "600",
+                            color: "rgba(255, 255, 255, 0.7)",
+                            fontSize: "0.875rem",
+                            marginBottom: "0.5rem",
                             fontFamily: "'Inter', sans-serif",
+                            textTransform: "uppercase",
+                            letterSpacing: "1px",
                           }}
                         >
-                          Model:
-                        </span>
-                        <span
+                          Model
+                        </div>
+                        <div
                           style={{
                             color: "white",
-                            fontWeight: "500",
+                            fontSize: "1.25rem",
+                            fontWeight: "700",
                             fontFamily: "'Inter', sans-serif",
                           }}
                         >
                           {result.model}
-                        </span>
+                        </div>
                       </div>
+
                       <div
                         style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          padding: "0.75rem 0",
-                          borderBottom: "1px solid rgba(0, 0, 0, 0.5)",
+                          background: "linear-gradient(135deg, rgba(128, 114, 255, 0.2) 0%, rgba(103, 93, 194, 0.2) 100%)",
+                          border: "1px solid rgba(128, 114, 255, 0.3)",
+                          padding: "1.5rem",
+                          borderRadius: "0.75rem",
+                          textAlign: "center",
                         }}
                       >
-                        <span
+                        <div
                           style={{
-                            color: "rgba(255, 255, 255, 0.8)",
-                            fontWeight: "600",
+                            color: "rgba(255, 255, 255, 0.7)",
+                            fontSize: "0.875rem",
+                            marginBottom: "0.5rem",
                             fontFamily: "'Inter', sans-serif",
+                            textTransform: "uppercase",
+                            letterSpacing: "1px",
                           }}
                         >
-                          RAG Examples Used:
-                        </span>
-                        <span
+                          RAG Examples
+                        </div>
+                        <div
                           style={{
                             color: "white",
-                            fontWeight: "500",
+                            fontSize: "1.25rem",
+                            fontWeight: "700",
                             fontFamily: "'Inter', sans-serif",
                           }}
                         >
-                          {result.similar_examples_used} most similar entries
-                        </span>
+                          {result.similar_examples_used}
+                        </div>
                       </div>
+
                       <div
                         style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          padding: "0.75rem 0",
+                          background: "linear-gradient(135deg, rgba(128, 114, 255, 0.2) 0%, rgba(103, 93, 194, 0.2) 100%)",
+                          border: "1px solid rgba(128, 114, 255, 0.3)",
+                          padding: "1.5rem",
+                          borderRadius: "0.75rem",
+                          textAlign: "center",
                         }}
                       >
-                        <span
+                        <div
                           style={{
-                            color: "rgba(255, 255, 255, 0.8)",
-                            fontWeight: "600",
+                            color: "rgba(255, 255, 255, 0.7)",
+                            fontSize: "0.875rem",
+                            marginBottom: "0.5rem",
                             fontFamily: "'Inter', sans-serif",
+                            textTransform: "uppercase",
+                            letterSpacing: "1px",
                           }}
                         >
-                          Processing Time:
-                        </span>
-                        <span
+                          Processing Time
+                        </div>
+                        <div
                           style={{
                             color: "white",
-                            fontWeight: "500",
+                            fontSize: "1.25rem",
+                            fontWeight: "700",
                             fontFamily: "'Inter', sans-serif",
                           }}
                         >
                           {result.processing_time}
-                        </span>
+                        </div>
                       </div>
                     </div>
 
                     {/* Input Summary */}
                     <div
                       style={{
-                        background: "rgba(0, 0, 0, 0.7)",
-                        padding: "1.5rem",
+                        background: "rgba(0, 0, 0, 0.3)",
+                        padding: "2rem",
                         borderRadius: "0.75rem",
                         marginBottom: "1.5rem",
+                        border: "1px solid rgba(255, 255, 255, 0.1)",
                       }}
                     >
                       <h4
                         style={{
-                          margin: "0 0 1rem 0",
+                          margin: "0 0 1.5rem 0",
                           color: "white",
-                          fontSize: "1.1rem",
-                          fontWeight: "600",
+                          fontSize: "1.2rem",
+                          fontWeight: "700",
                           fontFamily: "'Inter', sans-serif",
+                          textAlign: "center",
                         }}
                       >
-                        📋 Input Parameters:
+                        Input Parameters
                       </h4>
                       <div
                         style={{
                           display: "grid",
                           gridTemplateColumns:
-                            "repeat(auto-fit, minmax(180px, 1fr))",
-                          gap: "0.75rem",
-                          color: "rgba(255, 255, 255, 0.8)",
-                          fontSize: "0.95rem",
+                            "repeat(auto-fit, minmax(140px, 1fr))",
+                          gap: "1rem",
                           fontFamily: "'Inter', sans-serif",
                         }}
                       >
-                        <span>Period: {formData.period} days</span>
-                        <span>Duration: {formData.duration} hrs</span>
-                        <span>Depth: {formData.depth} ppm</span>
-                        <span>Radius: {formData.prad} R⊕</span>
-                        <span>Temp: {formData.teq} K</span>
+                        <div style={{ textAlign: "center" }}>
+                          <div style={{ color: "rgba(255, 255, 255, 0.6)", fontSize: "0.75rem", marginBottom: "0.25rem", textTransform: "uppercase", letterSpacing: "1px" }}>Period</div>
+                          <div style={{ color: "white", fontSize: "1.1rem", fontWeight: "600" }}>{formData.period} days</div>
+                        </div>
+                        <div style={{ textAlign: "center" }}>
+                          <div style={{ color: "rgba(255, 255, 255, 0.6)", fontSize: "0.75rem", marginBottom: "0.25rem", textTransform: "uppercase", letterSpacing: "1px" }}>Duration</div>
+                          <div style={{ color: "white", fontSize: "1.1rem", fontWeight: "600" }}>{formData.duration} hrs</div>
+                        </div>
+                        <div style={{ textAlign: "center" }}>
+                          <div style={{ color: "rgba(255, 255, 255, 0.6)", fontSize: "0.75rem", marginBottom: "0.25rem", textTransform: "uppercase", letterSpacing: "1px" }}>Depth</div>
+                          <div style={{ color: "white", fontSize: "1.1rem", fontWeight: "600" }}>{formData.depth} ppm</div>
+                        </div>
+                        <div style={{ textAlign: "center" }}>
+                          <div style={{ color: "rgba(255, 255, 255, 0.6)", fontSize: "0.75rem", marginBottom: "0.25rem", textTransform: "uppercase", letterSpacing: "1px" }}>Radius</div>
+                          <div style={{ color: "white", fontSize: "1.1rem", fontWeight: "600" }}>{formData.prad} R⊕</div>
+                        </div>
+                        <div style={{ textAlign: "center" }}>
+                          <div style={{ color: "rgba(255, 255, 255, 0.6)", fontSize: "0.75rem", marginBottom: "0.25rem", textTransform: "uppercase", letterSpacing: "1px" }}>Temp</div>
+                          <div style={{ color: "white", fontSize: "1.1rem", fontWeight: "600" }}>{formData.teq} K</div>
+                        </div>
                       </div>
                     </div>
 
@@ -2371,29 +2457,31 @@ export default function Home() {
                           onClick={() => setShowRagExamples(true)}
                           style={{
                             width: "100%",
-                            background: "#4299e1",
+                            background: "linear-gradient(135deg, #8072FF 0%, #675DC2 100%)",
                             color: "white",
                             border: "none",
-                            padding: "1rem",
+                            padding: "1.25rem",
                             borderRadius: "0.75rem",
-                            fontSize: "1.1rem",
+                            fontSize: "1.15rem",
                             fontWeight: "bold",
                             cursor: "pointer",
-                            transition: "background 0.2s",
+                            transition: "all 0.3s",
                             fontFamily: "'Inter', sans-serif",
+                            boxShadow: "0 4px 15px rgba(128, 114, 255, 0.3)",
                           }}
                           onMouseEnter={(e) => {
-                            e.target.style.background = "#3182ce";
+                            e.target.style.transform = "translateY(-2px)";
+                            e.target.style.boxShadow = "0 6px 20px rgba(128, 114, 255, 0.4)";
                           }}
                           onMouseLeave={(e) => {
-                            e.target.style.background = "#4299e1";
+                            e.target.style.transform = "translateY(0)";
+                            e.target.style.boxShadow = "0 4px 15px rgba(128, 114, 255, 0.3)";
                           }}
                         >
-                          🔍 View {result.similar_examples.length} RAG Examples
-                          Used
+                          View {result.similar_examples.length} Similar Examples
                         </button>
                       )}
-                  </div>
+
 
                   {/* What This Means */}
                   <div
@@ -2409,12 +2497,12 @@ export default function Home() {
                       style={{
                         margin: "0 0 1rem 0",
                         color: "white",
-                        fontSize: "1.2rem",
+              fontSize: "1.2rem",
                         fontWeight: "600",
                         fontFamily: "'Inter', sans-serif",
                       }}
                     >
-                      💡 What Does This Mean?
+                      What Does This Mean?
                     </h3>
                     {result.prediction === "CANDIDATE" ? (
                       <p
@@ -2474,7 +2562,7 @@ export default function Home() {
                     fontFamily: "'Inter', sans-serif",
                   }}
                 >
-                  🧠 How Our AI Works
+                  How Our AI Works
                 </h3>
                 <div
                   style={{
@@ -2485,7 +2573,7 @@ export default function Home() {
                 >
                   <div
                     style={{
-                      background: "rgba(0, 0, 0, 0.7)",
+                      background: "rgba(0, 0, 0, 0.2)",
                       padding: "2rem",
                       borderRadius: "1rem",
                       textAlign: "center",
@@ -2541,7 +2629,7 @@ export default function Home() {
                   </div>
                   <div
                     style={{
-                      background: "rgba(0, 0, 0, 0.7)",
+                      background: "rgba(0, 0, 0, 0.2)",
                       padding: "2rem",
                       borderRadius: "1rem",
                       textAlign: "center",
@@ -2597,7 +2685,7 @@ export default function Home() {
                   </div>
                   <div
                     style={{
-                      background: "rgba(0, 0, 0, 0.7)",
+                      background: "rgba(0, 0, 0, 0.2)",
                       padding: "2rem",
                       borderRadius: "1rem",
                       textAlign: "center",
@@ -3008,11 +3096,11 @@ export default function Home() {
                               transition: "all 0.2s ease",
                             }}
                             onMouseEnter={(e) => {
-                              e.target.style.background =
+                              e.currentTarget.style.background =
                                 "rgba(128, 114, 255, 0.05)";
                             }}
                             onMouseLeave={(e) => {
-                              e.target.style.background = "transparent";
+                              e.currentTarget.style.background = "transparent";
                             }}
                           >
                             <td
@@ -3306,7 +3394,7 @@ export default function Home() {
                     fontFamily: "'Inter', sans-serif",
                   }}
                 >
-                  ✅ Candidates:{" "}
+                  Candidates: 
                   {
                     result.similar_examples.filter(
                       (e) => e.disposition === "CANDIDATE"
@@ -3319,7 +3407,7 @@ export default function Home() {
                     fontFamily: "'Inter', sans-serif",
                   }}
                 >
-                  ❌ False Positives:{" "}
+                  False Positives: 
                   {
                     result.similar_examples.filter(
                       (e) => e.disposition === "FALSE POSITIVE"
@@ -3453,10 +3541,10 @@ export default function Home() {
                           borderBottom: "1px solid rgba(0, 0, 0, 0.2)",
                         }}
                         onMouseEnter={(e) => {
-                          e.target.style.background = "rgba(0, 0, 0, 0.5)";
+                          e.currentTarget.style.background = "rgba(0, 0, 0, 0.5)";
                         }}
                         onMouseLeave={(e) => {
-                          e.target.style.background = "transparent";
+                          e.currentTarget.style.background = "transparent";
                         }}
                       >
                         <td style={{ padding: "0.75rem 1rem" }}>{idx + 1}</td>
@@ -3511,7 +3599,7 @@ export default function Home() {
                     fontFamily: "'Inter', sans-serif",
                   }}
                 >
-                  💡 How RAG Works
+                  How RAG Works
                 </h4>
                 <p
                   style={{
