@@ -1,6 +1,6 @@
 import httpProxy from 'http-proxy';
 
-const API_URL = 'http://localhost:5001'; // The internal URL of your Flask backend
+const API_URL = 'http://127.0.0.1:5001'; // Force IPv4 to match Flask's bind address
 const proxy = httpProxy.createProxyServer();
 
 export const config = {

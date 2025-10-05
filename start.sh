@@ -43,7 +43,7 @@ for i in {1..60}; do
         exit 1
     fi
     
-    if wget -q --spider http://localhost:5001/health 2>/dev/null || curl -sf http://localhost:5001/health > /dev/null 2>&1; then
+    if wget -q --spider http://127.0.0.1:5001/health 2>/dev/null || curl -sf http://127.0.0.1:5001/health > /dev/null 2>&1; then
         echo "✅ Flask is ready!"
         break
     fi
