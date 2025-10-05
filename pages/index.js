@@ -784,6 +784,8 @@ export default function Home() {
             zIndex: 20,
             opacity: 0.92,
             pointerEvents: "none",
+            opacity: showDashboard ? 0 : 1,
+            transition: "opacity 0.8s ease-in-out",
             userSelect: "none",
           }}
         />
