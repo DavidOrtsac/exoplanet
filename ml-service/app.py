@@ -220,18 +220,14 @@ def save_dataset():
         selector.parse_json_to_data(data)
         selector.save_data(user_csv_path)
         
-        # Try to create vector store (async if Celery available)
-        task_id = None
-        try:
-            task = create_vector_store_task.delay(user_csv_path, user_vector_store_path)
-            task_id = task.id
-        except Exception as e:
-            print(f"Warning: Celery not available, skipping vector store creation: {e}")
-            # Will use default vector store instead
+        # Build vector store synchronously with user's custom dataset
+        print(f"🔄 Building vector store for custom dataset...")
+        llm_in_context_classifier.create_vector_store_from_csv(user_csv_path, user_vector_store_path)
+        print(f"✅ Custom vector store built successfully!")
 
         cleanup_old_sessions(max_sessions=20)
         
-        return jsonify({'message': 'Dataset saved successfully.' + (' Vector store creation started.' if task_id else ''), 'task_id': task_id}), 200
+        return jsonify({'message': 'Dataset saved and vector store built successfully'}), 200
 
     except Exception as e:
         return jsonify({'error': f'Dataset update failed: {str(e)}'}), 500
@@ -299,21 +295,20 @@ def split_dataset():
         training_df.to_csv(training_path, index=False)
         held_out_df.to_csv(held_out_path, index=False)
         
-        # Try to rebuild vector store with training data only (async if Celery available)
+        # CRITICAL: Rebuild vector store with ONLY training data
+        # This ensures held-out data is truly unseen by the model
         vector_store_path = os.path.join(user_data_dir, f"{session_id}_vector_store.pkl")
-        task_id = None
-        try:
-            task = create_vector_store_task.delay(training_path, vector_store_path)
-            task_id = task.id
-        except Exception as e:
-            print(f"Warning: Celery not available, skipping vector store rebuild: {e}")
-            # Will use default vector store instead
+        
+        print(f"🔄 Rebuilding vector store with {len(training_df)} training samples (excluding {len(held_out_df)} held-out)...")
+        # Build synchronously - this is essential for legitimate testing
+        llm_in_context_classifier.create_vector_store_from_csv(training_path, vector_store_path)
+        print(f"✅ Vector store rebuilt successfully!")
         
         return jsonify({
-            'message': 'Dataset split successfully',
-            'task_id': task_id,
+            'message': 'Dataset split and vector store rebuilt successfully',
             'training_count': len(training_df),
-            'held_out_count': len(held_out_df)
+            'held_out_count': len(held_out_df),
+            'note': 'Vector store now contains ONLY training data for legitimate held-out testing'
         }), 200
     except Exception as e:
         return jsonify({'error': f'Failed to split dataset: {str(e)}'}), 500

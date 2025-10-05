@@ -30,7 +30,7 @@ fi
 # Start Flask backend with Gunicorn
 echo "🚀 Starting Flask ML service with Gunicorn on port 5001..."
 cd ml-service
-gunicorn --bind 0.0.0.0:5001 --workers 2 --timeout 120 --log-level info --access-logfile '-' --error-logfile '-' --pythonpath . app:app &
+gunicorn --bind 0.0.0.0:5001 --workers 2 --timeout 300 --log-level info --access-logfile '-' --error-logfile '-' --pythonpath . app:app &
 FLASK_PID=$!
 echo "Flask PID: $FLASK_PID"
 cd ..

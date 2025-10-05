@@ -442,6 +442,10 @@ export default function Home() {
   };
 
   const handleSplitDataset = async () => {
+    if (!confirm('⚠️ This will take 2-3 minutes to rebuild the vector store with training data only.\n\nThis is ESSENTIAL for legitimate held-out testing.\n\nProceed?')) {
+      return;
+    }
+    
     setIsSplitting(true);
     setError('');
     try {
@@ -456,17 +460,17 @@ export default function Home() {
       
       if (response.ok) {
         const result = await response.json();
-        alert(`Dataset split successfully!\nTraining: ${result.training_count} rows\nHeld-out: ${result.held_out_count} rows\n\nBuilding vector store... (task ID: ${result.task_id})`);
+        alert(`✅ Dataset split successfully!\n\nTraining: ${result.training_count} rows\nHeld-out: ${result.held_out_count} rows\n\n${result.note || 'Vector store rebuilt with training data only.'}`);
         
         // Reload data
         await loadTrainingAndHeldOutData();
         setIsTestMode(true);
       } else {
         const error = await response.json();
-        alert("Split failed: " + error.error);
+        alert("❌ Split failed: " + error.error);
       }
     } catch (error) {
-      alert("Error splitting dataset: " + error.message);
+      alert("❌ Error splitting dataset: " + error.message);
     }
     setIsSplitting(false);
   };
