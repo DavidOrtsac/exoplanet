@@ -43,7 +43,6 @@ export default function Dataset() {
         const datasetData = await loadDatasetData();
         setData(datasetData);
         const uniqueTypes = Array.from(new Set(datasetData.map(row => row.type))).filter(Boolean);
-
         setTypeFilter(uniqueTypes);
       } catch (error) {
         console.error("Error loading data:", error);
@@ -63,6 +62,7 @@ export default function Dataset() {
     setSavingDisabled(true);
     const result = await getVectorTaskStatus(task_id);
 
+    // when done, just remove task_id from local storage
     const onDone = (message) => {
       localStorage.removeItem('task_id');
       setSavingDisabled(false);
@@ -74,12 +74,11 @@ export default function Dataset() {
         timerId.current = null;
       }
     }
-    console.log(result);
+
     if (result.status === 'STARTED') {
       setTaskProgress(0);
       timerId.current = setTimeout(() => getStatus(task_id), 2000);
     } else if (result.status === 'PROGRESS') {
-      // Update progress information
       setTaskProgress(result.progress?.current || 0);
       timerId.current = setTimeout(() => getStatus(task_id), 5000);
     } else if (result.status === 'SUCCESS') {
@@ -90,8 +89,6 @@ export default function Dataset() {
       onDone('Unknown error');
     }
   };
-
-  console.log(taskProgress);
 
   useEffect(() => {
     if (data.length > 0) {
@@ -226,11 +223,11 @@ export default function Dataset() {
       return;
     }
     try {
+      // so save_dataset returns task_id which we set in local storage and then run getStatus
       const result = await saveDataset(data);
       localStorage.setItem('task_id', result.task_id);
       setTimeout(() => getStatus(result.task_id), 1000);
     } catch (error) {
-      console.error("Error saving dataset:", error);
     } finally {
       setLoading(false);
     }

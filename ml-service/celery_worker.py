@@ -1,8 +1,8 @@
 
+# i clearly ai-d some of this because i got tired. but basically celery is like jobs in rails
 import os
 import sys
 
-# Add the current directory to the Python path to resolve local module imports
 sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
 
 from celery import Celery
@@ -13,7 +13,6 @@ import pickle
 from openai import OpenAI
 import pandas as pd
 
-# Load environment variables from .env file
 load_dotenv()
 
 from scripts.llm_in_context_classifier import LLMInContextClassifier, CLIENT, EMBEDDING_MODEL
@@ -50,9 +49,6 @@ def _get_embeddings_with_progress(task_instance, texts):
 
 @celery_app.task(name='create_vector_store_task', bind=True)
 def create_vector_store_task(self, csv_path, output_pkl_path):
-    """
-    This is the background task that creates a vector store and reports progress.
-    """
     try:
         self.update_state(state='PROGRESS', meta={'current': 0})
         

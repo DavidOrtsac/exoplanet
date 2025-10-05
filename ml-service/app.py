@@ -167,6 +167,7 @@ def save_dataset():
         selector.parse_json_to_data(data)
         selector.save_data(user_csv_path)
         
+        # this is the task that creates the vector store
         task = create_vector_store_task.delay(user_csv_path, user_vector_store_path)
         
         return jsonify({'message': 'Vector store creation started.', 'task_id': task.id}), 202
@@ -174,12 +175,8 @@ def save_dataset():
     except Exception as e:
         return jsonify({'error': f'Dataset update failed: {str(e)}'}), 500
 
-# 4. Modify the endpoint to accept the task_id from the URL.
 @app.route('/tasks/status/<task_id>', methods=['GET'])
 def get_task_status(task_id):
-    """
-    Checks the status of a background task given its ID.
-    """
     task = celery_app.AsyncResult(task_id)
     response_data = {
         'task_id': task_id,
@@ -191,7 +188,6 @@ def get_task_status(task_id):
     elif task.state == 'STARTED':
         response_data['result'] = None
     elif task.state == 'PROGRESS':
-        # If the task is in progress, add the progress metadata to the response.
         response_data['progress'] = task.info
     elif task.state == 'FAILURE':
         response_data['error'] = str(task.result)
