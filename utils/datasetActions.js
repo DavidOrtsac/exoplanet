@@ -66,3 +66,26 @@ export const saveDataset = async (data) => {
     throw error;
   }
 };
+
+export const getVectorTaskStatus = async (task_id) => {
+  try {
+    const response = await fetch(`http://localhost:5002/tasks/status/${task_id}`, {
+      method: 'GET',
+      credentials: 'include',
+    });
+
+    if (!response.ok) {
+      // If the response is not OK, read it as text to avoid JSON parsing errors
+      // on HTML error pages (like 502 Bad Gateway).
+      const errorText = await response.text();
+      console.error("Received non-JSON response from server:", errorText);
+      throw new Error(`Server returned an error: ${response.status} ${response.statusText}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    // Log the original error, which might be more informative now
+    console.error('Error in getVectorTaskStatus:', error);
+    throw error;
+  }
+};

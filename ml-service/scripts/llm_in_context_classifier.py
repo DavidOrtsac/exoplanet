@@ -48,6 +48,7 @@ class LLMInContextClassifier:
             embeddings.extend([item.embedding for item in response.data])
         return embeddings
 
+    # even tho this function is not used anymore, im still keeping it
     def create_vector_store_from_csv(self, csv_path, output_pkl_path):
         """
         Reads a CSV, generates embeddings, builds a vector store, and saves it to a file.
