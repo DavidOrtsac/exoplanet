@@ -109,6 +109,7 @@ export default function Home() {
   const [result, setResult] = useState(null);
   const [isClassifying, setIsClassifying] = useState(false);
   const [showRagExamples, setShowRagExamples] = useState(false);
+  const [error, setError] = useState(null);
 
   // Dual Table & Test Mode state
   const [trainingData, setTrainingData] = useState([]);

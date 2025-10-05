@@ -13,21 +13,48 @@ echo "🔍 Checking vector store..."
 python3 -c "
 import sys
 import os
+import requests
+from tqdm import tqdm
+
 sys.path.append('ml-service')
 sys.path.append('ml-service/scripts')
 
+# This is the direct download link to the LFS file in your repo.
+LFS_URL = 'https://github.com/DavidOrtsac/exoplanet/raw/main/ml-service/data/default_vector_store.pkl'
+VECTOR_STORE_PATH = 'ml-service/data/default_vector_store.pkl'
+FILE_SIZE = 216 * 1024 * 1024 # ~216 MB
+
+def download_file(url, path):
+    print(f'⬇️ Downloading vector store from {url}...')
+    try:
+        with requests.get(url, stream=True) as r:
+            r.raise_for_status()
+            total_size = int(r.headers.get('content-length', 0))
+            block_size = 8192
+            with open(path, 'wb') as f, tqdm(
+                total=total_size, unit='iB', unit_scale=True, desc='Downloading'
+            ) as bar:
+                for chunk in r.iter_content(chunk_size=block_size):
+                    f.write(chunk)
+                    bar.update(len(chunk))
+        print(f'✅ Download complete: {path}')
+        return True
+    except Exception as e:
+        print(f'❌ Download failed: {e}')
+        return False
+
 # Check if vector store exists and is valid
-vector_store_path = 'ml-service/data/default_vector_store.pkl'
-if os.path.exists(vector_store_path):
-    with open(vector_store_path, 'rb') as f:
-        first_bytes = f.read(10)
-        if first_bytes.startswith(b'version'):
-            print('⚠️ Vector store is a Git LFS pointer file!')
-            print('🧠 Will regenerate on first use (takes 2-3 minutes once)...')
-        else:
-            print('✅ Vector store exists and appears valid.')
+if os.path.exists(VECTOR_STORE_PATH):
+    # Check if it's a pointer file by its small size
+    if os.path.getsize(VECTOR_STORE_PATH) < 1024:
+        print('⚠️ Vector store is a Git LFS pointer file! Deleting and re-downloading...')
+        os.remove(VECTOR_STORE_PATH)
+        download_file(LFS_URL, VECTOR_STORE_PATH)
+    else:
+        print('✅ Vector store exists and is valid.')
 else:
-    print('⚠️ Vector store not found. Will generate on first use.')
+    print('⚠️ Vector store not found. Downloading now...')
+    download_file(LFS_URL, VECTOR_STORE_PATH)
 "
 
 # Start Flask backend with Gunicorn
