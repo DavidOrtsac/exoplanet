@@ -1,8 +1,18 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import Head from "next/head";
 import Layout from "../components/Layout";
 import ThreeJSEarth from "../components/ThreeJSEarth";
-import { loadKOIData, loadK2Data, loadTESSData } from "../utils/dataLoader";
+import {
+  loadKOIData,
+  loadK2Data,
+  loadTESSData,
+  loadDatasetData,
+} from "../utils/dataLoader";
+import {
+  filterData,
+  saveDataset,
+  uploadUserData,
+} from "../utils/datasetActions";
 
 export default function Home() {
   const earthRef = useRef(null);
@@ -28,6 +38,18 @@ export default function Home() {
   const [result, setResult] = useState(null);
   const [isClassifying, setIsClassifying] = useState(false);
   const [showRagExamples, setShowRagExamples] = useState(false);
+
+  // Data Explorer state
+  const [datasetData, setDatasetData] = useState([]);
+  const [datasetLoading, setDatasetLoading] = useState(true);
+  const [datasetSortConfig, setDatasetSortConfig] = useState({
+    key: "id",
+    direction: "ascending",
+  });
+  const [datasetColumnWidths, setDatasetColumnWidths] = useState({});
+  const [datasetTypeFilter, setDatasetTypeFilter] = useState([]);
+  const [datasetCurrentPage, setDatasetCurrentPage] = useState(1);
+  const [datasetRowsPerPage] = useState(50);
 
   // Example data for quick testing
   const examples = {
@@ -66,6 +88,131 @@ export default function Home() {
   const resetForm = () => {
     setFormData({ period: "", duration: "", depth: "", prad: "", teq: "" });
     setResult(null);
+  };
+
+  // Data Explorer helper functions
+  const measureText = (text, font) => {
+    const canvas = document.createElement("canvas");
+    const context = canvas.getContext("2d");
+    context.font = font;
+    return context.measureText(text).width;
+  };
+
+  const getDisposition = (disposition) => {
+    const value = Number(disposition);
+    switch (value) {
+      case 1:
+        return (
+          <span
+            style={{
+              display: "inline-block",
+              padding: "5px 12px",
+              borderRadius: "15px",
+              fontSize: "0.75rem",
+              fontWeight: "700",
+              lineHeight: "1",
+              textTransform: "uppercase",
+              whiteSpace: "nowrap",
+              letterSpacing: "0.03em",
+              background: "linear-gradient(to right, #80dda1, #7fdca0)",
+              color: "#ffffff",
+              boxShadow: "0 0 8px rgba(45, 211, 111, 0.3)",
+            }}
+          >
+            Confirmed
+          </span>
+        );
+      case 0:
+        return (
+          <span
+            style={{
+              display: "inline-block",
+              padding: "5px 12px",
+              borderRadius: "15px",
+              fontSize: "0.75rem",
+              fontWeight: "700",
+              lineHeight: "1",
+              textTransform: "uppercase",
+              whiteSpace: "nowrap",
+              letterSpacing: "0.03em",
+              background: "linear-gradient(to right, #f98496, #ef6f82)",
+              color: "#ffffff",
+              boxShadow: "0 0 8px rgba(235, 68, 90, 0.3)",
+            }}
+          >
+            False Positive
+          </span>
+        );
+      default:
+        return "Unknown";
+    }
+  };
+
+  const getTelescopeName = (type) => {
+    switch (type?.toLowerCase()) {
+      case "koi":
+        return "Kepler";
+      case "toi":
+        return "TESS";
+      case "k2":
+        return "K2";
+      case "user":
+        return "User";
+      default:
+        return type || "Unknown";
+    }
+  };
+
+  const datasetRequestSort = (key) => {
+    let direction = "ascending";
+    if (
+      datasetSortConfig.key === key &&
+      datasetSortConfig.direction === "ascending"
+    ) {
+      direction = "descending";
+    }
+    setDatasetSortConfig({ key, direction });
+    setDatasetCurrentPage(1);
+  };
+
+  const handleDatasetFilterChange = async (displayTypes) => {
+    setDatasetLoading(true);
+    try {
+      const filteredData = await filterData(displayTypes);
+      setDatasetData(filteredData);
+    } catch (error) {
+      console.error("Error filtering data:", error);
+    } finally {
+      setDatasetLoading(false);
+    }
+  };
+
+  const handleUploadUserData = async (file) => {
+    setDatasetLoading(true);
+    try {
+      const uploadedData = await uploadUserData(file);
+      setDatasetData(uploadedData);
+    } catch (error) {
+      console.error("Error loading data:", error);
+    } finally {
+      setDatasetLoading(false);
+    }
+  };
+
+  const handleSaveDataset = async () => {
+    setDatasetLoading(true);
+    if (datasetData.length === 0) {
+      alert("No data to save");
+      setDatasetLoading(false);
+      return;
+    }
+    try {
+      await saveDataset(datasetData);
+    } catch (error) {
+      console.error("Error saving dataset:", error);
+    } finally {
+      setDatasetLoading(false);
+    }
   };
 
   const classifyExoplanet = async () => {
@@ -132,38 +279,86 @@ export default function Home() {
 
     setIsTransitioning(true);
 
-    // Trigger Earth animation based on destination
-    if (
-      itemId === "ai" &&
-      earthRef.current &&
-      earthRef.current.triggerLeftAnimation
-    ) {
-      // Move Earth to bottom left for AI content
-      earthRef.current.triggerLeftAnimation();
-      // Wait for Earth animation to complete before transitioning content
-      setTimeout(() => {
-        setActiveNavItem(itemId);
+    // Trigger Earth animation based on destination and source
+    if (itemId === "ai") {
+      // Moving to AI
+      if (activeNavItem === "data") {
+        // Data → AI: No animation needed (both are bottom left)
         setTimeout(() => {
-          setIsTransitioning(false);
-        }, 50);
-      }, 1000); // Wait 1 second for smooth Earth movement, then transition content
-    } else if (
-      activeNavItem === "ai" &&
-      itemId !== "ai" &&
-      earthRef.current &&
-      earthRef.current.triggerRightAnimation
-    ) {
-      // Move Earth back to bottom right when leaving AI content
-      earthRef.current.triggerRightAnimation();
-      // Wait for Earth animation to complete before transitioning content
-      setTimeout(() => {
-        setActiveNavItem(itemId);
+          setActiveNavItem(itemId);
+          setTimeout(() => {
+            setIsTransitioning(false);
+          }, 50);
+        }, 300);
+      } else {
+        // Overview → AI: Earth goes to bottom left
+        if (earthRef.current && earthRef.current.triggerLeftAnimation) {
+          earthRef.current.triggerLeftAnimation();
+          setTimeout(() => {
+            setActiveNavItem(itemId);
+            setTimeout(() => {
+              setIsTransitioning(false);
+            }, 50);
+          }, 1000);
+        }
+      }
+    } else if (itemId === "data") {
+      // Moving to Data tab
+      if (activeNavItem === "ai") {
+        // AI → Data: No animation needed (both are bottom left)
         setTimeout(() => {
-          setIsTransitioning(false);
-        }, 50);
-      }, 1000); // Wait 1 second for smooth Earth movement, then transition content
+          setActiveNavItem(itemId);
+          setTimeout(() => {
+            setIsTransitioning(false);
+          }, 50);
+        }, 300);
+      } else {
+        // Coming from Overview - Earth moves from bottom right to bottom left
+        if (earthRef.current && earthRef.current.triggerLeftAnimation) {
+          earthRef.current.triggerLeftAnimation();
+          setTimeout(() => {
+            setActiveNavItem(itemId);
+            setTimeout(() => {
+              setIsTransitioning(false);
+            }, 50);
+          }, 1000);
+        }
+      }
+    } else if (activeNavItem === "data") {
+      // Moving away from Data tab
+      if (itemId === "ai") {
+        // Data → AI: No animation needed (both are bottom left)
+        setTimeout(() => {
+          setActiveNavItem(itemId);
+          setTimeout(() => {
+            setIsTransitioning(false);
+          }, 50);
+        }, 300);
+      } else if (itemId === "overview") {
+        // Data → Overview: Earth moves from bottom left to bottom right
+        if (earthRef.current && earthRef.current.triggerRightAnimation) {
+          earthRef.current.triggerRightAnimation();
+          setTimeout(() => {
+            setActiveNavItem(itemId);
+            setTimeout(() => {
+              setIsTransitioning(false);
+            }, 50);
+          }, 1000);
+        }
+      }
+    } else if (activeNavItem === "ai" && itemId !== "ai") {
+      // Moving away from AI to Overview - Earth goes back to bottom right
+      if (earthRef.current && earthRef.current.triggerRightAnimation) {
+        earthRef.current.triggerRightAnimation();
+        setTimeout(() => {
+          setActiveNavItem(itemId);
+          setTimeout(() => {
+            setIsTransitioning(false);
+          }, 50);
+        }, 1000);
+      }
     } else {
-      // For other transitions, use the original fast transition
+      // For other transitions (like Overview to AI), use the original fast transition
       setTimeout(() => {
         setActiveNavItem(itemId);
         setTimeout(() => {
@@ -204,6 +399,83 @@ export default function Home() {
     loadData();
   }, []);
 
+  // Load dataset data for Data Explorer
+  useEffect(() => {
+    const loadDatasetDataAsync = async () => {
+      setDatasetLoading(true);
+      try {
+        const datasetDataResult = await loadDatasetData();
+        setDatasetData(datasetDataResult);
+        const uniqueTypes = Array.from(
+          new Set(datasetDataResult.map((row) => row.type))
+        ).filter(Boolean);
+        setDatasetTypeFilter(uniqueTypes);
+      } catch (error) {
+        console.error("Error loading dataset data:", error);
+      } finally {
+        setDatasetLoading(false);
+      }
+    };
+    loadDatasetDataAsync();
+  }, []);
+
+  // Calculate column widths for dataset table
+  useEffect(() => {
+    if (datasetData.length > 0) {
+      const timer = setTimeout(() => {
+        const headerFont = "600 0.85rem Inter";
+        const cellFont = "400 0.9rem Inter";
+        const numericCellFont = "400 0.9rem 'Roboto Mono'";
+        const padding = 32;
+
+        const tableColumns = [
+          { key: "type", label: "Telescope Type" },
+          { key: "id", label: "Planet ID" },
+          { key: "name", label: "Planet Name" },
+          { key: "disposition", label: "Disposition" },
+          { key: "period", label: "Orbital Period (days)" },
+          { key: "duration", label: "Transit Duration (hours)" },
+          { key: "depth", label: "Transit Depth (ppm)" },
+          { key: "prad", label: "Orbital Radius (Earth radii)" },
+          { key: "teq", label: "Equilibrium Temperature (K)" },
+        ];
+
+        const newWidths = {};
+        tableColumns.forEach((column) => {
+          let maxWidth = measureText(column.label, headerFont);
+
+          if (column.key === "disposition") {
+            maxWidth = Math.max(maxWidth, 140);
+          }
+
+          const sampleSize = 500;
+          const dataSample = datasetData.slice(0, sampleSize);
+
+          dataSample.forEach((row) => {
+            const isNumeric = [
+              "id",
+              "period",
+              "duration",
+              "depth",
+              "prad",
+              "teq",
+            ].includes(column.key);
+            const font = isNumeric ? numericCellFont : cellFont;
+            const text = row[column.key] ? row[column.key].toString() : "";
+            const width = measureText(text, font);
+            if (width > maxWidth) {
+              maxWidth = width;
+            }
+          });
+          newWidths[column.key] = Math.ceil(maxWidth + padding);
+        });
+        setDatasetColumnWidths(newWidths);
+      }, 100);
+
+      return () => clearTimeout(timer);
+    }
+  }, [datasetData]);
+
   const missions = [
     {
       id: "KOI",
@@ -239,6 +511,47 @@ export default function Home() {
   const startIndex = (currentPage - 1) * rowsPerPage;
   const endIndex = startIndex + rowsPerPage;
   const paginatedData = currentData.slice(startIndex, endIndex);
+
+  // Dataset table logic
+  const datasetTableColumns = [
+    { key: "type", label: "Telescope Type" },
+    { key: "id", label: "Planet ID" },
+    { key: "name", label: "Planet Name" },
+    { key: "disposition", label: "Disposition" },
+    { key: "period", label: "Orbital Period (days)" },
+    { key: "duration", label: "Transit Duration (hours)" },
+    { key: "depth", label: "Transit Depth (ppm)" },
+    { key: "prad", label: "Orbital Radius (Earth radii)" },
+    { key: "teq", label: "Equilibrium Temperature (K)" },
+  ];
+
+  const sortedDatasetData = useMemo(() => {
+    let sortableData = [...datasetData];
+    if (datasetSortConfig.key !== null) {
+      sortableData.sort((a, b) => {
+        if (a[datasetSortConfig.key] === null) return 1;
+        if (b[datasetSortConfig.key] === null) return -1;
+        if (a[datasetSortConfig.key] < b[datasetSortConfig.key]) {
+          return datasetSortConfig.direction === "ascending" ? -1 : 1;
+        }
+        if (a[datasetSortConfig.key] > b[datasetSortConfig.key]) {
+          return datasetSortConfig.direction === "ascending" ? 1 : -1;
+        }
+        return 0;
+      });
+    }
+    return sortableData;
+  }, [datasetData, datasetSortConfig]);
+
+  const datasetTotalPages = Math.ceil(
+    sortedDatasetData.length / datasetRowsPerPage
+  );
+  const datasetStartIndex = (datasetCurrentPage - 1) * datasetRowsPerPage;
+  const datasetEndIndex = datasetStartIndex + datasetRowsPerPage;
+  const paginatedDatasetData = sortedDatasetData.slice(
+    datasetStartIndex,
+    datasetEndIndex
+  );
 
   // Generate random stars
   const generateStars = () => {
@@ -573,8 +886,613 @@ export default function Home() {
             overflow: "auto",
           }}
         >
-          {/* AI Classifier Content */}
-          {activeNavItem === "ai" ? (
+          {/* Data Tab Content */}
+          {activeNavItem === "data" ? (
+            <div
+              style={{
+                minHeight: "100vh",
+                padding: "3rem 5% 3rem 8rem",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                overflow: "auto",
+              }}
+            >
+              {/* Header */}
+              <div
+                style={{
+                  textAlign: "center",
+                  marginBottom: "3rem",
+                  maxWidth: "1000px",
+                }}
+              >
+                <h1
+                  style={{
+                    fontSize: "3.5rem",
+                    fontWeight: "800",
+                    margin: "0 0 1rem 0",
+                    background:
+                      "linear-gradient(135deg, #ffffff 0%, #8072FF 100%)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text",
+                    fontFamily: "'Inter', sans-serif",
+                  }}
+                >
+                  📊 Data Explorer
+                </h1>
+                <p
+                  style={{
+                    fontSize: "1.25rem",
+                    fontWeight: "300",
+                    color: "rgba(255, 255, 255, 0.8)",
+                    margin: "0 0 1.5rem 0",
+                    fontFamily: "'Inter', sans-serif",
+                    lineHeight: "1.6",
+                  }}
+                >
+                  Interactive dataset of exoplanets from KOI, TESS, and K2
+                  missions
+                </p>
+              </div>
+
+              {/* Action Bar */}
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginBottom: "2rem",
+                  flexWrap: "wrap",
+                  gap: "1.5rem",
+                  width: "100%",
+                  maxWidth: "1200px",
+                }}
+              >
+                {/* Left Side: Controls for data manipulation */}
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "1rem",
+                    flexWrap: "wrap",
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "0.8rem",
+                      flexWrap: "wrap",
+                    }}
+                  >
+                    <span
+                      style={{
+                        marginRight: "0.5rem",
+                        fontWeight: "500",
+                        whiteSpace: "nowrap",
+                        color: "rgba(255, 255, 255, 0.9)",
+                        fontFamily: "'Inter', sans-serif",
+                      }}
+                    >
+                      Filter by Type:
+                    </span>
+                    {[
+                      { value: "koi", label: "Kepler" },
+                      { value: "toi", label: "TESS" },
+                      { value: "k2", label: "K2" },
+                    ].map((option) => (
+                      <label
+                        key={option.value}
+                        style={{
+                          display: "inline-block",
+                          cursor: "pointer",
+                          userSelect: "none",
+                        }}
+                      >
+                        <input
+                          type="checkbox"
+                          style={{ display: "none" }}
+                          checked={datasetTypeFilter.includes(option.value)}
+                          onChange={(e) => {
+                            setDatasetCurrentPage(1);
+                            let selected = datasetTypeFilter
+                              ? datasetTypeFilter
+                              : [];
+                            if (e.target.checked) {
+                              selected = [...selected, option.value];
+                            } else {
+                              selected = selected.filter(
+                                (v) => v !== option.value
+                              );
+                            }
+                            setDatasetTypeFilter(
+                              selected.length === 0 ? [] : selected
+                            );
+                            handleDatasetFilterChange(selected);
+                          }}
+                        />
+                        <span
+                          style={{
+                            display: "inline-block",
+                            padding: "8px 16px",
+                            borderRadius: "20px",
+                            backgroundColor: datasetTypeFilter.includes(
+                              option.value
+                            )
+                              ? "#4A90E2"
+                              : "rgba(255, 255, 255, 0.1)",
+                            color: datasetTypeFilter.includes(option.value)
+                              ? "#ffffff"
+                              : "rgba(255, 255, 255, 0.8)",
+                            border: `1px solid ${
+                              datasetTypeFilter.includes(option.value)
+                                ? "#4A90E2"
+                                : "rgba(255, 255, 255, 0.2)"
+                            }`,
+                            fontSize: "0.85rem",
+                            fontWeight: "500",
+                            transition: "all 0.2s ease-in-out",
+                            fontFamily: "'Inter', sans-serif",
+                            boxShadow: datasetTypeFilter.includes(option.value)
+                              ? "0 0 10px rgba(74, 144, 226, 0.5)"
+                              : "none",
+                          }}
+                        >
+                          {option.label}
+                        </span>
+                      </label>
+                    ))}
+                  </div>
+
+                  <button
+                    onClick={() => {
+                      const fileInput = document.createElement("input");
+                      fileInput.type = "file";
+                      fileInput.accept = ".csv";
+                      fileInput.onchange = (e) => {
+                        const file = e.target.files[0];
+                        if (file) {
+                          handleUploadUserData(file);
+                        }
+                      };
+                      fileInput.click();
+                    }}
+                    style={{
+                      background: "rgba(255, 255, 255, 0.1)",
+                      color: "rgba(255, 255, 255, 0.8)",
+                      border: "1px solid rgba(255, 255, 255, 0.2)",
+                      padding: "10px 20px",
+                      borderRadius: "8px",
+                      cursor: "pointer",
+                      fontFamily: "'Inter', sans-serif",
+                      fontWeight: "600",
+                      fontSize: "0.9rem",
+                      transition: "all 0.2s ease-in-out",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.background = "rgba(255, 255, 255, 0.2)";
+                      e.target.style.borderColor = "rgba(255, 255, 255, 0.3)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.background = "rgba(255, 255, 255, 0.1)";
+                      e.target.style.borderColor = "rgba(255, 255, 255, 0.2)";
+                    }}
+                  >
+                    Upload CSV
+                  </button>
+                </div>
+
+                {/* Right Side: Save action */}
+                <div>
+                  <button
+                    onClick={handleSaveDataset}
+                    style={{
+                      background: "rgba(74, 144, 226, 0.8)",
+                      color: "#ffffff",
+                      border: "none",
+                      padding: "10px 20px",
+                      borderRadius: "8px",
+                      cursor: "pointer",
+                      fontFamily: "'Inter', sans-serif",
+                      fontWeight: "600",
+                      fontSize: "0.9rem",
+                      transition: "all 0.2s ease-in-out",
+                      boxShadow: "0 2px 5px rgba(0, 0, 0, 0.2)",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.background = "#4A90E2";
+                      e.target.style.transform = "translateY(-2px)";
+                      e.target.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.3)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.background = "rgba(74, 144, 226, 0.8)";
+                      e.target.style.transform = "translateY(0)";
+                      e.target.style.boxShadow = "0 2px 5px rgba(0, 0, 0, 0.2)";
+                    }}
+                  >
+                    Save Dataset
+                  </button>
+                </div>
+              </div>
+
+              {/* Table Container */}
+              <div
+                style={{
+                  background: "rgba(255, 255, 255, 0.1)",
+                  backdropFilter: "blur(10px)",
+                  borderRadius: "15px",
+                  padding: "2rem",
+                  border: "1px solid rgba(255, 255, 255, 0.2)",
+                  overflowX: "auto",
+                  width: "100%",
+                  maxWidth: "1200px",
+                }}
+              >
+                <div style={{ overflow: "auto" }}>
+                  <table
+                    style={{
+                      width: "100%",
+                      borderCollapse: "separate",
+                      borderSpacing: "0",
+                      fontFamily: "'Inter', sans-serif",
+                      color: "#c9d1d9",
+                      tableLayout: "fixed",
+                    }}
+                  >
+                    <thead>
+                      <tr>
+                        {datasetTableColumns.map((column) => (
+                          <th
+                            key={column.key}
+                            onClick={() => datasetRequestSort(column.key)}
+                            style={{
+                              cursor: "pointer",
+                              userSelect: "none",
+                              position: "relative",
+                              paddingRight: "30px",
+                              transition: "color 0.2s ease-in-out",
+                              padding: "14px 16px",
+                              textAlign: "left",
+                              fontWeight: "600",
+                              fontSize: "0.85rem",
+                              textTransform: "uppercase",
+                              letterSpacing: "0.05em",
+                              backgroundColor: "transparent",
+                              color: "#8b949e",
+                              borderBottom: "2px solid #30363d",
+                              width: datasetColumnWidths[column.key] || "auto",
+                            }}
+                            onMouseEnter={(e) => {
+                              e.target.style.color = "#c9d1d9";
+                            }}
+                            onMouseLeave={(e) => {
+                              e.target.style.color = "#8b949e";
+                            }}
+                          >
+                            <span>{column.label}</span>
+                            {datasetSortConfig.key === column.key && (
+                              <span
+                                style={{
+                                  position: "absolute",
+                                  right: "8px",
+                                  top: "50%",
+                                  transform: "translateY(-50%)",
+                                  opacity: "0.7",
+                                  fontSize: "0.9em",
+                                  marginLeft: "auto",
+                                  paddingLeft: "12px",
+                                  flexShrink: "0",
+                                }}
+                              >
+                                {datasetSortConfig.direction === "ascending"
+                                  ? " ▲"
+                                  : " ▼"}
+                              </span>
+                            )}
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {datasetLoading ? (
+                        <tr>
+                          <td
+                            colSpan={datasetTableColumns.length}
+                            style={{
+                              padding: "3rem",
+                              textAlign: "center",
+                              color: "rgba(255, 255, 255, 0.6)",
+                              fontSize: "1rem",
+                              fontFamily: "'Inter', sans-serif",
+                            }}
+                          >
+                            Loading dataset data...
+                          </td>
+                        </tr>
+                      ) : paginatedDatasetData.length > 0 ? (
+                        paginatedDatasetData.map((planet, rowIndex) => (
+                          <tr
+                            key={rowIndex}
+                            style={{
+                              borderBottom: "1px solid #21262d",
+                              transition: "background-color 0.2s ease-in-out",
+                              backgroundColor:
+                                rowIndex % 2 === 0
+                                  ? "rgba(13, 17, 23, 0.5)"
+                                  : "transparent",
+                            }}
+                            onMouseEnter={(e) => {
+                              e.target.style.backgroundColor =
+                                "rgba(74, 144, 226, 0.1)";
+                            }}
+                            onMouseLeave={(e) => {
+                              e.target.style.backgroundColor =
+                                rowIndex % 2 === 0
+                                  ? "rgba(13, 17, 23, 0.5)"
+                                  : "transparent";
+                            }}
+                          >
+                            <td
+                              style={{
+                                padding: "12px 16px",
+                                borderBottom: "1px solid #21262d",
+                                verticalAlign: "middle",
+                              }}
+                            >
+                              {getTelescopeName(planet.type)}
+                            </td>
+                            <td
+                              style={{
+                                padding: "12px 16px",
+                                borderBottom: "1px solid #21262d",
+                                verticalAlign: "middle",
+                                fontFamily: "'Roboto Mono', monospace",
+                                fontSize: "0.9rem",
+                              }}
+                            >
+                              {planet.id}
+                            </td>
+                            <td
+                              style={{
+                                padding: "12px 16px",
+                                borderBottom: "1px solid #21262d",
+                                verticalAlign: "middle",
+                              }}
+                            >
+                              {planet.name}
+                            </td>
+                            <td
+                              style={{
+                                padding: "12px 16px",
+                                borderBottom: "1px solid #21262d",
+                                verticalAlign: "middle",
+                              }}
+                            >
+                              {getDisposition(planet.disposition)}
+                            </td>
+                            <td
+                              style={{
+                                padding: "12px 16px",
+                                borderBottom: "1px solid #21262d",
+                                verticalAlign: "middle",
+                                fontFamily: "'Roboto Mono', monospace",
+                                fontSize: "0.9rem",
+                              }}
+                            >
+                              {planet.period}
+                            </td>
+                            <td
+                              style={{
+                                padding: "12px 16px",
+                                borderBottom: "1px solid #21262d",
+                                verticalAlign: "middle",
+                                fontFamily: "'Roboto Mono', monospace",
+                                fontSize: "0.9rem",
+                              }}
+                            >
+                              {planet.duration}
+                            </td>
+                            <td
+                              style={{
+                                padding: "12px 16px",
+                                borderBottom: "1px solid #21262d",
+                                verticalAlign: "middle",
+                                fontFamily: "'Roboto Mono', monospace",
+                                fontSize: "0.9rem",
+                              }}
+                            >
+                              {planet.depth}
+                            </td>
+                            <td
+                              style={{
+                                padding: "12px 16px",
+                                borderBottom: "1px solid #21262d",
+                                verticalAlign: "middle",
+                                fontFamily: "'Roboto Mono', monospace",
+                                fontSize: "0.9rem",
+                              }}
+                            >
+                              {planet.prad}
+                            </td>
+                            <td
+                              style={{
+                                padding: "12px 16px",
+                                borderBottom: "1px solid #21262d",
+                                verticalAlign: "middle",
+                                fontFamily: "'Roboto Mono', monospace",
+                                fontSize: "0.9rem",
+                              }}
+                            >
+                              {planet.teq}
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td
+                            colSpan={datasetTableColumns.length}
+                            style={{
+                              padding: "3rem",
+                              textAlign: "center",
+                              color: "rgba(255, 255, 255, 0.6)",
+                              fontSize: "1rem",
+                              fontFamily: "'Inter', sans-serif",
+                            }}
+                          >
+                            No data available for your dataset
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* Pagination */}
+              {!datasetLoading &&
+                sortedDatasetData.length > datasetRowsPerPage && (
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      gap: "1.5rem",
+                      marginTop: "2rem",
+                      padding: "1rem",
+                      userSelect: "none",
+                    }}
+                  >
+                    <button
+                      onClick={() =>
+                        setDatasetCurrentPage(datasetCurrentPage - 1)
+                      }
+                      disabled={datasetCurrentPage === 1}
+                      style={{
+                        background:
+                          datasetCurrentPage === 1
+                            ? "rgba(255, 255, 255, 0.1)"
+                            : "rgba(74, 144, 226, 0.8)",
+                        color:
+                          datasetCurrentPage === 1
+                            ? "rgba(255, 255, 255, 0.4)"
+                            : "#ffffff",
+                        border: "none",
+                        padding: "10px 20px",
+                        borderRadius: "8px",
+                        cursor:
+                          datasetCurrentPage === 1 ? "not-allowed" : "pointer",
+                        fontFamily: "'Inter', sans-serif",
+                        fontWeight: "600",
+                        fontSize: "0.9rem",
+                        transition: "all 0.2s ease-in-out",
+                        boxShadow:
+                          datasetCurrentPage === 1
+                            ? "none"
+                            : "0 2px 5px rgba(0, 0, 0, 0.2)",
+                      }}
+                      onMouseEnter={(e) => {
+                        if (datasetCurrentPage !== 1) {
+                          e.target.style.background = "#4A90E2";
+                          e.target.style.transform = "translateY(-2px)";
+                          e.target.style.boxShadow =
+                            "0 4px 8px rgba(0, 0, 0, 0.3)";
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (datasetCurrentPage !== 1) {
+                          e.target.style.background = "rgba(74, 144, 226, 0.8)";
+                          e.target.style.transform = "translateY(0)";
+                          e.target.style.boxShadow =
+                            "0 2px 5px rgba(0, 0, 0, 0.2)";
+                        }
+                      }}
+                    >
+                      ← Previous
+                    </button>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        gap: "0.25rem",
+                      }}
+                    >
+                      <span
+                        style={{
+                          color: "#e0e0e0",
+                          fontSize: "0.95rem",
+                          fontWeight: "500",
+                          fontFamily: "'Inter', sans-serif",
+                        }}
+                      >
+                        Page {datasetCurrentPage} of {datasetTotalPages}
+                      </span>
+                      <span
+                        style={{
+                          color: "#8b949e",
+                          fontSize: "0.8rem",
+                          fontFamily: "'Roboto Mono', monospace",
+                        }}
+                      >
+                        ({datasetStartIndex + 1}-
+                        {Math.min(datasetEndIndex, sortedDatasetData.length)} of{" "}
+                        {sortedDatasetData.length})
+                      </span>
+                    </div>
+                    <button
+                      onClick={() =>
+                        setDatasetCurrentPage(datasetCurrentPage + 1)
+                      }
+                      disabled={datasetCurrentPage === datasetTotalPages}
+                      style={{
+                        background:
+                          datasetCurrentPage === datasetTotalPages
+                            ? "rgba(255, 255, 255, 0.1)"
+                            : "rgba(74, 144, 226, 0.8)",
+                        color:
+                          datasetCurrentPage === datasetTotalPages
+                            ? "rgba(255, 255, 255, 0.4)"
+                            : "#ffffff",
+                        border: "none",
+                        padding: "10px 20px",
+                        borderRadius: "8px",
+                        cursor:
+                          datasetCurrentPage === datasetTotalPages
+                            ? "not-allowed"
+                            : "pointer",
+                        fontFamily: "'Inter', sans-serif",
+                        fontWeight: "600",
+                        fontSize: "0.9rem",
+                        transition: "all 0.2s ease-in-out",
+                        boxShadow:
+                          datasetCurrentPage === datasetTotalPages
+                            ? "none"
+                            : "0 2px 5px rgba(0, 0, 0, 0.2)",
+                      }}
+                      onMouseEnter={(e) => {
+                        if (datasetCurrentPage !== datasetTotalPages) {
+                          e.target.style.background = "#4A90E2";
+                          e.target.style.transform = "translateY(-2px)";
+                          e.target.style.boxShadow =
+                            "0 4px 8px rgba(0, 0, 0, 0.3)";
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (datasetCurrentPage !== datasetTotalPages) {
+                          e.target.style.background = "rgba(74, 144, 226, 0.8)";
+                          e.target.style.transform = "translateY(0)";
+                          e.target.style.boxShadow =
+                            "0 2px 5px rgba(0, 0, 0, 0.2)";
+                        }
+                      }}
+                    >
+                      Next →
+                    </button>
+                  </div>
+                )}
+            </div>
+          ) : activeNavItem === "ai" ? (
             <div
               style={{
                 minHeight: "100vh",
@@ -1617,7 +2535,7 @@ export default function Home() {
               </div>
             </div>
           ) : (
-            /* Original Dashboard Content */
+            /* Original Dashboard Content (Overview) */
             <div
               style={{
                 minHeight: "100vh",
