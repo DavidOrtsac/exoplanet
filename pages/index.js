@@ -129,6 +129,8 @@ export default function Home() {
   const [datasetCurrentPage, setDatasetCurrentPage] = useState(1);
   const [datasetRowsPerPage] = useState(50);
 
+  const apiBaseUrl = '/api/ml-proxy'; // Use the proxy for all client-side requests
+
   // Example data for quick testing
   const examples = {
     kepler: {
@@ -418,38 +420,37 @@ export default function Home() {
   // Dual-Table & Test Mode Functions
   const loadTrainingAndHeldOutData = async () => {
     try {
-      const baseUrl = process.env.NEXT_PUBLIC_ML_SERVICE_URL || 'http://localhost:5001';
-      
-      // Load training data (same as dataset)
-      const trainingResp = await fetch(`${baseUrl}/data/dataset`, { credentials: 'include' });
-      if (trainingResp.ok) {
-        const training = await trainingResp.json();
-        setTrainingData(training);
-      }
-      
-      // Load held-out data
-      const heldOutResp = await fetch(`${baseUrl}/data/held_out`, { credentials: 'include' });
-      if (heldOutResp.ok) {
-        const heldOut = await heldOutResp.json();
-        setHeldOutData(heldOut);
-        setIsTestMode(heldOut.length > 0); // Auto-enable test mode if held-out data exists
-      }
-    } catch (error) {
-      console.error("Error loading training/held-out data:", error);
+      // Fetch training data (full dataset)
+      const trainingResponse = await fetch(`${apiBaseUrl}/data/dataset`, {
+        credentials: 'include',
+      });
+      if (!trainingResponse.ok) throw new Error('Failed to fetch training data');
+      const trainingJson = await trainingResponse.json();
+      setTrainingData(trainingJson);
+
+      // Fetch held-out data
+      const heldOutResponse = await fetch(`${apiBaseUrl}/data/held_out`, {
+        credentials: 'include',
+      });
+      if (!heldOutResponse.ok) throw new Error('Failed to fetch held-out data');
+      const heldOutJson = await heldOutResponse.json();
+      setHeldOutData(heldOutJson);
+
+    } catch (err) {
+      console.error("Error loading data:", err);
+      setError(err.message);
     }
   };
 
   const handleSplitDataset = async () => {
-    if (!confirm(`Split dataset: ${holdoutPercentage}% will be moved to held-out set for testing. Continue?`)) {
-      return;
-    }
-    
     setIsSplitting(true);
+    setError('');
     try {
-      const baseUrl = process.env.NEXT_PUBLIC_ML_SERVICE_URL || 'http://localhost:5001';
-      const response = await fetch(`${baseUrl}/data/split_dataset`, {
+      const response = await fetch(`${apiBaseUrl}/data/split_dataset`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json'
+        },
         credentials: 'include',
         body: JSON.stringify({ holdout_percentage: holdoutPercentage })
       });
@@ -480,13 +481,16 @@ export default function Home() {
     
     // Save to backend
     try {
-      const baseUrl = process.env.NEXT_PUBLIC_ML_SERVICE_URL || 'http://localhost:5001';
-      await fetch(`${baseUrl}/data/held_out`, {
+      const response = await fetch(`${apiBaseUrl}/data/held_out`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json'
+        },
         credentials: 'include',
         body: JSON.stringify(newHeldOut)
       });
+      
+      if (!response.ok) throw new Error('Failed to update held-out data');
       
       // Also update training dataset
       await saveDataset(newTraining);
@@ -504,13 +508,16 @@ export default function Home() {
     
     // Save to backend
     try {
-      const baseUrl = process.env.NEXT_PUBLIC_ML_SERVICE_URL || 'http://localhost:5001';
-      await fetch(`${baseUrl}/data/held_out`, {
+      const response = await fetch(`${apiBaseUrl}/data/held_out`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json'
+        },
         credentials: 'include',
         body: JSON.stringify(newHeldOut)
       });
+      
+      if (!response.ok) throw new Error('Failed to update held-out data');
       
       // Also update training dataset
       await saveDataset(newTraining);

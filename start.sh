@@ -36,7 +36,6 @@ done
 
 # Start Next.js frontend
 echo "🌐 Starting Next.js frontend on port ${PORT}..."
-export NEXT_PUBLIC_ML_SERVICE_URL=http://localhost:5001
 trap "kill $FLASK_PID" EXIT
 npm run start
 

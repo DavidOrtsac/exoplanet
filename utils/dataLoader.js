@@ -109,7 +109,7 @@ export async function loadTESSData() {
 
 export async function loadDatasetData() {
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_ML_SERVICE_URL || 'http://localhost:5001';
+    const baseUrl = '/api/ml-proxy'; // Use the proxy
     const response = await fetch(`${baseUrl}/data/dataset`, {
       credentials: 'include',
     });
