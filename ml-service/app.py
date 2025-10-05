@@ -10,6 +10,7 @@ import csv
 import io
 import uuid
 from dotenv import load_dotenv
+from celery_worker import create_vector_store_task, celery_app
 
 # Load environment variables from .env file
 load_dotenv()
@@ -78,8 +79,7 @@ def predict():
         }
 
         session_id = session['session_id']
-        user_vector_store_path = session.get('user_vector_store_path') if session_id else None
-
+        user_vector_store_path = os.path.join('data/user_sessions', f"{session_id}_vector_store.pkl") if session_id else None
         # Get prediction from LLM classifier
         prediction = llm_in_context_classifier.classify(query_row,vector_store_path=user_vector_store_path, k=25)
         processing_time = time.time() - start_time
@@ -104,7 +104,7 @@ def predict():
 @app.route('/data/dataset', methods=['GET'])
 def get_dataset_data():
     session_id = session['session_id']
-    user_csv_path = session.get('user_csv_path') if session_id else None
+    user_csv_path = os.path.join('data/user_sessions', f"{session_id}_data.csv") if session_id else None
     if user_csv_path and os.path.exists(user_csv_path):
         df = pd.read_csv(user_csv_path)
     else:
@@ -156,18 +156,54 @@ def save_dataset():
         session_id = session['session_id']
         user_data_dir = 'data/user_sessions'
         os.makedirs(user_data_dir, exist_ok=True) 
-        user_csv_path = os.path.join(user_data_dir, f"{session_id}_data.csv")
-        user_vector_store_path = os.path.join(user_data_dir, f"{session_id}_vector_store.pkl")
+
+        relative_csv_path = os.path.join(user_data_dir, f"{session_id}_data.csv")
+        relative_vector_store_path = os.path.join(user_data_dir, f"{session_id}_vector_store.pkl")
+
+        user_csv_path = os.path.abspath(relative_csv_path)
+        user_vector_store_path = os.path.abspath(relative_vector_store_path)
+
 
         selector.parse_json_to_data(data)
         selector.save_data(user_csv_path)
-    
-        llm_in_context_classifier.create_vector_store_from_csv(user_csv_path, user_vector_store_path)
         
-        return jsonify({'message': 'Your data has been uploaded and your dedicated vector store has been created.'}), 200
+        task = create_vector_store_task.delay(user_csv_path, user_vector_store_path)
+        
+        return jsonify({'message': 'Vector store creation started.', 'task_id': task.id}), 202
 
     except Exception as e:
         return jsonify({'error': f'Dataset update failed: {str(e)}'}), 500
+
+# 4. Modify the endpoint to accept the task_id from the URL.
+@app.route('/tasks/status/<task_id>', methods=['GET'])
+def get_task_status(task_id):
+    """
+    Checks the status of a background task given its ID.
+    """
+    task = celery_app.AsyncResult(task_id)
+    response_data = {
+        'task_id': task_id,
+        'status': task.state
+    }
+
+    if task.state == 'PENDING':
+        response_data['result'] = None
+    elif task.state == 'STARTED':
+        response_data['result'] = None
+    elif task.state == 'PROGRESS':
+        # If the task is in progress, add the progress metadata to the response.
+        response_data['progress'] = task.info
+    elif task.state == 'FAILURE':
+        response_data['error'] = str(task.result)
+        response_data['result'] = None
+    elif task.state == 'SUCCESS':
+        response_data['result'] = task.result
+    else:
+        response_data['status'] = 'UNKNOWN'
+        response_data['result'] = None
+
+    return jsonify(response_data)
+
 
 @app.route('/health')
 def health():

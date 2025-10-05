@@ -1,8 +1,8 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import Head from "next/head";
 import DashboardLayout from "../../components/DashboardLayout";
 import { loadDatasetData } from "../../utils/dataLoader";
-import { filterData, saveDataset, uploadUserData } from "../../utils/datasetActions";
+import { filterData, getVectorTaskStatus, saveDataset, uploadUserData } from "../../utils/datasetActions";
 import styles from "../../styles/Dataset.module.css";
 
 const measureText = (text, font) => {
@@ -20,6 +20,8 @@ export default function Dataset() {
   const [sortConfig, setSortConfig] = useState({ key: 'id', direction: 'ascending' });
   const [columnWidths, setColumnWidths] = useState({});
   const [typeFilter, setTypeFilter] = useState([]);
+  const timerId = useRef(null);
+  const [savingDisabled, setSavingDisabled] = useState(false);
 
   const tableColumns = [
     { key: 'type', label: 'Telescope Type' },
@@ -49,7 +51,30 @@ export default function Dataset() {
       }
     };
     loadData();
+    if (localStorage.getItem('task_id')) {
+      getStatus(localStorage.getItem('task_id'));
+    }
+
   }, []);
+
+
+  const getStatus = async (task_id) => {
+    setSavingDisabled(true);
+    const result = await getVectorTaskStatus(task_id);
+
+    if (result.status === 'STARTED') {
+      timerId.current = setTimeout(() => getStatus(task_id), 5000);
+    } else if (result.status === 'SUCCESS' || result.status === 'FAILURE') {
+      localStorage.removeItem('task_id');
+      setSavingDisabled(false);
+      setLoading(false);
+      if (timerId.current) {
+        clearTimeout(timerId.current);
+        timerId.current = null;
+      }
+    }
+  };
+
 
   useEffect(() => {
     if (data.length > 0) {
@@ -124,7 +149,7 @@ export default function Dataset() {
     setCurrentPage(newPage);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
-
+  
   const getDisposition = (disposition) => {
     const value = Number(disposition);
     switch (value) {
@@ -173,6 +198,10 @@ export default function Dataset() {
 
 
   const handleSaveDataset = async () => {
+    if (savingDisabled) {
+      alert("Please wait for the vector store to be created");
+      return;
+    }
     setLoading(true);
     if (data.length === 0) {
       alert("No data to save");
@@ -180,8 +209,9 @@ export default function Dataset() {
       return;
     }
     try {
-      await saveDataset(data);
-   
+      const result = await saveDataset(data);
+      localStorage.setItem('task_id', result.task_id);
+      setTimeout(() => getStatus(result.task_id), 1000);
     } catch (error) {
       console.error("Error saving dataset:", error);
     } finally {
