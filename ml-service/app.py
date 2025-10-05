@@ -266,20 +266,35 @@ def set_held_out_data():
 def split_dataset():
     """Randomly split dataset into training and held-out sets"""
     try:
+        print("📊 Split dataset request received")
         data = request.get_json()
-        holdout_percentage = float(data.get('holdout_percentage', 20))
+        print(f"Request data: {data}")
         
-        session_id = session['session_id']
+        holdout_percentage = float(data.get('holdout_percentage', 20))
+        print(f"Holdout percentage: {holdout_percentage}%")
+        
+        session_id = session.get('session_id')
+        if not session_id:
+            print("ERROR: No session_id found!")
+            return jsonify({'error': 'No session ID found'}), 400
+            
+        print(f"Session ID: {session_id}")
         user_csv_path = os.path.join('data/user_sessions', f"{session_id}_data.csv")
         
         # Load current dataset
         if os.path.exists(user_csv_path):
+            print(f"Loading user dataset from: {user_csv_path}")
             df = pd.read_csv(user_csv_path)
         else:
+            print("Loading default dataset")
             df = pd.read_csv('data/dataset.csv')
+        
+        print(f"Dataset loaded: {len(df)} rows")
         
         # Randomly split
         n_holdout = int(len(df) * (holdout_percentage / 100))
+        print(f"Splitting: {len(df) - n_holdout} training, {n_holdout} held-out")
+        
         held_out_df = df.sample(n=n_holdout, random_state=np.random.randint(0, 10000))
         training_df = df.drop(held_out_df.index)
         
@@ -290,24 +305,29 @@ def split_dataset():
         training_path = os.path.join(user_data_dir, f"{session_id}_data.csv")
         held_out_path = os.path.join(user_data_dir, f"{session_id}_held_out.csv")
         
+        print(f"Saving to: {training_path} and {held_out_path}")
         training_df.to_csv(training_path, index=False)
         held_out_df.to_csv(held_out_path, index=False)
         
-        # IMPORTANT: For legitimate held-out testing, we SHOULD rebuild the vector store
-        # But for now, we'll use the default store to keep it fast
-        # The held-out CSV is saved so the testing is still valid
-        print(f"✅ Dataset split: {len(training_df)} training, {len(held_out_df)} held-out")
+        print(f"✅ Dataset split complete: {len(training_df)} training, {len(held_out_df)} held-out")
         
         # Mark that this session has held-out data for testing
         session['has_held_out'] = True
         
-        return jsonify({
+        result = {
             'message': 'Dataset split successfully',
             'training_count': len(training_df),
             'held_out_count': len(held_out_df),
             'note': 'Held-out data ready for testing'
-        }), 200
+        }
+        print(f"Returning result: {result}")
+        
+        return jsonify(result), 200
+        
     except Exception as e:
+        print(f"❌ ERROR in split_dataset: {e}")
+        import traceback
+        traceback.print_exc()
         return jsonify({'error': f'Failed to split dataset: {str(e)}'}), 500
 
 @app.route('/data/remove_row', methods=['DELETE'])

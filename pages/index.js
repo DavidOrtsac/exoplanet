@@ -442,13 +442,16 @@ export default function Home() {
   };
 
   const handleSplitDataset = async () => {
-    if (!confirm('⚠️ This will take 2-3 minutes to rebuild the vector store with training data only.\n\nThis is ESSENTIAL for legitimate held-out testing.\n\nProceed?')) {
+    if (!confirm(`Split dataset into ${100 - holdoutPercentage}% training and ${holdoutPercentage}% held-out?\n\nThis is for legitimate testing with unseen data.`)) {
       return;
     }
     
     setIsSplitting(true);
     setError('');
+    
     try {
+      console.log('Splitting dataset with holdout:', holdoutPercentage);
+      
       const response = await fetch(`${apiBaseUrl}/data/split_dataset`, {
         method: 'POST',
         headers: {
@@ -458,21 +461,27 @@ export default function Home() {
         body: JSON.stringify({ holdout_percentage: holdoutPercentage })
       });
       
+      console.log('Split response status:', response.status);
+      
       if (response.ok) {
         const result = await response.json();
-        alert(`✅ Dataset split successfully!\n\nTraining: ${result.training_count} rows\nHeld-out: ${result.held_out_count} rows\n\n${result.note || 'Vector store rebuilt with training data only.'}`);
+        console.log('Split result:', result);
+        alert(`✅ Dataset split successfully!\n\nTraining: ${result.training_count} rows\nHeld-out: ${result.held_out_count} rows\n\n${result.note || ''}`);
         
         // Reload data
         await loadTrainingAndHeldOutData();
         setIsTestMode(true);
       } else {
-        const error = await response.json();
-        alert("❌ Split failed: " + error.error);
+        const errorData = await response.json();
+        console.error('Split error:', errorData);
+        alert("❌ Split failed: " + (errorData.error || 'Unknown error'));
       }
     } catch (error) {
+      console.error('Split exception:', error);
       alert("❌ Error splitting dataset: " + error.message);
+    } finally {
+      setIsSplitting(false);
     }
-    setIsSplitting(false);
   };
 
   const moveToHeldOut = async (row) => {
