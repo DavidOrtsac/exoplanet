@@ -89,5 +89,10 @@ class SelectData:
             except FileNotFoundError:
                 print(f"Warning: data/{display_type}_data.csv not found.")
 
+    def remove_row_by_id(self, row_id):
+        """Remove a row from self.data by its ID (column index 1)"""
+        original_length = len(self.data)
+        self.data = [row for row in self.data if row[1] != row_id]
+        return len(self.data) < original_length  # Return True if a row was removed
 
 

@@ -6,6 +6,7 @@ const LoadingOverlay = ({
   title = "Loading...",
   subtitle = "Please wait while we process your request",
   onComplete,
+  progress = null,
 }) => {
   const [isAnimating, setIsAnimating] = useState(false);
   const [shouldRender, setShouldRender] = useState(false);
@@ -177,6 +178,66 @@ const LoadingOverlay = ({
           >
             {subtitle}
           </div>
+          
+          {/* Progress Bar */}
+          {progress && progress.current !== undefined && (
+            <div
+              style={{
+                width: "100%",
+                marginTop: "1rem",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginBottom: "0.5rem",
+                }}
+              >
+                <div
+                  style={{
+                    color: "rgba(255, 255, 255, 0.9)",
+                    fontSize: "0.875rem",
+                    fontFamily: "'Inter', sans-serif",
+                  }}
+                >
+                  Processing...
+                </div>
+                <div
+                  style={{
+                    color: "rgba(255, 255, 255, 0.7)",
+                    fontSize: "0.875rem",
+                    fontFamily: "'Inter', sans-serif",
+                  }}
+                >
+                  {Math.round(progress.current)}%
+                </div>
+              </div>
+              
+              {/* Progress Bar */}
+              <div
+                style={{
+                  width: "100%",
+                  height: "8px",
+                  background: "rgba(255, 255, 255, 0.1)",
+                  borderRadius: "4px",
+                  overflow: "hidden",
+                }}
+              >
+                <div
+                  style={{
+                    height: "100%",
+                    background: "linear-gradient(90deg, #8072FF 0%, #A896FF 100%)",
+                    borderRadius: "4px",
+                    transition: "width 0.3s ease",
+                    width: `${Math.min(100, Math.max(0, progress.current))}%`,
+                    boxShadow: "0 0 10px rgba(128, 114, 255, 0.5)",
+                  }}
+                />
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </>

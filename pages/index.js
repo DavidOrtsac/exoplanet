@@ -96,6 +96,7 @@ export default function Home() {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isSavingDataset, setIsSavingDataset] = useState(false);
+  const [saveProgress, setSaveProgress] = useState(null);
 
   // AI Classifier state
   const [formData, setFormData] = useState({
@@ -269,6 +270,35 @@ export default function Home() {
     }
   };
 
+  const handleRemoveRow = async (rowId) => {
+    if (!confirm(`Are you sure you want to remove row with ID: ${rowId}?`)) {
+      return;
+    }
+    
+    try {
+      const response = await fetch('http://localhost:5002/data/remove_row', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id: rowId }),
+        credentials: 'include',
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to remove row');
+      }
+
+      // Update local state to remove the row
+      setDatasetData(prevData => prevData.filter(row => row.id !== rowId));
+      alert('Row removed successfully!');
+    } catch (error) {
+      console.error('Error removing row:', error);
+      alert(`Error removing row: ${error.message}`);
+    }
+  };
+
   const handleSaveDataset = async () => {
     setIsSavingDataset(true);
     if (datasetData.length === 0) {
@@ -294,12 +324,20 @@ export default function Home() {
             const statusResponse = await getVectorTaskStatus(taskId);
             console.log("Task status:", statusResponse);
             
+            // Update progress if available
+            console.log("Status response:", statusResponse);
+            if (statusResponse.progress) {
+              setSaveProgress(statusResponse.progress);
+            }
+            
             if (statusResponse.status === "SUCCESS") {
               console.log("Vector store creation completed successfully!");
+              setSaveProgress(null);
               setIsSavingDataset(false);
               alert("Dataset saved and vector store created successfully!");
             } else if (statusResponse.status === "FAILURE") {
               console.error("Vector store creation failed:", statusResponse.error_message);
+              setSaveProgress(null);
               setIsSavingDataset(false);
               alert(`Failed to create vector store: ${statusResponse.error_message || "Unknown error"}`);
             } else {
@@ -308,6 +346,7 @@ export default function Home() {
             }
           } catch (error) {
             console.error("Error polling task status:", error);
+            setSaveProgress(null);
             setIsSavingDataset(false);
             alert("Error checking task status. Please check the console.");
           }
@@ -635,6 +674,7 @@ export default function Home() {
     { key: "depth", label: "Transit Depth (ppm)" },
     { key: "prad", label: "Orbital Radius (Earth radii)" },
     { key: "teq", label: "Equilibrium Temperature (K)" },
+    { key: "actions", label: "Actions" },
   ];
 
   const sortedDatasetData = useMemo(() => {
@@ -1025,6 +1065,7 @@ export default function Home() {
           duration={999999}
           title="Saving Dataset..."
           subtitle="Creating vector store in the background... This may take a minute."
+          progress={saveProgress}
         />
 
         {/* Dashboard Content - Scrollable Container */}
@@ -1325,15 +1366,15 @@ export default function Home() {
                         {datasetTableColumns.map((column) => (
                           <th
                             key={column.key}
-                            onClick={() => datasetRequestSort(column.key)}
+                            onClick={column.key !== "actions" ? () => datasetRequestSort(column.key) : undefined}
                             style={{
-                              cursor: "pointer",
+                              cursor: column.key !== "actions" ? "pointer" : "default",
                               userSelect: "none",
                               position: "relative",
-                              paddingRight: "30px",
+                              paddingRight: column.key !== "actions" ? "30px" : "16px",
                               transition: "color 0.2s ease-in-out",
                               padding: "14px 16px",
-                              textAlign: "left",
+                              textAlign: column.key === "actions" ? "center" : "left",
                               fontWeight: "600",
                               fontSize: "0.85rem",
                               textTransform: "uppercase",
@@ -1341,11 +1382,11 @@ export default function Home() {
                               backgroundColor: "transparent",
                               color: "#8b949e",
                               borderBottom: "2px solid #30363d",
-                              width: datasetColumnWidths[column.key] || "auto",
+                              width: column.key === "actions" ? "120px" : (datasetColumnWidths[column.key] || "auto"),
                             }}
                           >
                             <span>{column.label}</span>
-                            {datasetSortConfig.key === column.key && (
+                            {datasetSortConfig.key === column.key && column.key !== "actions" && (
                               <span
                                 style={{
                                   position: "absolute",
@@ -1499,6 +1540,41 @@ export default function Home() {
                               }}
                             >
                               {planet.teq}
+                            </td>
+                            <td
+                              style={{
+                                padding: "12px 16px",
+                                borderBottom: "1px solid #21262d",
+                                verticalAlign: "middle",
+                                textAlign: "center",
+                              }}
+                            >
+                              {planet.type?.toLowerCase() === "user" && (
+                                <button
+                                  onClick={() => handleRemoveRow(planet.id)}
+                                  style={{
+                                    background: "rgba(220, 38, 38, 0.8)",
+                                    color: "white",
+                                    border: "none",
+                                    padding: "6px 12px",
+                                    borderRadius: "6px",
+                                    cursor: "pointer",
+                                    fontSize: "0.8rem",
+                                    fontWeight: "600",
+                                    transition: "all 0.2s ease",
+                                  }}
+                                  onMouseEnter={(e) => {
+                                    e.target.style.background = "rgba(220, 38, 38, 1)";
+                                    e.target.style.transform = "translateY(-1px)";
+                                  }}
+                                  onMouseLeave={(e) => {
+                                    e.target.style.background = "rgba(220, 38, 38, 0.8)";
+                                    e.target.style.transform = "translateY(0)";
+                                  }}
+                                >
+                                  Remove
+                                </button>
+                              )}
                             </td>
                           </tr>
                         ))
@@ -2466,7 +2542,7 @@ export default function Home() {
                         style={{
                           margin: "0 0 1.5rem 0",
                           color: "white",
-                          fontSize: "1.2rem",
+              fontSize: "1.2rem",
                           fontWeight: "700",
                           fontFamily: "'Inter', sans-serif",
                           textAlign: "center",

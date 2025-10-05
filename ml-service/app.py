@@ -205,6 +205,26 @@ def save_dataset():
     except Exception as e:
         return jsonify({'error': f'Dataset update failed: {str(e)}'}), 500
 
+@app.route('/data/remove_row', methods=['DELETE'])
+def remove_row():
+    try:
+        data = request.get_json()
+        row_id = data.get('id')
+        
+        if not row_id:
+            return jsonify({'error': 'No ID provided'}), 400
+        
+        # Remove the row from selector.data
+        removed = selector.remove_row_by_id(row_id)
+        
+        if removed:
+            return jsonify({'message': f'Row with ID {row_id} removed successfully'}), 200
+        else:
+            return jsonify({'error': f'Row with ID {row_id} not found'}), 404
+            
+    except Exception as e:
+        return jsonify({'error': f'Failed to remove row: {str(e)}'}), 500
+
 @app.route('/tasks/status/<task_id>', methods=['GET'])
 def get_task_status(task_id):
     task = celery_app.AsyncResult(task_id)
