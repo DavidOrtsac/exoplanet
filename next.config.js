@@ -1,19 +1,16 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  images: {
-    domains: ["localhost"],
-  },
-  // Enable static file serving for textures
+  swcMinify: true,
+
   async rewrites() {
     return [
       {
-        source: "/textures/:path*",
-        destination: "/textures/:path*",
+        source: '/api/ml-proxy/:path*',
+        destination: 'http://127.0.0.1:5001/:path*',
       },
     ];
   },
-  outputFileTracingRoot: "/Users/fielzachary/exoplanet",
 };
 
 module.exports = nextConfig;
