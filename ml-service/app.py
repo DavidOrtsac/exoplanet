@@ -220,12 +220,18 @@ def save_dataset():
         selector.parse_json_to_data(data)
         selector.save_data(user_csv_path)
         
-        # this is the task that creates the vector store
-        task = create_vector_store_task.delay(user_csv_path, user_vector_store_path)
+        # Try to create vector store (async if Celery available)
+        task_id = None
+        try:
+            task = create_vector_store_task.delay(user_csv_path, user_vector_store_path)
+            task_id = task.id
+        except Exception as e:
+            print(f"Warning: Celery not available, skipping vector store creation: {e}")
+            # Will use default vector store instead
 
         cleanup_old_sessions(max_sessions=20)
         
-        return jsonify({'message': 'Vector store creation started.', 'task_id': task.id}), 202
+        return jsonify({'message': 'Dataset saved successfully.' + (' Vector store creation started.' if task_id else ''), 'task_id': task_id}), 200
 
     except Exception as e:
         return jsonify({'error': f'Dataset update failed: {str(e)}'}), 500
@@ -293,16 +299,22 @@ def split_dataset():
         training_df.to_csv(training_path, index=False)
         held_out_df.to_csv(held_out_path, index=False)
         
-        # Rebuild vector store with training data only
+        # Try to rebuild vector store with training data only (async if Celery available)
         vector_store_path = os.path.join(user_data_dir, f"{session_id}_vector_store.pkl")
-        task = create_vector_store_task.delay(training_path, vector_store_path)
+        task_id = None
+        try:
+            task = create_vector_store_task.delay(training_path, vector_store_path)
+            task_id = task.id
+        except Exception as e:
+            print(f"Warning: Celery not available, skipping vector store rebuild: {e}")
+            # Will use default vector store instead
         
         return jsonify({
             'message': 'Dataset split successfully',
-            'task_id': task.id,
+            'task_id': task_id,
             'training_count': len(training_df),
             'held_out_count': len(held_out_df)
-        }), 202
+        }), 200
     except Exception as e:
         return jsonify({'error': f'Failed to split dataset: {str(e)}'}), 500
 

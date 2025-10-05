@@ -1,8 +1,10 @@
 [phases.setup]
-nixPkgs = ["nodejs_18", "python312", "python312Packages.pip", "python312Packages.virtualenv", "zlib"]
+nixPkgs = ["nodejs_18", "python312", "python312Packages.pip", "python312Packages.virtualenv", "zlib", "git-lfs"]
 
 [phases.install]
 cmds = [
+  "git lfs install",
+  "git lfs pull",
   "npm ci",
   "python3 -m venv /opt/venv",
   ". /opt/venv/bin/activate && pip install --upgrade pip setuptools wheel",
