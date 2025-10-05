@@ -10,6 +10,10 @@ from sklearn.model_selection import train_test_split
 from tqdm import tqdm
 
 # --- Configuration ---
+# Get the directory of the current script to build robust paths
+_SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+_ML_SERVICE_DIR = os.path.dirname(_SCRIPT_DIR)
+
 API_KEY = os.getenv('OPENAI_API_KEY')
 if not API_KEY:
     raise ValueError("OPENAI_API_KEY is required.")
@@ -17,8 +21,8 @@ if not API_KEY:
 CLIENT = OpenAI(api_key=API_KEY)
 EMBEDDING_MODEL = "text-embedding-3-small"
 CLASSIFIER_MODEL = "gpt-4o-mini"
-DEFAULT_VECTOR_STORE_PATH = "data/default_vector_store.pkl"
-BASE_DATASET_PATH = 'data/dataset.csv'
+DEFAULT_VECTOR_STORE_PATH = os.path.join(_ML_SERVICE_DIR, "data/default_vector_store.pkl")
+BASE_DATASET_PATH = os.path.join(_ML_SERVICE_DIR, 'data/dataset.csv')
 
 class LLMInContextClassifier:
     """
