@@ -101,9 +101,27 @@ class LLMInContextClassifier:
         """Loads a specific vector store from a .pkl file."""
         if not os.path.exists(pkl_path):
             return None, None
-        with open(pkl_path, 'rb') as f:
-            data = pickle.load(f)
-            return data['vector_store_index'], data['original_data']
+        
+        # Check if this is a Git LFS pointer file (text file starting with "version")
+        try:
+            with open(pkl_path, 'rb') as f:
+                first_bytes = f.read(100)
+                if first_bytes.startswith(b'version https://git-lfs.github.com'):
+                    print(f"ERROR: {pkl_path} is a Git LFS pointer file, not the actual pickle!")
+                    print("Regenerating vector store from base dataset...")
+                    # Regenerate from base dataset
+                    self.create_vector_store_from_csv(BASE_DATASET_PATH, pkl_path)
+                    print("Vector store regenerated successfully!")
+        except Exception as e:
+            print(f"Warning during LFS check: {e}")
+        
+        try:
+            with open(pkl_path, 'rb') as f:
+                data = pickle.load(f)
+                return data['vector_store_index'], data['original_data']
+        except Exception as e:
+            print(f"ERROR loading vector store from {pkl_path}: {e}")
+            return None, None
 
     def _find_similar_examples(self, query_row, vector_store_index, original_data, k=25, exclude_ids=None):
         """Finds the k most similar examples from a given vector store, excluding specified IDs."""
