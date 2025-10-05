@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, useMemo } from "react";
 import Head from "next/head";
 import Layout from "../components/Layout";
 import ThreeJSEarth from "../components/ThreeJSEarth";
+import LoadingOverlay from "../components/LoadingOverlay";
 import {
   loadKOIData,
   loadK2Data,
@@ -26,6 +27,8 @@ export default function Home() {
   const [hoveredNavItem, setHoveredNavItem] = useState(null);
   const [activeNavItem, setActiveNavItem] = useState(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSavingDataset, setIsSavingDataset] = useState(false);
 
   // AI Classifier state
   const [formData, setFormData] = useState({
@@ -200,19 +203,19 @@ export default function Home() {
   };
 
   const handleSaveDataset = async () => {
-    setDatasetLoading(true);
+    setIsSavingDataset(true);
     if (datasetData.length === 0) {
       alert("No data to save");
-      setDatasetLoading(false);
+      setIsSavingDataset(false);
       return;
     }
     try {
       await saveDataset(datasetData);
     } catch (error) {
       console.error("Error saving dataset:", error);
-    } finally {
-      setDatasetLoading(false);
+      setIsSavingDataset(false);
     }
+    // Note: Don't set isSavingDataset to false here - let LoadingOverlay handle it
   };
 
   const classifyExoplanet = async () => {
@@ -769,8 +772,8 @@ export default function Home() {
           >
             {[
               { icon: "🌌", label: "Overview", id: "overview" },
-              { icon: "📊", label: "Data", id: "data" },
               { icon: "🤖", label: "AI", id: "ai" },
+              { icon: "📊", label: "Data", id: "data" },
             ].map((item, index) => (
               <div
                 key={item.id}
@@ -783,7 +786,11 @@ export default function Home() {
                 onMouseLeave={() => setHoveredNavItem(null)}
               >
                 <button
-                  onClick={() => !isTransitioning && handleNavClick(item.id)}
+                  onClick={() => {
+                    if (!isTransitioning) {
+                      handleNavClick(item.id);
+                    }
+                  }}
                   disabled={isTransitioning}
                   style={{
                     background:
@@ -835,7 +842,7 @@ export default function Home() {
                       }}
                     />
                   ) : (
-                    item.icon
+                    <span style={{ fontSize: "1.5rem" }}>{item.icon}</span>
                   )}
                 </button>
 
@@ -869,6 +876,24 @@ export default function Home() {
             ))}
           </div>
         </div>
+
+        {/* Loading Overlay */}
+        <LoadingOverlay
+          isVisible={isLoading}
+          duration={3000}
+          title="Loading..."
+          subtitle="Please wait while we process your request"
+          onComplete={() => setIsLoading(false)}
+        />
+
+        {/* Save Dataset Loading Overlay */}
+        <LoadingOverlay
+          isVisible={isSavingDataset}
+          duration={500}
+          title="Saving Dataset..."
+          subtitle="Processing your dataset and updating the AI model"
+          onComplete={() => setIsSavingDataset(false)}
+        />
 
         {/* Dashboard Content - Scrollable Container */}
         <div
@@ -1087,28 +1112,38 @@ export default function Home() {
                 <div>
                   <button
                     onClick={handleSaveDataset}
+                    disabled={isSavingDataset}
                     style={{
-                      background: "rgba(74, 144, 226, 0.8)",
+                      background: isSavingDataset
+                        ? "rgba(74, 144, 226, 0.5)"
+                        : "rgba(74, 144, 226, 0.8)",
                       color: "#ffffff",
                       border: "none",
                       padding: "10px 20px",
                       borderRadius: "8px",
-                      cursor: "pointer",
+                      cursor: isSavingDataset ? "not-allowed" : "pointer",
                       fontFamily: "'Inter', sans-serif",
                       fontWeight: "600",
                       fontSize: "0.9rem",
                       transition: "all 0.2s ease-in-out",
                       boxShadow: "0 2px 5px rgba(0, 0, 0, 0.2)",
+                      opacity: isSavingDataset ? 0.7 : 1,
                     }}
                     onMouseEnter={(e) => {
-                      e.target.style.background = "#4A90E2";
-                      e.target.style.transform = "translateY(-2px)";
-                      e.target.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.3)";
+                      if (!isSavingDataset) {
+                        e.target.style.background = "#4A90E2";
+                        e.target.style.transform = "translateY(-2px)";
+                        e.target.style.boxShadow =
+                          "0 4px 8px rgba(0, 0, 0, 0.3)";
+                      }
                     }}
                     onMouseLeave={(e) => {
-                      e.target.style.background = "rgba(74, 144, 226, 0.8)";
-                      e.target.style.transform = "translateY(0)";
-                      e.target.style.boxShadow = "0 2px 5px rgba(0, 0, 0, 0.2)";
+                      if (!isSavingDataset) {
+                        e.target.style.background = "rgba(74, 144, 226, 0.8)";
+                        e.target.style.transform = "translateY(0)";
+                        e.target.style.boxShadow =
+                          "0 2px 5px rgba(0, 0, 0, 0.2)";
+                      }
                     }}
                   >
                     Save Dataset
@@ -1707,6 +1742,91 @@ export default function Home() {
                     🌟 K2 Example
                   </button>
                 </div>
+              </div>
+
+              {/* Data Reminder Card */}
+              <div
+                style={{
+                  background:
+                    "linear-gradient(135deg, rgba(34, 197, 94, 0.2) 0%, rgba(22, 163, 74, 0.3) 100%)",
+                  backdropFilter: "blur(10px)",
+                  borderRadius: "1.5rem",
+                  padding: "1.5rem 2rem",
+                  marginBottom: "2rem",
+                  border: "2px solid rgba(34, 197, 94, 0.3)",
+                  width: "100%",
+                  maxWidth: "1000px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  gap: "1.5rem",
+                }}
+              >
+                <div
+                  style={{ display: "flex", alignItems: "center", gap: "1rem" }}
+                >
+                  <div
+                    style={{
+                      fontSize: "2rem",
+                      filter: "drop-shadow(0 0 10px rgba(34, 197, 94, 0.5))",
+                    }}
+                  >
+                    💡
+                  </div>
+                  <div>
+                    <p
+                      style={{
+                        color: "white",
+                        fontSize: "1.1rem",
+                        fontWeight: "600",
+                        margin: "0 0 0.25rem 0",
+                        fontFamily: "'Inter', sans-serif",
+                      }}
+                    >
+                      Note: Want to change the data that the AI is working with?
+                    </p>
+                    <p
+                      style={{
+                        color: "rgba(255, 255, 255, 0.8)",
+                        fontSize: "0.95rem",
+                        margin: "0",
+                        fontFamily: "'Inter', sans-serif",
+                      }}
+                    >
+                      Proceed to the Data tab to upload or modify your dataset
+                    </p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => handleNavClick("data")}
+                  style={{
+                    background:
+                      "linear-gradient(135deg, #22c55e 0%, #16a34a 100%)",
+                    color: "white",
+                    border: "none",
+                    padding: "0.75rem 1.5rem",
+                    borderRadius: "0.75rem",
+                    cursor: "pointer",
+                    fontSize: "1rem",
+                    fontWeight: "600",
+                    transition: "all 0.2s ease",
+                    fontFamily: "'Inter', sans-serif",
+                    boxShadow: "0 4px 12px rgba(34, 197, 94, 0.3)",
+                    whiteSpace: "nowrap",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.transform = "translateY(-2px)";
+                    e.target.style.boxShadow =
+                      "0 6px 16px rgba(34, 197, 94, 0.4)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.transform = "translateY(0)";
+                    e.target.style.boxShadow =
+                      "0 4px 12px rgba(34, 197, 94, 0.3)";
+                  }}
+                >
+                  📊 Go to Data Tab
+                </button>
               </div>
 
               {/* Classification Form */}
