@@ -110,6 +110,13 @@ export default function Home() {
   const [isClassifying, setIsClassifying] = useState(false);
   const [showRagExamples, setShowRagExamples] = useState(false);
 
+  // Dual Table & Test Mode state
+  const [trainingData, setTrainingData] = useState([]);
+  const [heldOutData, setHeldOutData] = useState([]);
+  const [isTestMode, setIsTestMode] = useState(false);
+  const [holdoutPercentage, setHoldoutPercentage] = useState(20);
+  const [isSplitting, setIsSplitting] = useState(false);
+
   // Data Explorer state
   const [datasetData, setDatasetData] = useState([]);
   const [datasetLoading, setDatasetLoading] = useState(true);
@@ -381,7 +388,8 @@ export default function Home() {
 
     setIsClassifying(true);
     try {
-      const response = await fetch("http://localhost:5002/predict", {
+      const baseUrl = process.env.NEXT_PUBLIC_ML_SERVICE_URL || 'http://localhost:5001';
+      const response = await fetch(`${baseUrl}/predict`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -405,6 +413,110 @@ export default function Home() {
       alert("Error connecting to server: " + error.message);
     }
     setIsClassifying(false);
+  };
+
+  // Dual-Table & Test Mode Functions
+  const loadTrainingAndHeldOutData = async () => {
+    try {
+      const baseUrl = process.env.NEXT_PUBLIC_ML_SERVICE_URL || 'http://localhost:5001';
+      
+      // Load training data (same as dataset)
+      const trainingResp = await fetch(`${baseUrl}/data/dataset`, { credentials: 'include' });
+      if (trainingResp.ok) {
+        const training = await trainingResp.json();
+        setTrainingData(training);
+      }
+      
+      // Load held-out data
+      const heldOutResp = await fetch(`${baseUrl}/data/held_out`, { credentials: 'include' });
+      if (heldOutResp.ok) {
+        const heldOut = await heldOutResp.json();
+        setHeldOutData(heldOut);
+        setIsTestMode(heldOut.length > 0); // Auto-enable test mode if held-out data exists
+      }
+    } catch (error) {
+      console.error("Error loading training/held-out data:", error);
+    }
+  };
+
+  const handleSplitDataset = async () => {
+    if (!confirm(`Split dataset: ${holdoutPercentage}% will be moved to held-out set for testing. Continue?`)) {
+      return;
+    }
+    
+    setIsSplitting(true);
+    try {
+      const baseUrl = process.env.NEXT_PUBLIC_ML_SERVICE_URL || 'http://localhost:5001';
+      const response = await fetch(`${baseUrl}/data/split_dataset`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ holdout_percentage: holdoutPercentage })
+      });
+      
+      if (response.ok) {
+        const result = await response.json();
+        alert(`Dataset split successfully!\nTraining: ${result.training_count} rows\nHeld-out: ${result.held_out_count} rows\n\nBuilding vector store... (task ID: ${result.task_id})`);
+        
+        // Reload data
+        await loadTrainingAndHeldOutData();
+        setIsTestMode(true);
+      } else {
+        const error = await response.json();
+        alert("Split failed: " + error.error);
+      }
+    } catch (error) {
+      alert("Error splitting dataset: " + error.message);
+    }
+    setIsSplitting(false);
+  };
+
+  const moveToHeldOut = async (row) => {
+    const newHeldOut = [...heldOutData, row];
+    const newTraining = trainingData.filter(r => r.id !== row.id);
+    
+    setHeldOutData(newHeldOut);
+    setTrainingData(newTraining);
+    
+    // Save to backend
+    try {
+      const baseUrl = process.env.NEXT_PUBLIC_ML_SERVICE_URL || 'http://localhost:5001';
+      await fetch(`${baseUrl}/data/held_out`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(newHeldOut)
+      });
+      
+      // Also update training dataset
+      await saveDataset(newTraining);
+    } catch (error) {
+      console.error("Error moving to held-out:", error);
+    }
+  };
+
+  const moveToTraining = async (row) => {
+    const newTraining = [...trainingData, row];
+    const newHeldOut = heldOutData.filter(r => r.id !== row.id);
+    
+    setTrainingData(newTraining);
+    setHeldOutData(newHeldOut);
+    
+    // Save to backend
+    try {
+      const baseUrl = process.env.NEXT_PUBLIC_ML_SERVICE_URL || 'http://localhost:5001';
+      await fetch(`${baseUrl}/data/held_out`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(newHeldOut)
+      });
+      
+      // Also update training dataset
+      await saveDataset(newTraining);
+    } catch (error) {
+      console.error("Error moving to training:", error);
+    }
   };
 
   const handleGetStarted = () => {
@@ -627,6 +739,13 @@ export default function Home() {
     }
   }, [datasetData]);
 
+  // Load training/held-out data when classify tab becomes active
+  useEffect(() => {
+    if (activeNavItem === "classify") {
+      loadTrainingAndHeldOutData();
+    }
+  }, [activeNavItem]);
+
   const missions = [
     {
       id: "KOI",
@@ -768,7 +887,7 @@ export default function Home() {
             pointerEvents: showDashboard ? "none" : "auto",
           }}
         >
-          in submission to A World Away: Hunting for Exoplanets with{" "}
+          Submitted to: A World Away: Hunting for Exoplanets with{" "}
           <strong>AI</strong>
         </div>
 
@@ -2871,6 +2990,462 @@ export default function Home() {
                       POSITIVE
                     </p>
                   </div>
+                </div>
+              </div>
+
+              {/* DUAL TABLE SYSTEM - Training & Held-Out Data */}
+              <div
+                style={{
+                  background: "rgba(0, 0, 0, 0.6)",
+                  backdropFilter: "blur(10px)",
+                  borderRadius: "1.5rem",
+                  padding: "2rem",
+                  border: "1px solid rgba(0, 0, 0, 0.5)",
+                  width: "100%",
+                  maxWidth: "1400px",
+                  marginTop: "2rem",
+                }}
+              >
+                <h3
+                  style={{
+                    margin: "0 0 1.5rem 0",
+                    fontSize: "1.8rem",
+                    color: "white",
+                    fontWeight: "600",
+                    fontFamily: "'Inter', sans-serif",
+                  }}
+                >
+                  🗂️ RAG Training Data Management
+                </h3>
+
+                {/* Mode Toggle & Split Controls */}
+                <div
+                  style={{
+                    background: "rgba(0, 0, 0, 0.4)",
+                    padding: "1.5rem",
+                    borderRadius: "1rem",
+                    marginBottom: "2rem",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "1rem",
+                  }}
+                >
+                  <div style={{ display: "flex", alignItems: "center", gap: "1rem", flexWrap: "wrap" }}>
+                    <label
+                      style={{
+                        color: "white",
+                        fontWeight: "600",
+                        fontSize: "1.1rem",
+                        fontFamily: "'Inter', sans-serif",
+                      }}
+                    >
+                      Mode:
+                    </label>
+                    <button
+                      onClick={() => {
+                        setIsTestMode(false);
+                        setHeldOutData([]);
+                      }}
+                      style={{
+                        background: !isTestMode
+                          ? "linear-gradient(135deg, #48bb78 0%, #38a169 100%)"
+                          : "rgba(255, 255, 255, 0.1)",
+                        color: "white",
+                        border: "none",
+                        padding: "0.75rem 1.5rem",
+                        borderRadius: "0.5rem",
+                        fontSize: "1rem",
+                        fontWeight: "600",
+                        cursor: "pointer",
+                        fontFamily: "'Inter', sans-serif",
+                        transition: "all 0.3s",
+                      }}
+                    >
+                      🚀 Default Mode (Max Strength)
+                    </button>
+                    <button
+                      onClick={() => setIsTestMode(true)}
+                      style={{
+                        background: isTestMode
+                          ? "linear-gradient(135deg, #8072FF 0%, #675DC2 100%)"
+                          : "rgba(255, 255, 255, 0.1)",
+                        color: "white",
+                        border: "none",
+                        padding: "0.75rem 1.5rem",
+                        borderRadius: "0.5rem",
+                        fontSize: "1rem",
+                        fontWeight: "600",
+                        cursor: "pointer",
+                        fontFamily: "'Inter', sans-serif",
+                        transition: "all 0.3s",
+                      }}
+                    >
+                      🧪 Test Mode (Hold-Out Data)
+                    </button>
+                  </div>
+
+                  {isTestMode && (
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "1rem",
+                        flexWrap: "wrap",
+                        paddingTop: "1rem",
+                        borderTop: "1px solid rgba(255, 255, 255, 0.1)",
+                      }}
+                    >
+                      <label
+                        style={{
+                          color: "white",
+                          fontWeight: "600",
+                          fontSize: "1rem",
+                          fontFamily: "'Inter', sans-serif",
+                        }}
+                      >
+                        Hold-Out Percentage:
+                      </label>
+                      <input
+                        type="range"
+                        min="5"
+                        max="50"
+                        value={holdoutPercentage}
+                        onChange={(e) => setHoldoutPercentage(Number(e.target.value))}
+                        style={{
+                          flex: "1",
+                          minWidth: "200px",
+                          maxWidth: "300px",
+                        }}
+                      />
+                      <span
+                        style={{
+                          color: "#8072FF",
+                          fontWeight: "700",
+                          fontSize: "1.2rem",
+                          fontFamily: "'Inter', sans-serif",
+                        }}
+                      >
+                        {holdoutPercentage}%
+                      </span>
+                      <button
+                        onClick={handleSplitDataset}
+                        disabled={isSplitting}
+                        style={{
+                          background: isSplitting
+                            ? "rgba(128, 114, 255, 0.5)"
+                            : "linear-gradient(135deg, #8072FF 0%, #675DC2 100%)",
+                          color: "white",
+                          border: "none",
+                          padding: "0.75rem 1.5rem",
+                          borderRadius: "0.5rem",
+                          fontSize: "1rem",
+                          fontWeight: "600",
+                          cursor: isSplitting ? "not-allowed" : "pointer",
+                          fontFamily: "'Inter', sans-serif",
+                        }}
+                      >
+                        {isSplitting ? "Splitting..." : "🔀 Random Split Dataset"}
+                      </button>
+                    </div>
+                  )}
+
+                  <p
+                    style={{
+                      color: "rgba(255, 255, 255, 0.7)",
+                      fontSize: "0.9rem",
+                      margin: "0.5rem 0 0 0",
+                      fontFamily: "'Inter', sans-serif",
+                      lineHeight: "1.6",
+                    }}
+                  >
+                    {!isTestMode
+                      ? "🚀 Default Mode: All data available for RAG (maximum strength). Use for real classifications."
+                      : "🧪 Test Mode: Hold-out data excluded from RAG. Use held-out examples to test accuracy like a teacher with answer keys."}
+                  </p>
+                </div>
+
+                {/* Dual Tables */}
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: isTestMode ? "1fr 1fr" : "1fr",
+                    gap: "1.5rem",
+                  }}
+                >
+                  {/* Training Data Table */}
+                  <div>
+                    <h4
+                      style={{
+                        color: "white",
+                        fontSize: "1.2rem",
+                        fontWeight: "600",
+                        marginBottom: "1rem",
+                        fontFamily: "'Inter', sans-serif",
+                      }}
+                    >
+                      📚 Training Data ({trainingData.length} examples)
+                    </h4>
+                    <div
+                      style={{
+                        background: "rgba(0, 0, 0, 0.4)",
+                        borderRadius: "0.75rem",
+                        maxHeight: "500px",
+                        overflowY: "auto",
+                        border: "1px solid rgba(0, 0, 0, 0.5)",
+                      }}
+                    >
+                      <table
+                        style={{
+                          width: "100%",
+                          borderCollapse: "collapse",
+                          color: "white",
+                          fontSize: "0.85rem",
+                          fontFamily: "'Inter', sans-serif",
+                        }}
+                      >
+                        <thead
+                          style={{
+                            position: "sticky",
+                            top: 0,
+                            background: "rgba(0, 0, 0, 0.9)",
+                            zIndex: 1,
+                          }}
+                        >
+                          <tr>
+                            <th style={{ padding: "0.75rem", textAlign: "left" }}>Name</th>
+                            <th style={{ padding: "0.75rem", textAlign: "left" }}>Period</th>
+                            <th style={{ padding: "0.75rem", textAlign: "left" }}>Depth</th>
+                            <th style={{ padding: "0.75rem", textAlign: "left" }}>Label</th>
+                            {isTestMode && (
+                              <th style={{ padding: "0.75rem", textAlign: "center" }}>Action</th>
+                            )}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {trainingData.slice(0, 100).map((row, idx) => (
+                            <tr
+                              key={idx}
+                              style={{
+                                borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
+                              }}
+                              onMouseEnter={(e) => {
+                                e.currentTarget.style.background = "rgba(128, 114, 255, 0.2)";
+                              }}
+                              onMouseLeave={(e) => {
+                                e.currentTarget.style.background = "transparent";
+                              }}
+                            >
+                              <td style={{ padding: "0.5rem 0.75rem" }}>{row.name || row.id}</td>
+                              <td style={{ padding: "0.5rem 0.75rem" }}>{row.period}</td>
+                              <td style={{ padding: "0.5rem 0.75rem" }}>{row.depth}</td>
+                              <td style={{ padding: "0.5rem 0.75rem" }}>
+                                <span
+                                  style={{
+                                    background:
+                                      row.disposition === 1 || row.disposition === "CANDIDATE"
+                                        ? "#48bb78"
+                                        : "#f56565",
+                                    color: "white",
+                                    padding: "0.25rem 0.5rem",
+                                    borderRadius: "0.25rem",
+                                    fontSize: "0.75rem",
+                                    fontWeight: "600",
+                                  }}
+                                >
+                                  {row.disposition === 1 || row.disposition === "CANDIDATE"
+                                    ? "CANDIDATE"
+                                    : "FALSE POS"}
+                                </span>
+                              </td>
+                              {isTestMode && (
+                                <td style={{ padding: "0.5rem 0.75rem", textAlign: "center" }}>
+                                  <button
+                                    onClick={() => moveToHeldOut(row)}
+                                    style={{
+                                      background: "#8072FF",
+                                      color: "white",
+                                      border: "none",
+                                      padding: "0.25rem 0.5rem",
+                                      borderRadius: "0.25rem",
+                                      fontSize: "0.75rem",
+                                      cursor: "pointer",
+                                      fontFamily: "'Inter', sans-serif",
+                                    }}
+                                  >
+                                    Hold Out →
+                                  </button>
+                                </td>
+                              )}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                      {trainingData.length > 100 && (
+                        <p
+                          style={{
+                            color: "rgba(255, 255, 255, 0.6)",
+                            textAlign: "center",
+                            padding: "1rem",
+                            fontSize: "0.85rem",
+                            fontFamily: "'Inter', sans-serif",
+                          }}
+                        >
+                          Showing first 100 of {trainingData.length} examples
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Held-Out Data Table (only in Test Mode) */}
+                  {isTestMode && (
+                    <div>
+                      <h4
+                        style={{
+                          color: "white",
+                          fontSize: "1.2rem",
+                          fontWeight: "600",
+                          marginBottom: "1rem",
+                          fontFamily: "'Inter', sans-serif",
+                        }}
+                      >
+                        🧪 Held-Out Test Set ({heldOutData.length} examples)
+                      </h4>
+                      <div
+                        style={{
+                          background: "rgba(0, 0, 0, 0.4)",
+                          borderRadius: "0.75rem",
+                          maxHeight: "500px",
+                          overflowY: "auto",
+                          border: "1px solid rgba(128, 114, 255, 0.5)",
+                        }}
+                      >
+                        <table
+                          style={{
+                            width: "100%",
+                            borderCollapse: "collapse",
+                            color: "white",
+                            fontSize: "0.85rem",
+                            fontFamily: "'Inter', sans-serif",
+                          }}
+                        >
+                          <thead
+                            style={{
+                              position: "sticky",
+                              top: 0,
+                              background: "rgba(0, 0, 0, 0.9)",
+                              zIndex: 1,
+                            }}
+                          >
+                            <tr>
+                              <th style={{ padding: "0.75rem", textAlign: "left" }}>Name</th>
+                              <th style={{ padding: "0.75rem", textAlign: "left" }}>Period</th>
+                              <th style={{ padding: "0.75rem", textAlign: "left" }}>Depth</th>
+                              <th style={{ padding: "0.75rem", textAlign: "left" }}>Label</th>
+                              <th style={{ padding: "0.75rem", textAlign: "center" }}>Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {heldOutData.map((row, idx) => (
+                              <tr
+                                key={idx}
+                                style={{
+                                  borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
+                                }}
+                                onMouseEnter={(e) => {
+                                  e.currentTarget.style.background = "rgba(128, 114, 255, 0.2)";
+                                }}
+                                onMouseLeave={(e) => {
+                                  e.currentTarget.style.background = "transparent";
+                                }}
+                              >
+                                <td style={{ padding: "0.5rem 0.75rem" }}>{row.name || row.id}</td>
+                                <td style={{ padding: "0.5rem 0.75rem" }}>{row.period}</td>
+                                <td style={{ padding: "0.5rem 0.75rem" }}>{row.depth}</td>
+                                <td style={{ padding: "0.5rem 0.75rem" }}>
+                                  <span
+                                    style={{
+                                      background:
+                                        row.disposition === 1 || row.disposition === "CANDIDATE"
+                                          ? "#48bb78"
+                                          : "#f56565",
+                                      color: "white",
+                                      padding: "0.25rem 0.5rem",
+                                      borderRadius: "0.25rem",
+                                      fontSize: "0.75rem",
+                                      fontWeight: "600",
+                                    }}
+                                  >
+                                    {row.disposition === 1 || row.disposition === "CANDIDATE"
+                                      ? "CANDIDATE"
+                                      : "FALSE POS"}
+                                  </span>
+                                </td>
+                                <td style={{ padding: "0.5rem 0.75rem", textAlign: "center" }}>
+                                  <div style={{ display: "flex", gap: "0.25rem", justifyContent: "center" }}>
+                                    <button
+                                      onClick={() => {
+                                        setFormData({
+                                          period: String(row.period || ""),
+                                          duration: String(row.duration || ""),
+                                          depth: String(row.depth || ""),
+                                          prad: String(row.prad || ""),
+                                          teq: String(row.teq || ""),
+                                        });
+                                        setResult(null);
+                                        // Scroll to form
+                                        window.scrollTo({ top: 0, behavior: "smooth" });
+                                      }}
+                                      style={{
+                                        background: "linear-gradient(135deg, #8072FF 0%, #675DC2 100%)",
+                                        color: "white",
+                                        border: "none",
+                                        padding: "0.25rem 0.5rem",
+                                        borderRadius: "0.25rem",
+                                        fontSize: "0.75rem",
+                                        cursor: "pointer",
+                                        fontFamily: "'Inter', sans-serif",
+                                        fontWeight: "600",
+                                      }}
+                                    >
+                                      🧪 Test This →
+                                    </button>
+                                    <button
+                                      onClick={() => moveToTraining(row)}
+                                      style={{
+                                        background: "#48bb78",
+                                        color: "white",
+                                        border: "none",
+                                        padding: "0.25rem 0.5rem",
+                                        borderRadius: "0.25rem",
+                                        fontSize: "0.75rem",
+                                        cursor: "pointer",
+                                        fontFamily: "'Inter', sans-serif",
+                                      }}
+                                    >
+                                      ← Back
+                                    </button>
+                                  </div>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                        {heldOutData.length === 0 && (
+                          <p
+                            style={{
+                              color: "rgba(255, 255, 255, 0.6)",
+                              textAlign: "center",
+                              padding: "2rem",
+                              fontSize: "0.95rem",
+                              fontFamily: "'Inter', sans-serif",
+                            }}
+                          >
+                            No held-out data yet. Use "Random Split Dataset" or manually move rows.
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

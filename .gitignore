@@ -76,6 +76,13 @@ temp/
 
 ml-service/data/user_sessions/
 
-default_vector_store.pkl
+# Vector stores and model files (too large for git)
+*.pkl
+data/*.pkl
+ml-service/data/*.pkl
+models/*.pkl
+
+# Result files
+results/*.csv
 
 __pycache__

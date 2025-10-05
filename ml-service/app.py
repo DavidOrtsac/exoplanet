@@ -24,8 +24,9 @@ app = Flask(__name__)
 # Set the secret key is essential for Flask session management
 app.secret_key = os.getenv('SECRET_KEY', os.urandom(24))
 
-# Configure CORS to allow credentials from your frontend's origin
-CORS(app, supports_credentials=True, origins=["http://localhost:3000"])
+# Configure CORS to allow credentials from your frontend's origin(s)
+# Include both 3000 and 3001 since Next.js may switch ports in dev
+CORS(app, supports_credentials=True, origins=["http://localhost:3000", "http://localhost:3001"])
 
 @app.before_request
 def ensure_session_id():
@@ -108,12 +109,27 @@ def predict():
 
         session_id = session['session_id']
         user_vector_store_path = os.path.join('data/user_sessions', f"{session_id}_vector_store.pkl") if session_id else None
-        # Get prediction from LLM classifier
-        prediction = llm_in_context_classifier.classify(query_row,vector_store_path=user_vector_store_path, k=25)
+        
+        # Get prediction AND similar examples from LLM classifier
+        prediction, similar_examples = llm_in_context_classifier.classify(
+            query_row,
+            vector_store_path=user_vector_store_path,
+            k=25,
+            return_examples=True
+        )
         processing_time = time.time() - start_time
         
         if prediction == "ERROR":
             return jsonify({'error': 'LLM classification failed'}), 500
+        
+        # Format similar examples for frontend (convert disposition to string)
+        formatted_examples = []
+        for ex in similar_examples:
+            formatted_ex = ex.copy()
+            # Convert numeric disposition to string for frontend
+            if 'disposition' in formatted_ex:
+                formatted_ex['disposition'] = "CANDIDATE" if formatted_ex['disposition'] == 1 else "FALSE POSITIVE"
+            formatted_examples.append(formatted_ex)
         
         # For LLM, we don't have a traditional confidence score
         # Instead, we'll indicate high confidence since it achieved 98% accuracy
@@ -123,7 +139,8 @@ def predict():
             'model': 'LLM In-Context',
             'prediction': prediction,
             'confidence': confidence,
-            'similar_examples_used': 25,
+            'similar_examples_used': len(similar_examples),
+            'similar_examples': formatted_examples,  # Now includes formatted examples!
             'processing_time': f'{processing_time:.1f}s'
         })
     except Exception as e:
@@ -204,6 +221,82 @@ def save_dataset():
 
     except Exception as e:
         return jsonify({'error': f'Dataset update failed: {str(e)}'}), 500
+
+@app.route('/data/held_out', methods=['GET'])
+def get_held_out_data():
+    """Get held-out test data for the current session"""
+    session_id = session['session_id']
+    held_out_path = os.path.join('data/user_sessions', f"{session_id}_held_out.csv")
+    
+    if os.path.exists(held_out_path):
+        df = pd.read_csv(held_out_path)
+        df = df.replace({np.nan: None})
+        return jsonify(df.to_dict('records'))
+    else:
+        return jsonify([])
+
+@app.route('/data/held_out', methods=['PUT'])
+def set_held_out_data():
+    """Set held-out test data for the current session"""
+    try:
+        data = request.get_json()
+        session_id = session['session_id']
+        user_data_dir = 'data/user_sessions'
+        os.makedirs(user_data_dir, exist_ok=True)
+        
+        held_out_path = os.path.join(user_data_dir, f"{session_id}_held_out.csv")
+        
+        # Save held-out data to CSV
+        df = pd.DataFrame(data)
+        df.to_csv(held_out_path, index=False)
+        
+        return jsonify({'message': 'Held-out data saved successfully'})
+    except Exception as e:
+        return jsonify({'error': f'Failed to save held-out data: {str(e)}'}), 500
+
+@app.route('/data/split_dataset', methods=['POST'])
+def split_dataset():
+    """Randomly split dataset into training and held-out sets"""
+    try:
+        data = request.get_json()
+        holdout_percentage = float(data.get('holdout_percentage', 20))
+        
+        session_id = session['session_id']
+        user_csv_path = os.path.join('data/user_sessions', f"{session_id}_data.csv")
+        
+        # Load current dataset
+        if os.path.exists(user_csv_path):
+            df = pd.read_csv(user_csv_path)
+        else:
+            df = pd.read_csv('data/dataset.csv')
+        
+        # Randomly split
+        n_holdout = int(len(df) * (holdout_percentage / 100))
+        held_out_df = df.sample(n=n_holdout, random_state=np.random.randint(0, 10000))
+        training_df = df.drop(held_out_df.index)
+        
+        # Save both
+        user_data_dir = 'data/user_sessions'
+        os.makedirs(user_data_dir, exist_ok=True)
+        
+        training_path = os.path.join(user_data_dir, f"{session_id}_data.csv")
+        held_out_path = os.path.join(user_data_dir, f"{session_id}_held_out.csv")
+        
+        training_df.to_csv(training_path, index=False)
+        held_out_df.to_csv(held_out_path, index=False)
+        
+        # Rebuild vector store with training data only
+        vector_store_path = os.path.join(user_data_dir, f"{session_id}_vector_store.pkl")
+        task = create_vector_store_task.delay(training_path, vector_store_path)
+        
+        return jsonify({
+            'message': 'Dataset split successfully',
+            'task_id': task.id,
+            'training_count': len(training_df),
+            'held_out_count': len(held_out_df)
+        }), 202
+    except Exception as e:
+        return jsonify({'error': f'Failed to split dataset: {str(e)}'}), 500
 
 @app.route('/data/remove_row', methods=['DELETE'])
 def remove_row():
