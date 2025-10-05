@@ -11,6 +11,15 @@ echo "📍 Python: $(which python3)"
 # Generate vector store if it doesn't exist
 if [ ! -f "ml-service/data/default_vector_store.pkl" ]; then
     echo "🧠 Generating vector store (this may take 2-3 minutes)..."
+    echo "🔎 Python site info before generating vector store:"
+    python3 - <<'PY'
+import sys, site, numpy as np
+print('sys.prefix=', sys.prefix)
+print('sys.path=')
+for p in sys.path: print(' -', p)
+print('numpy version:', np.__version__)
+print('numpy file:', getattr(np, '__file__', 'N/A'))
+PY
     # Run from root to avoid numpy import issues, script now uses absolute paths
     python3 -c "import sys; sys.path.append('ml-service'); sys.path.append('ml-service/scripts'); from llm_in_context_classifier import LLMInContextClassifier; print('Initializing classifier...'); classifier = LLMInContextClassifier(); classifier.ensure_default_vector_store(); print('✅ Vector store generated!')"
     echo "✅ Vector store generation complete!"
