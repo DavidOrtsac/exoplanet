@@ -233,7 +233,10 @@ def save_dataset():
 @app.route('/data/held_out', methods=['GET'])
 def get_held_out_data():
     """Get held-out test data for the current session"""
-    session_id = session['session_id']
+    session_id = session.get('session_id')
+    if not session_id:
+        return jsonify([])
+    
     held_out_path = os.path.join('data/user_sessions', f"{session_id}_held_out.csv")
     
     if os.path.exists(held_out_path):
