@@ -5,3 +5,5 @@ flask
 python-dotenv
 celery
 redis
+Flask-Cors
+gunicorn
