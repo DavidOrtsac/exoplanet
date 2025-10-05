@@ -354,6 +354,21 @@ export default function Home() {
           >
             exoplanets
           </h2>
+          <p
+            style={{
+              margin: "0.25rem 0 0 0",
+              textAlign: "right",
+              fontFamily: "'Inter', sans-serif",
+              fontWeight: "300",
+              color: "rgba(255, 255, 255, 0.7)",
+              fontSize: "0.875rem",
+              letterSpacing: "-0.02em",
+              width: "fit-content",
+              marginLeft: "auto",
+            }}
+          >
+            RAG + LLM based exoplanet classifier solution
+          </p>
           {/* Placeholder image with 340:142 ratio */}
           <img
             src="/images/spaceapps_logo.jpeg"
@@ -427,7 +442,7 @@ export default function Home() {
         >
           <div
             style={{
-              background: "rgba(255, 255, 255, 0.05)",
+              background: "rgba(255, 255, 255, 0.18)",
               backdropFilter: "blur(10px)",
               borderRadius: "2rem",
               padding: "1.5rem 1rem",
@@ -623,28 +638,31 @@ export default function Home() {
                       borderRadius: "1.5rem",
                       fontWeight: "bold",
                       fontSize: "1.1rem",
+                      fontFamily: "'Inter', sans-serif",
                     }}
                   >
                     95.45% Accurate
                   </span>
                   <span
                     style={{
-                      background: "rgba(255, 255, 255, 0.1)",
+                      background: "rgba(255, 255, 255, 0.22)",
                       color: "rgba(255, 255, 255, 0.8)",
                       padding: "0.75rem 1.5rem",
                       borderRadius: "1.5rem",
                       fontWeight: "600",
+                      fontFamily: "'Inter', sans-serif",
                     }}
                   >
                     LLM In-Context Learning
                   </span>
                   <span
                     style={{
-                      background: "rgba(255, 255, 255, 0.1)",
+                      background: "rgba(255, 255, 255, 0.22)",
                       color: "rgba(255, 255, 255, 0.8)",
                       padding: "0.75rem 1.5rem",
                       borderRadius: "1.5rem",
                       fontWeight: "600",
+                      fontFamily: "'Inter', sans-serif",
                     }}
                   >
                     25 RAG Examples
@@ -655,7 +673,7 @@ export default function Home() {
               {/* Quick Examples */}
               <div
                 style={{
-                  background: "rgba(255, 255, 255, 0.05)",
+                  background: "rgba(255, 255, 255, 0.18)",
                   backdropFilter: "blur(10px)",
                   borderRadius: "1.5rem",
                   padding: "2rem",
@@ -688,7 +706,7 @@ export default function Home() {
                     style={{
                       flex: "1",
                       minWidth: "180px",
-                      background: "rgba(255, 255, 255, 0.1)",
+                      background: "rgba(255, 255, 255, 0.22)",
                       color: "white",
                       border: "2px solid rgba(255, 255, 255, 0.2)",
                       padding: "1rem 1.5rem",
@@ -717,7 +735,7 @@ export default function Home() {
                     style={{
                       flex: "1",
                       minWidth: "180px",
-                      background: "rgba(255, 255, 255, 0.1)",
+                      background: "rgba(255, 255, 255, 0.22)",
                       color: "white",
                       border: "2px solid rgba(255, 255, 255, 0.2)",
                       padding: "1rem 1.5rem",
@@ -746,7 +764,7 @@ export default function Home() {
                     style={{
                       flex: "1",
                       minWidth: "180px",
-                      background: "rgba(255, 255, 255, 0.1)",
+                      background: "rgba(255, 255, 255, 0.22)",
                       color: "white",
                       border: "2px solid rgba(255, 255, 255, 0.2)",
                       padding: "1rem 1.5rem",
@@ -776,7 +794,7 @@ export default function Home() {
               {/* Classification Form */}
               <div
                 style={{
-                  background: "rgba(255, 255, 255, 0.05)",
+                  background: "rgba(255, 255, 255, 0.18)",
                   backdropFilter: "blur(10px)",
                   borderRadius: "1.5rem",
                   padding: "2rem",
@@ -831,7 +849,7 @@ export default function Home() {
                       }
                       placeholder="e.g., 9.49"
                       style={{
-                        background: "rgba(255, 255, 255, 0.1)",
+                        background: "rgba(255, 255, 255, 0.22)",
                         border: "2px solid rgba(255, 255, 255, 0.2)",
                         borderRadius: "0.75rem",
                         padding: "1rem",
@@ -875,7 +893,7 @@ export default function Home() {
                       }
                       placeholder="e.g., 2.96"
                       style={{
-                        background: "rgba(255, 255, 255, 0.1)",
+                        background: "rgba(255, 255, 255, 0.22)",
                         border: "2px solid rgba(255, 255, 255, 0.2)",
                         borderRadius: "0.75rem",
                         padding: "1rem",
@@ -919,7 +937,7 @@ export default function Home() {
                       }
                       placeholder="e.g., 615.8"
                       style={{
-                        background: "rgba(255, 255, 255, 0.1)",
+                        background: "rgba(255, 255, 255, 0.22)",
                         border: "2px solid rgba(255, 255, 255, 0.2)",
                         borderRadius: "0.75rem",
                         padding: "1rem",
@@ -963,7 +981,7 @@ export default function Home() {
                       }
                       placeholder="e.g., 2.26"
                       style={{
-                        background: "rgba(255, 255, 255, 0.1)",
+                        background: "rgba(255, 255, 255, 0.22)",
                         border: "2px solid rgba(255, 255, 255, 0.2)",
                         borderRadius: "0.75rem",
                         padding: "1rem",
@@ -1005,7 +1023,7 @@ export default function Home() {
                       onChange={(e) => handleInputChange("teq", e.target.value)}
                       placeholder="e.g., 793"
                       style={{
-                        background: "rgba(255, 255, 255, 0.1)",
+                        background: "rgba(255, 255, 255, 0.22)",
                         border: "2px solid rgba(255, 255, 255, 0.2)",
                         borderRadius: "0.75rem",
                         padding: "1rem",
@@ -1070,7 +1088,7 @@ export default function Home() {
                     onClick={resetForm}
                     style={{
                       flex: "1",
-                      background: "rgba(255, 255, 255, 0.1)",
+                      background: "rgba(255, 255, 255, 0.22)",
                       color: "white",
                       border: "2px solid rgba(255, 255, 255, 0.2)",
                       padding: "1rem 2rem",
@@ -1099,7 +1117,7 @@ export default function Home() {
               {result && (
                 <div
                   style={{
-                    background: "rgba(255, 255, 255, 0.05)",
+                    background: "rgba(255, 255, 255, 0.18)",
                     backdropFilter: "blur(10px)",
                     borderRadius: "1.5rem",
                     padding: "2rem",
@@ -1123,7 +1141,7 @@ export default function Home() {
 
                   <div
                     style={{
-                      background: "rgba(255, 255, 255, 0.05)",
+                      background: "rgba(255, 255, 255, 0.18)",
                       borderRadius: "1rem",
                       padding: "2rem",
                       marginBottom: "1.5rem",
@@ -1158,6 +1176,7 @@ export default function Home() {
                             borderRadius: "1rem",
                             fontSize: "1.5rem",
                             fontWeight: "bold",
+                            fontFamily: "'Inter', sans-serif",
                           }}
                         >
                           {result.prediction === "CANDIDATE"
@@ -1169,6 +1188,7 @@ export default function Home() {
                             color: "rgba(255, 255, 255, 0.8)",
                             fontSize: "1.3rem",
                             fontWeight: "600",
+                            fontFamily: "'Inter', sans-serif",
                           }}
                         >
                           {(result.confidence * 100).toFixed(1)}% confidence
@@ -1179,7 +1199,7 @@ export default function Home() {
                     {/* Result Details */}
                     <div
                       style={{
-                        background: "rgba(255, 255, 255, 0.1)",
+                        background: "rgba(255, 255, 255, 0.22)",
                         padding: "1.5rem",
                         borderRadius: "0.75rem",
                         marginBottom: "1.5rem",
@@ -1197,6 +1217,7 @@ export default function Home() {
                           style={{
                             color: "rgba(255, 255, 255, 0.8)",
                             fontWeight: "600",
+                            fontFamily: "'Inter', sans-serif",
                           }}
                         >
                           Model:
@@ -1205,6 +1226,7 @@ export default function Home() {
                           style={{
                             color: "white",
                             fontWeight: "500",
+                            fontFamily: "'Inter', sans-serif",
                           }}
                         >
                           {result.model}
@@ -1222,6 +1244,7 @@ export default function Home() {
                           style={{
                             color: "rgba(255, 255, 255, 0.8)",
                             fontWeight: "600",
+                            fontFamily: "'Inter', sans-serif",
                           }}
                         >
                           RAG Examples Used:
@@ -1230,6 +1253,7 @@ export default function Home() {
                           style={{
                             color: "white",
                             fontWeight: "500",
+                            fontFamily: "'Inter', sans-serif",
                           }}
                         >
                           {result.similar_examples_used} most similar entries
@@ -1246,6 +1270,7 @@ export default function Home() {
                           style={{
                             color: "rgba(255, 255, 255, 0.8)",
                             fontWeight: "600",
+                            fontFamily: "'Inter', sans-serif",
                           }}
                         >
                           Processing Time:
@@ -1254,6 +1279,7 @@ export default function Home() {
                           style={{
                             color: "white",
                             fontWeight: "500",
+                            fontFamily: "'Inter', sans-serif",
                           }}
                         >
                           {result.processing_time}
@@ -1264,7 +1290,7 @@ export default function Home() {
                     {/* Input Summary */}
                     <div
                       style={{
-                        background: "rgba(255, 255, 255, 0.1)",
+                        background: "rgba(255, 255, 255, 0.22)",
                         padding: "1.5rem",
                         borderRadius: "0.75rem",
                         marginBottom: "1.5rem",
@@ -1276,6 +1302,7 @@ export default function Home() {
                           color: "white",
                           fontSize: "1.1rem",
                           fontWeight: "600",
+                          fontFamily: "'Inter', sans-serif",
                         }}
                       >
                         📋 Input Parameters:
@@ -1288,6 +1315,7 @@ export default function Home() {
                           gap: "0.75rem",
                           color: "rgba(255, 255, 255, 0.8)",
                           fontSize: "0.95rem",
+                          fontFamily: "'Inter', sans-serif",
                         }}
                       >
                         <span>Period: {formData.period} days</span>
@@ -1332,7 +1360,7 @@ export default function Home() {
                   {/* What This Means */}
                   <div
                     style={{
-                      background: "rgba(255, 255, 255, 0.1)",
+                      background: "rgba(255, 255, 255, 0.22)",
                       borderLeft: "4px solid #8072FF",
                       padding: "1.5rem",
                       borderRadius: "0.75rem",
@@ -1345,6 +1373,7 @@ export default function Home() {
                         color: "white",
                         fontSize: "1.2rem",
                         fontWeight: "600",
+                        fontFamily: "'Inter', sans-serif",
                       }}
                     >
                       💡 What Does This Mean?
@@ -1356,6 +1385,7 @@ export default function Home() {
                           lineHeight: "1.7",
                           margin: "0",
                           fontSize: "1rem",
+                          fontFamily: "'Inter', sans-serif",
                         }}
                       >
                         <strong>CANDIDATE:</strong> Our AI predicts this is
@@ -1371,6 +1401,7 @@ export default function Home() {
                           lineHeight: "1.7",
                           margin: "0",
                           fontSize: "1rem",
+                          fontFamily: "'Inter', sans-serif",
                         }}
                       >
                         <strong>FALSE POSITIVE:</strong> Our AI predicts this
@@ -1386,7 +1417,7 @@ export default function Home() {
               {/* How It Works */}
               <div
                 style={{
-                  background: "rgba(255, 255, 255, 0.05)",
+                  background: "rgba(255, 255, 255, 0.18)",
                   backdropFilter: "blur(10px)",
                   borderRadius: "1.5rem",
                   padding: "2rem",
@@ -1416,7 +1447,7 @@ export default function Home() {
                 >
                   <div
                     style={{
-                      background: "rgba(255, 255, 255, 0.1)",
+                      background: "rgba(255, 255, 255, 0.22)",
                       padding: "2rem",
                       borderRadius: "1rem",
                       textAlign: "center",
@@ -1452,6 +1483,7 @@ export default function Home() {
                         margin: "1rem 0 0.75rem 0",
                         fontSize: "1.1rem",
                         fontWeight: "600",
+                        fontFamily: "'Inter', sans-serif",
                       }}
                     >
                       RAG Retrieval
@@ -1462,6 +1494,7 @@ export default function Home() {
                         fontSize: "0.95rem",
                         lineHeight: "1.6",
                         margin: "0",
+                        fontFamily: "'Inter', sans-serif",
                       }}
                     >
                       Finds 25 most similar exoplanets from 17,594 labeled
@@ -1470,7 +1503,7 @@ export default function Home() {
                   </div>
                   <div
                     style={{
-                      background: "rgba(255, 255, 255, 0.1)",
+                      background: "rgba(255, 255, 255, 0.22)",
                       padding: "2rem",
                       borderRadius: "1rem",
                       textAlign: "center",
@@ -1506,6 +1539,7 @@ export default function Home() {
                         margin: "1rem 0 0.75rem 0",
                         fontSize: "1.1rem",
                         fontWeight: "600",
+                        fontFamily: "'Inter', sans-serif",
                       }}
                     >
                       In-Context Learning
@@ -1516,6 +1550,7 @@ export default function Home() {
                         fontSize: "0.95rem",
                         lineHeight: "1.6",
                         margin: "0",
+                        fontFamily: "'Inter', sans-serif",
                       }}
                     >
                       Sends similar examples to GPT-4o-mini as context for
@@ -1524,7 +1559,7 @@ export default function Home() {
                   </div>
                   <div
                     style={{
-                      background: "rgba(255, 255, 255, 0.1)",
+                      background: "rgba(255, 255, 255, 0.22)",
                       padding: "2rem",
                       borderRadius: "1rem",
                       textAlign: "center",
@@ -1560,6 +1595,7 @@ export default function Home() {
                         margin: "1rem 0 0.75rem 0",
                         fontSize: "1.1rem",
                         fontWeight: "600",
+                        fontFamily: "'Inter', sans-serif",
                       }}
                     >
                       Expert Decision
@@ -1570,6 +1606,7 @@ export default function Home() {
                         fontSize: "0.95rem",
                         lineHeight: "1.6",
                         margin: "0",
+                        fontFamily: "'Inter', sans-serif",
                       }}
                     >
                       LLM analyzes patterns and predicts: CANDIDATE or FALSE
@@ -1643,8 +1680,8 @@ export default function Home() {
                     style={{
                       background:
                         activeMission === mission.id
-                          ? "rgba(128, 114, 255, 0.1)"
-                          : "rgba(255, 255, 255, 0.05)",
+                          ? "rgba(128, 114, 255, 0.22)"
+                          : "rgba(255, 255, 255, 0.18)",
                       backdropFilter: "blur(10px)",
                       borderRadius: "1.5rem",
                       padding: "2rem",
@@ -1786,7 +1823,7 @@ export default function Home() {
               <div
                 style={{
                   background:
-                    "linear-gradient(135deg, rgba(128, 114, 255, 0.2) 0%, rgba(103, 93, 194, 0.2) 100%)",
+                    "linear-gradient(135deg, rgba(128, 114, 255, 0.3) 0%, rgba(103, 93, 194, 0.3) 100%)",
                   backdropFilter: "blur(20px)",
                   borderRadius: "1.5rem",
                   padding: "2rem",
@@ -1821,7 +1858,7 @@ export default function Home() {
               {/* Data Table Section */}
               <div
                 style={{
-                  background: "rgba(255, 255, 255, 0.05)",
+                  background: "rgba(255, 255, 255, 0.18)",
                   backdropFilter: "blur(10px)",
                   borderRadius: "1.5rem",
                   padding: "2rem",
@@ -2179,7 +2216,7 @@ export default function Home() {
           >
             <div
               style={{
-                background: "rgba(255, 255, 255, 0.05)",
+                background: "rgba(255, 255, 255, 0.18)",
                 backdropFilter: "blur(10px)",
                 border: "2px solid rgba(255, 255, 255, 0.1)",
                 borderRadius: "1.5rem",
@@ -2208,6 +2245,7 @@ export default function Home() {
                   marginBottom: "1.5rem",
                   fontSize: "1rem",
                   lineHeight: "1.6",
+                  fontFamily: "'Inter', sans-serif",
                 }}
               >
                 These are the 25 most similar examples the AI retrieved from the
@@ -2220,13 +2258,19 @@ export default function Home() {
                   gap: "1.5rem",
                   marginBottom: "1.5rem",
                   padding: "1rem",
-                  background: "rgba(255, 255, 255, 0.1)",
+                  background: "rgba(255, 255, 255, 0.22)",
                   borderRadius: "0.75rem",
                   fontWeight: "600",
                   fontSize: "0.95rem",
+                  fontFamily: "'Inter', sans-serif",
                 }}
               >
-                <span style={{ color: "#48bb78" }}>
+                <span
+                  style={{
+                    color: "#48bb78",
+                    fontFamily: "'Inter', sans-serif",
+                  }}
+                >
                   ✅ Candidates:{" "}
                   {
                     result.similar_examples.filter(
@@ -2234,7 +2278,12 @@ export default function Home() {
                     ).length
                   }
                 </span>
-                <span style={{ color: "#f56565" }}>
+                <span
+                  style={{
+                    color: "#f56565",
+                    fontFamily: "'Inter', sans-serif",
+                  }}
+                >
                   ❌ False Positives:{" "}
                   {
                     result.similar_examples.filter(
@@ -2264,7 +2313,7 @@ export default function Home() {
                   <thead>
                     <tr
                       style={{
-                        background: "rgba(255, 255, 255, 0.1)",
+                        background: "rgba(255, 255, 255, 0.22)",
                         position: "sticky",
                         top: 0,
                       }}
@@ -2412,7 +2461,7 @@ export default function Home() {
 
               <div
                 style={{
-                  background: "rgba(255, 255, 255, 0.1)",
+                  background: "rgba(255, 255, 255, 0.22)",
                   borderLeft: "4px solid #8072FF",
                   padding: "1.5rem",
                   borderRadius: "0.75rem",
@@ -2425,6 +2474,7 @@ export default function Home() {
                     color: "white",
                     fontSize: "1.1rem",
                     fontWeight: "600",
+                    fontFamily: "'Inter', sans-serif",
                   }}
                 >
                   💡 How RAG Works
@@ -2435,6 +2485,7 @@ export default function Home() {
                     lineHeight: "1.7",
                     margin: "0",
                     fontSize: "1rem",
+                    fontFamily: "'Inter', sans-serif",
                   }}
                 >
                   Our system uses{" "}
@@ -2451,7 +2502,7 @@ export default function Home() {
                 onClick={() => setShowRagExamples(false)}
                 style={{
                   width: "100%",
-                  background: "rgba(255, 255, 255, 0.1)",
+                  background: "rgba(255, 255, 255, 0.22)",
                   color: "white",
                   border: "2px solid rgba(255, 255, 255, 0.2)",
                   padding: "1rem",
