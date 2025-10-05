@@ -28,6 +28,11 @@ app.secret_key = os.getenv('SECRET_KEY', os.urandom(24))
 # Include both 3000 and 3001 since Next.js may switch ports in dev
 CORS(app, supports_credentials=True, origins=["http://localhost:3000", "http://localhost:3001"])
 
+@app.route('/health', methods=['GET'])
+def health_check():
+    """Health check endpoint for Railway deployment"""
+    return jsonify({'status': 'ok', 'llm_available': llm_available}), 200
+
 @app.before_request
 def ensure_session_id():
     """Ensure every user has a unique session ID stored in their cookie."""
