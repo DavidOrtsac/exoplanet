@@ -33,12 +33,13 @@ out/
 .git/
 .gitignore
 
-# Large data files
+# Large data files (vector stores will be generated on startup)
 *.pkl
-data/*.pkl
-ml-service/data/*.pkl
 models/*.pkl
 results/*.csv
+
+# Keep CSV data files but ignore user sessions
+ml-service/data/user_sessions/
 
 # OS
 .DS_Store
