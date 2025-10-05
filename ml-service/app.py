@@ -47,6 +47,34 @@ except Exception as e:
     print("🔄 Web app will run with RandomForest only")
     llm_available = False
 
+def cleanup_old_sessions(max_sessions=20):
+    user_dir = 'data/user_sessions'
+    
+    session_files = {} 
+    
+    for file in os.listdir(user_dir):
+        if file.endswith(('.csv', '.pkl')):
+            session_id = file.rsplit('_', 1)[0]  
+            if session_id not in session_files:
+                session_files[session_id] = []
+            session_files[session_id].append(file)
+    
+    if len(session_files) > max_sessions:
+        sessions_by_time = []
+        for session_id, files in session_files.items():
+            latest_time = max(
+                os.path.getmtime(os.path.join(user_dir, f)) 
+                for f in files
+            )
+            sessions_by_time.append((session_id, latest_time))
+        
+        sessions_by_time.sort(key=lambda x: x[1], reverse=True)
+        
+        for session_id, _ in sessions_by_time[max_sessions:]:
+            for file in session_files[session_id]:
+                os.remove(os.path.join(user_dir, file))
+            print(f"Deleted old session: {session_id}")
+
 @app.route('/')
 def home():
     pass
@@ -169,6 +197,8 @@ def save_dataset():
         
         # this is the task that creates the vector store
         task = create_vector_store_task.delay(user_csv_path, user_vector_store_path)
+
+        cleanup_old_sessions(max_sessions=20)
         
         return jsonify({'message': 'Vector store creation started.', 'task_id': task.id}), 202
 
