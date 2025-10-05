@@ -755,11 +755,11 @@ export default function Home() {
         >
           <div
             style={{
-              background: "rgba(255, 255, 255, 0.18)",
+              background: "rgba(0, 0, 0, 0.6)",
               backdropFilter: "blur(10px)",
               borderRadius: "2rem",
               padding: "1.5rem 1rem",
-              border: "1px solid rgba(255, 255, 255, 0.1)",
+              border: "1px solid rgba(0, 0, 0, 0.5)",
               display: "flex",
               flexDirection: "column",
               gap: "1.5rem",
@@ -828,7 +828,7 @@ export default function Home() {
                       style={{
                         width: "1rem",
                         height: "1rem",
-                        border: "2px solid rgba(255, 255, 255, 0.3)",
+                        border: "2px solid rgba(0, 0, 0, 0.6)",
                         borderTop: "2px solid white",
                         borderRadius: "50%",
                         animation: "spin 1s linear infinite",
@@ -1021,14 +1021,14 @@ export default function Home() {
                               option.value
                             )
                               ? "#4A90E2"
-                              : "rgba(255, 255, 255, 0.1)",
+                              : "rgba(0, 0, 0, 0.5)",
                             color: datasetTypeFilter.includes(option.value)
                               ? "#ffffff"
                               : "rgba(255, 255, 255, 0.8)",
                             border: `1px solid ${
                               datasetTypeFilter.includes(option.value)
                                 ? "#4A90E2"
-                                : "rgba(255, 255, 255, 0.2)"
+                                : "rgba(0, 0, 0, 0.6)"
                             }`,
                             fontSize: "0.85rem",
                             fontWeight: "500",
@@ -1059,9 +1059,9 @@ export default function Home() {
                       fileInput.click();
                     }}
                     style={{
-                      background: "rgba(255, 255, 255, 0.1)",
+                      background: "rgba(0, 0, 0, 0.5)",
                       color: "rgba(255, 255, 255, 0.8)",
-                      border: "1px solid rgba(255, 255, 255, 0.2)",
+                      border: "1px solid rgba(0, 0, 0, 0.6)",
                       padding: "10px 20px",
                       borderRadius: "8px",
                       cursor: "pointer",
@@ -1071,12 +1071,12 @@ export default function Home() {
                       transition: "all 0.2s ease-in-out",
                     }}
                     onMouseEnter={(e) => {
-                      e.target.style.background = "rgba(255, 255, 255, 0.2)";
-                      e.target.style.borderColor = "rgba(255, 255, 255, 0.3)";
+                      e.target.style.background = "rgba(0, 0, 0, 0.6)";
+                      e.target.style.borderColor = "rgba(0, 0, 0, 0.6)";
                     }}
                     onMouseLeave={(e) => {
-                      e.target.style.background = "rgba(255, 255, 255, 0.1)";
-                      e.target.style.borderColor = "rgba(255, 255, 255, 0.2)";
+                      e.target.style.background = "rgba(0, 0, 0, 0.5)";
+                      e.target.style.borderColor = "rgba(0, 0, 0, 0.6)";
                     }}
                   >
                     Upload CSV
@@ -1119,11 +1119,11 @@ export default function Home() {
               {/* Table Container */}
               <div
                 style={{
-                  background: "rgba(255, 255, 255, 0.1)",
+                  background: "rgba(0, 0, 0, 0.5)",
                   backdropFilter: "blur(10px)",
                   borderRadius: "15px",
                   padding: "2rem",
-                  border: "1px solid rgba(255, 255, 255, 0.2)",
+                  border: "1px solid rgba(0, 0, 0, 0.6)",
                   overflowX: "auto",
                   width: "100%",
                   maxWidth: "1200px",
@@ -1371,11 +1371,11 @@ export default function Home() {
                       style={{
                         background:
                           datasetCurrentPage === 1
-                            ? "rgba(255, 255, 255, 0.1)"
+                            ? "rgba(0, 0, 0, 0.5)"
                             : "rgba(74, 144, 226, 0.8)",
                         color:
                           datasetCurrentPage === 1
-                            ? "rgba(255, 255, 255, 0.4)"
+                            ? "rgba(0, 0, 0, 0.6)"
                             : "#ffffff",
                         border: "none",
                         padding: "10px 20px",
@@ -1448,11 +1448,11 @@ export default function Home() {
                       style={{
                         background:
                           datasetCurrentPage === datasetTotalPages
-                            ? "rgba(255, 255, 255, 0.1)"
+                            ? "rgba(0, 0, 0, 0.5)"
                             : "rgba(74, 144, 226, 0.8)",
                         color:
                           datasetCurrentPage === datasetTotalPages
-                            ? "rgba(255, 255, 255, 0.4)"
+                            ? "rgba(0, 0, 0, 0.6)"
                             : "#ffffff",
                         border: "none",
                         padding: "10px 20px",
@@ -1563,7 +1563,7 @@ export default function Home() {
                   </span>
                   <span
                     style={{
-                      background: "rgba(255, 255, 255, 0.22)",
+                      background: "rgba(0, 0, 0, 0.7)",
                       color: "rgba(255, 255, 255, 0.8)",
                       padding: "0.75rem 1.5rem",
                       borderRadius: "1.5rem",
@@ -1575,7 +1575,7 @@ export default function Home() {
                   </span>
                   <span
                     style={{
-                      background: "rgba(255, 255, 255, 0.22)",
+                      background: "rgba(0, 0, 0, 0.7)",
                       color: "rgba(255, 255, 255, 0.8)",
                       padding: "0.75rem 1.5rem",
                       borderRadius: "1.5rem",
@@ -1591,12 +1591,12 @@ export default function Home() {
               {/* Quick Examples */}
               <div
                 style={{
-                  background: "rgba(255, 255, 255, 0.18)",
+                  background: "rgba(0, 0, 0, 0.6)",
                   backdropFilter: "blur(10px)",
                   borderRadius: "1.5rem",
                   padding: "2rem",
                   marginBottom: "2rem",
-                  border: "1px solid rgba(255, 255, 255, 0.1)",
+                  border: "1px solid rgba(0, 0, 0, 0.5)",
                   width: "100%",
                   maxWidth: "1000px",
                 }}
@@ -1624,9 +1624,9 @@ export default function Home() {
                     style={{
                       flex: "1",
                       minWidth: "180px",
-                      background: "rgba(255, 255, 255, 0.22)",
+                      background: "rgba(0, 0, 0, 0.7)",
                       color: "white",
-                      border: "2px solid rgba(255, 255, 255, 0.2)",
+                      border: "2px solid rgba(0, 0, 0, 0.6)",
                       padding: "1rem 1.5rem",
                       borderRadius: "0.75rem",
                       cursor: "pointer",
@@ -1636,13 +1636,13 @@ export default function Home() {
                       fontFamily: "'Inter', sans-serif",
                     }}
                     onMouseEnter={(e) => {
-                      e.target.style.background = "rgba(255, 255, 255, 0.2)";
+                      e.target.style.background = "rgba(0, 0, 0, 0.6)";
                       e.target.style.borderColor = "#8072FF";
                       e.target.style.transform = "translateY(-2px)";
                     }}
                     onMouseLeave={(e) => {
-                      e.target.style.background = "rgba(255, 255, 255, 0.1)";
-                      e.target.style.borderColor = "rgba(255, 255, 255, 0.2)";
+                      e.target.style.background = "rgba(0, 0, 0, 0.5)";
+                      e.target.style.borderColor = "rgba(0, 0, 0, 0.6)";
                       e.target.style.transform = "translateY(0)";
                     }}
                   >
@@ -1653,9 +1653,9 @@ export default function Home() {
                     style={{
                       flex: "1",
                       minWidth: "180px",
-                      background: "rgba(255, 255, 255, 0.22)",
+                      background: "rgba(0, 0, 0, 0.7)",
                       color: "white",
-                      border: "2px solid rgba(255, 255, 255, 0.2)",
+                      border: "2px solid rgba(0, 0, 0, 0.6)",
                       padding: "1rem 1.5rem",
                       borderRadius: "0.75rem",
                       cursor: "pointer",
@@ -1665,13 +1665,13 @@ export default function Home() {
                       fontFamily: "'Inter', sans-serif",
                     }}
                     onMouseEnter={(e) => {
-                      e.target.style.background = "rgba(255, 255, 255, 0.2)";
+                      e.target.style.background = "rgba(0, 0, 0, 0.6)";
                       e.target.style.borderColor = "#8072FF";
                       e.target.style.transform = "translateY(-2px)";
                     }}
                     onMouseLeave={(e) => {
-                      e.target.style.background = "rgba(255, 255, 255, 0.1)";
-                      e.target.style.borderColor = "rgba(255, 255, 255, 0.2)";
+                      e.target.style.background = "rgba(0, 0, 0, 0.5)";
+                      e.target.style.borderColor = "rgba(0, 0, 0, 0.6)";
                       e.target.style.transform = "translateY(0)";
                     }}
                   >
@@ -1682,9 +1682,9 @@ export default function Home() {
                     style={{
                       flex: "1",
                       minWidth: "180px",
-                      background: "rgba(255, 255, 255, 0.22)",
+                      background: "rgba(0, 0, 0, 0.7)",
                       color: "white",
-                      border: "2px solid rgba(255, 255, 255, 0.2)",
+                      border: "2px solid rgba(0, 0, 0, 0.6)",
                       padding: "1rem 1.5rem",
                       borderRadius: "0.75rem",
                       cursor: "pointer",
@@ -1694,13 +1694,13 @@ export default function Home() {
                       fontFamily: "'Inter', sans-serif",
                     }}
                     onMouseEnter={(e) => {
-                      e.target.style.background = "rgba(255, 255, 255, 0.2)";
+                      e.target.style.background = "rgba(0, 0, 0, 0.6)";
                       e.target.style.borderColor = "#8072FF";
                       e.target.style.transform = "translateY(-2px)";
                     }}
                     onMouseLeave={(e) => {
-                      e.target.style.background = "rgba(255, 255, 255, 0.1)";
-                      e.target.style.borderColor = "rgba(255, 255, 255, 0.2)";
+                      e.target.style.background = "rgba(0, 0, 0, 0.5)";
+                      e.target.style.borderColor = "rgba(0, 0, 0, 0.6)";
                       e.target.style.transform = "translateY(0)";
                     }}
                   >
@@ -1712,12 +1712,12 @@ export default function Home() {
               {/* Classification Form */}
               <div
                 style={{
-                  background: "rgba(255, 255, 255, 0.18)",
+                  background: "rgba(0, 0, 0, 0.6)",
                   backdropFilter: "blur(10px)",
                   borderRadius: "1.5rem",
                   padding: "2rem",
                   marginBottom: "2rem",
-                  border: "1px solid rgba(255, 255, 255, 0.1)",
+                  border: "1px solid rgba(0, 0, 0, 0.5)",
                   width: "100%",
                   maxWidth: "1000px",
                 }}
@@ -1767,8 +1767,8 @@ export default function Home() {
                       }
                       placeholder="e.g., 9.49"
                       style={{
-                        background: "rgba(255, 255, 255, 0.22)",
-                        border: "2px solid rgba(255, 255, 255, 0.2)",
+                        background: "rgba(0, 0, 0, 0.7)",
+                        border: "2px solid rgba(0, 0, 0, 0.6)",
                         borderRadius: "0.75rem",
                         padding: "1rem",
                         color: "white",
@@ -1781,7 +1781,7 @@ export default function Home() {
                         e.target.style.borderColor = "#8072FF";
                       }}
                       onBlur={(e) => {
-                        e.target.style.borderColor = "rgba(255, 255, 255, 0.2)";
+                        e.target.style.borderColor = "rgba(0, 0, 0, 0.6)";
                       }}
                     />
                   </div>
@@ -1811,8 +1811,8 @@ export default function Home() {
                       }
                       placeholder="e.g., 2.96"
                       style={{
-                        background: "rgba(255, 255, 255, 0.22)",
-                        border: "2px solid rgba(255, 255, 255, 0.2)",
+                        background: "rgba(0, 0, 0, 0.7)",
+                        border: "2px solid rgba(0, 0, 0, 0.6)",
                         borderRadius: "0.75rem",
                         padding: "1rem",
                         color: "white",
@@ -1825,7 +1825,7 @@ export default function Home() {
                         e.target.style.borderColor = "#8072FF";
                       }}
                       onBlur={(e) => {
-                        e.target.style.borderColor = "rgba(255, 255, 255, 0.2)";
+                        e.target.style.borderColor = "rgba(0, 0, 0, 0.6)";
                       }}
                     />
                   </div>
@@ -1855,8 +1855,8 @@ export default function Home() {
                       }
                       placeholder="e.g., 615.8"
                       style={{
-                        background: "rgba(255, 255, 255, 0.22)",
-                        border: "2px solid rgba(255, 255, 255, 0.2)",
+                        background: "rgba(0, 0, 0, 0.7)",
+                        border: "2px solid rgba(0, 0, 0, 0.6)",
                         borderRadius: "0.75rem",
                         padding: "1rem",
                         color: "white",
@@ -1869,7 +1869,7 @@ export default function Home() {
                         e.target.style.borderColor = "#8072FF";
                       }}
                       onBlur={(e) => {
-                        e.target.style.borderColor = "rgba(255, 255, 255, 0.2)";
+                        e.target.style.borderColor = "rgba(0, 0, 0, 0.6)";
                       }}
                     />
                   </div>
@@ -1899,8 +1899,8 @@ export default function Home() {
                       }
                       placeholder="e.g., 2.26"
                       style={{
-                        background: "rgba(255, 255, 255, 0.22)",
-                        border: "2px solid rgba(255, 255, 255, 0.2)",
+                        background: "rgba(0, 0, 0, 0.7)",
+                        border: "2px solid rgba(0, 0, 0, 0.6)",
                         borderRadius: "0.75rem",
                         padding: "1rem",
                         color: "white",
@@ -1913,7 +1913,7 @@ export default function Home() {
                         e.target.style.borderColor = "#8072FF";
                       }}
                       onBlur={(e) => {
-                        e.target.style.borderColor = "rgba(255, 255, 255, 0.2)";
+                        e.target.style.borderColor = "rgba(0, 0, 0, 0.6)";
                       }}
                     />
                   </div>
@@ -1941,8 +1941,8 @@ export default function Home() {
                       onChange={(e) => handleInputChange("teq", e.target.value)}
                       placeholder="e.g., 793"
                       style={{
-                        background: "rgba(255, 255, 255, 0.22)",
-                        border: "2px solid rgba(255, 255, 255, 0.2)",
+                        background: "rgba(0, 0, 0, 0.7)",
+                        border: "2px solid rgba(0, 0, 0, 0.6)",
                         borderRadius: "0.75rem",
                         padding: "1rem",
                         color: "white",
@@ -1955,7 +1955,7 @@ export default function Home() {
                         e.target.style.borderColor = "#8072FF";
                       }}
                       onBlur={(e) => {
-                        e.target.style.borderColor = "rgba(255, 255, 255, 0.2)";
+                        e.target.style.borderColor = "rgba(0, 0, 0, 0.6)";
                       }}
                     />
                   </div>
@@ -2006,9 +2006,9 @@ export default function Home() {
                     onClick={resetForm}
                     style={{
                       flex: "1",
-                      background: "rgba(255, 255, 255, 0.22)",
+                      background: "rgba(0, 0, 0, 0.7)",
                       color: "white",
-                      border: "2px solid rgba(255, 255, 255, 0.2)",
+                      border: "2px solid rgba(0, 0, 0, 0.6)",
                       padding: "1rem 2rem",
                       borderRadius: "0.75rem",
                       fontSize: "1.15rem",
@@ -2018,12 +2018,12 @@ export default function Home() {
                       fontFamily: "'Inter', sans-serif",
                     }}
                     onMouseEnter={(e) => {
-                      e.target.style.background = "rgba(255, 255, 255, 0.2)";
+                      e.target.style.background = "rgba(0, 0, 0, 0.6)";
                       e.target.style.borderColor = "#8072FF";
                     }}
                     onMouseLeave={(e) => {
-                      e.target.style.background = "rgba(255, 255, 255, 0.1)";
-                      e.target.style.borderColor = "rgba(255, 255, 255, 0.2)";
+                      e.target.style.background = "rgba(0, 0, 0, 0.5)";
+                      e.target.style.borderColor = "rgba(0, 0, 0, 0.6)";
                     }}
                   >
                     🔄 Reset
@@ -2035,12 +2035,12 @@ export default function Home() {
               {result && (
                 <div
                   style={{
-                    background: "rgba(255, 255, 255, 0.18)",
+                    background: "rgba(0, 0, 0, 0.6)",
                     backdropFilter: "blur(10px)",
                     borderRadius: "1.5rem",
                     padding: "2rem",
                     marginBottom: "2rem",
-                    border: "1px solid rgba(255, 255, 255, 0.1)",
+                    border: "1px solid rgba(0, 0, 0, 0.5)",
                     width: "100%",
                     maxWidth: "1000px",
                   }}
@@ -2059,18 +2059,18 @@ export default function Home() {
 
                   <div
                     style={{
-                      background: "rgba(255, 255, 255, 0.18)",
+                      background: "rgba(0, 0, 0, 0.6)",
                       borderRadius: "1rem",
                       padding: "2rem",
                       marginBottom: "1.5rem",
-                      border: "1px solid rgba(255, 255, 255, 0.1)",
+                      border: "1px solid rgba(0, 0, 0, 0.5)",
                     }}
                   >
                     {/* Main Result */}
                     <div
                       style={{
                         paddingBottom: "1.5rem",
-                        borderBottom: "2px solid rgba(255, 255, 255, 0.1)",
+                        borderBottom: "2px solid rgba(0, 0, 0, 0.5)",
                         marginBottom: "1.5rem",
                       }}
                     >
@@ -2117,7 +2117,7 @@ export default function Home() {
                     {/* Result Details */}
                     <div
                       style={{
-                        background: "rgba(255, 255, 255, 0.22)",
+                        background: "rgba(0, 0, 0, 0.7)",
                         padding: "1.5rem",
                         borderRadius: "0.75rem",
                         marginBottom: "1.5rem",
@@ -2128,7 +2128,7 @@ export default function Home() {
                           display: "flex",
                           justifyContent: "space-between",
                           padding: "0.75rem 0",
-                          borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
+                          borderBottom: "1px solid rgba(0, 0, 0, 0.5)",
                         }}
                       >
                         <span
@@ -2155,7 +2155,7 @@ export default function Home() {
                           display: "flex",
                           justifyContent: "space-between",
                           padding: "0.75rem 0",
-                          borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
+                          borderBottom: "1px solid rgba(0, 0, 0, 0.5)",
                         }}
                       >
                         <span
@@ -2208,7 +2208,7 @@ export default function Home() {
                     {/* Input Summary */}
                     <div
                       style={{
-                        background: "rgba(255, 255, 255, 0.22)",
+                        background: "rgba(0, 0, 0, 0.7)",
                         padding: "1.5rem",
                         borderRadius: "0.75rem",
                         marginBottom: "1.5rem",
@@ -2278,7 +2278,7 @@ export default function Home() {
                   {/* What This Means */}
                   <div
                     style={{
-                      background: "rgba(255, 255, 255, 0.22)",
+                      background: "rgba(0, 0, 0, 0.7)",
                       borderLeft: "4px solid #8072FF",
                       padding: "1.5rem",
                       borderRadius: "0.75rem",
@@ -2335,11 +2335,11 @@ export default function Home() {
               {/* How It Works */}
               <div
                 style={{
-                  background: "rgba(255, 255, 255, 0.18)",
+                  background: "rgba(0, 0, 0, 0.6)",
                   backdropFilter: "blur(10px)",
                   borderRadius: "1.5rem",
                   padding: "2rem",
-                  border: "1px solid rgba(255, 255, 255, 0.1)",
+                  border: "1px solid rgba(0, 0, 0, 0.5)",
                   width: "100%",
                   maxWidth: "1000px",
                 }}
@@ -2365,7 +2365,7 @@ export default function Home() {
                 >
                   <div
                     style={{
-                      background: "rgba(255, 255, 255, 0.22)",
+                      background: "rgba(0, 0, 0, 0.7)",
                       padding: "2rem",
                       borderRadius: "1rem",
                       textAlign: "center",
@@ -2421,7 +2421,7 @@ export default function Home() {
                   </div>
                   <div
                     style={{
-                      background: "rgba(255, 255, 255, 0.22)",
+                      background: "rgba(0, 0, 0, 0.7)",
                       padding: "2rem",
                       borderRadius: "1rem",
                       textAlign: "center",
@@ -2477,7 +2477,7 @@ export default function Home() {
                   </div>
                   <div
                     style={{
-                      background: "rgba(255, 255, 255, 0.22)",
+                      background: "rgba(0, 0, 0, 0.7)",
                       padding: "2rem",
                       borderRadius: "1rem",
                       textAlign: "center",
@@ -2599,14 +2599,14 @@ export default function Home() {
                       background:
                         activeMission === mission.id
                           ? "rgba(128, 114, 255, 0.22)"
-                          : "rgba(255, 255, 255, 0.18)",
+                          : "rgba(0, 0, 0, 0.6)",
                       backdropFilter: "blur(10px)",
                       borderRadius: "1.5rem",
                       padding: "2rem",
                       border:
                         activeMission === mission.id
                           ? `2px solid ${mission.color}`
-                          : "1px solid rgba(255, 255, 255, 0.1)",
+                          : "1px solid rgba(0, 0, 0, 0.5)",
                       transition: "all 0.3s ease",
                       cursor: "pointer",
                       position: "relative",
@@ -2633,7 +2633,7 @@ export default function Home() {
                     onMouseLeave={(e) => {
                       if (activeMission !== mission.id) {
                         e.target.style.transform = "translateY(0)";
-                        e.target.style.borderColor = "rgba(255, 255, 255, 0.1)";
+                        e.target.style.borderColor = "rgba(0, 0, 0, 0.5)";
                         e.target.style.boxShadow = "none";
                       }
                     }}
@@ -2769,18 +2769,18 @@ export default function Home() {
                     fontFamily: "'Inter', sans-serif",
                   }}
                 >
-                  Total Exoplanets Discovered
+                  Total Entries
                 </p>
               </div>
 
               {/* Data Table Section */}
               <div
                 style={{
-                  background: "rgba(255, 255, 255, 0.18)",
+                  background: "rgba(0, 0, 0, 0.6)",
                   backdropFilter: "blur(10px)",
                   borderRadius: "1.5rem",
                   padding: "2rem",
-                  border: "1px solid rgba(255, 255, 255, 0.1)",
+                  border: "1px solid rgba(0, 0, 0, 0.5)",
                   marginTop: "3rem",
                   width: "100%",
                   maxWidth: "1200px",
@@ -2884,8 +2884,7 @@ export default function Home() {
                           <tr
                             key={rowIndex}
                             style={{
-                              borderBottom:
-                                "1px solid rgba(255, 255, 255, 0.05)",
+                              borderBottom: "1px solid rgba(0, 0, 0, 0.2)",
                               transition: "all 0.2s ease",
                             }}
                             onMouseEnter={(e) => {
@@ -2979,7 +2978,7 @@ export default function Home() {
                       gap: "1rem",
                       marginTop: "2rem",
                       padding: "1.5rem",
-                      background: "rgba(255, 255, 255, 0.03)",
+                      background: "rgba(0, 0, 0, 0.1)",
                       borderRadius: "1rem",
                     }}
                   >
@@ -2989,13 +2988,11 @@ export default function Home() {
                       style={{
                         background:
                           currentPage === 1
-                            ? "rgba(255, 255, 255, 0.1)"
+                            ? "rgba(0, 0, 0, 0.5)"
                             : "rgba(128, 114, 255, 0.2)",
                         color:
-                          currentPage === 1
-                            ? "rgba(255, 255, 255, 0.4)"
-                            : "white",
-                        border: "1px solid rgba(255, 255, 255, 0.2)",
+                          currentPage === 1 ? "rgba(0, 0, 0, 0.6)" : "white",
+                        border: "1px solid rgba(0, 0, 0, 0.6)",
                         padding: "0.75rem 1.5rem",
                         borderRadius: "0.75rem",
                         cursor: currentPage === 1 ? "not-allowed" : "pointer",
@@ -3042,13 +3039,13 @@ export default function Home() {
                       style={{
                         background:
                           currentPage === totalPages
-                            ? "rgba(255, 255, 255, 0.1)"
+                            ? "rgba(0, 0, 0, 0.5)"
                             : "rgba(128, 114, 255, 0.2)",
                         color:
                           currentPage === totalPages
-                            ? "rgba(255, 255, 255, 0.4)"
+                            ? "rgba(0, 0, 0, 0.6)"
                             : "white",
-                        border: "1px solid rgba(255, 255, 255, 0.2)",
+                        border: "1px solid rgba(0, 0, 0, 0.6)",
                         padding: "0.75rem 1.5rem",
                         borderRadius: "0.75rem",
                         cursor:
@@ -3134,9 +3131,9 @@ export default function Home() {
           >
             <div
               style={{
-                background: "rgba(255, 255, 255, 0.18)",
+                background: "rgba(0, 0, 0, 0.6)",
                 backdropFilter: "blur(10px)",
-                border: "2px solid rgba(255, 255, 255, 0.1)",
+                border: "2px solid rgba(0, 0, 0, 0.5)",
                 borderRadius: "1.5rem",
                 padding: "2rem",
                 maxWidth: "1200px",
@@ -3176,7 +3173,7 @@ export default function Home() {
                   gap: "1.5rem",
                   marginBottom: "1.5rem",
                   padding: "1rem",
-                  background: "rgba(255, 255, 255, 0.22)",
+                  background: "rgba(0, 0, 0, 0.7)",
                   borderRadius: "0.75rem",
                   fontWeight: "600",
                   fontSize: "0.95rem",
@@ -3214,7 +3211,7 @@ export default function Home() {
               <div
                 style={{
                   overflowX: "auto",
-                  border: "1px solid rgba(255, 255, 255, 0.1)",
+                  border: "1px solid rgba(0, 0, 0, 0.5)",
                   borderRadius: "0.75rem",
                   marginBottom: "1.5rem",
                 }}
@@ -3231,7 +3228,7 @@ export default function Home() {
                   <thead>
                     <tr
                       style={{
-                        background: "rgba(255, 255, 255, 0.22)",
+                        background: "rgba(0, 0, 0, 0.7)",
                         position: "sticky",
                         top: 0,
                       }}
@@ -3241,7 +3238,7 @@ export default function Home() {
                           padding: "1rem",
                           textAlign: "left",
                           fontWeight: "bold",
-                          borderBottom: "2px solid rgba(255, 255, 255, 0.2)",
+                          borderBottom: "2px solid rgba(0, 0, 0, 0.6)",
                         }}
                       >
                         #
@@ -3251,7 +3248,7 @@ export default function Home() {
                           padding: "1rem",
                           textAlign: "left",
                           fontWeight: "bold",
-                          borderBottom: "2px solid rgba(255, 255, 255, 0.2)",
+                          borderBottom: "2px solid rgba(0, 0, 0, 0.6)",
                         }}
                       >
                         Name
@@ -3261,7 +3258,7 @@ export default function Home() {
                           padding: "1rem",
                           textAlign: "left",
                           fontWeight: "bold",
-                          borderBottom: "2px solid rgba(255, 255, 255, 0.2)",
+                          borderBottom: "2px solid rgba(0, 0, 0, 0.6)",
                         }}
                       >
                         Period
@@ -3271,7 +3268,7 @@ export default function Home() {
                           padding: "1rem",
                           textAlign: "left",
                           fontWeight: "bold",
-                          borderBottom: "2px solid rgba(255, 255, 255, 0.2)",
+                          borderBottom: "2px solid rgba(0, 0, 0, 0.6)",
                         }}
                       >
                         Duration
@@ -3281,7 +3278,7 @@ export default function Home() {
                           padding: "1rem",
                           textAlign: "left",
                           fontWeight: "bold",
-                          borderBottom: "2px solid rgba(255, 255, 255, 0.2)",
+                          borderBottom: "2px solid rgba(0, 0, 0, 0.6)",
                         }}
                       >
                         Depth
@@ -3291,7 +3288,7 @@ export default function Home() {
                           padding: "1rem",
                           textAlign: "left",
                           fontWeight: "bold",
-                          borderBottom: "2px solid rgba(255, 255, 255, 0.2)",
+                          borderBottom: "2px solid rgba(0, 0, 0, 0.6)",
                         }}
                       >
                         Radius
@@ -3301,7 +3298,7 @@ export default function Home() {
                           padding: "1rem",
                           textAlign: "left",
                           fontWeight: "bold",
-                          borderBottom: "2px solid rgba(255, 255, 255, 0.2)",
+                          borderBottom: "2px solid rgba(0, 0, 0, 0.6)",
                         }}
                       >
                         Temp
@@ -3311,7 +3308,7 @@ export default function Home() {
                           padding: "1rem",
                           textAlign: "left",
                           fontWeight: "bold",
-                          borderBottom: "2px solid rgba(255, 255, 255, 0.2)",
+                          borderBottom: "2px solid rgba(0, 0, 0, 0.6)",
                         }}
                       >
                         Label
@@ -3321,7 +3318,7 @@ export default function Home() {
                           padding: "1rem",
                           textAlign: "left",
                           fontWeight: "bold",
-                          borderBottom: "2px solid rgba(255, 255, 255, 0.2)",
+                          borderBottom: "2px solid rgba(0, 0, 0, 0.6)",
                         }}
                       >
                         Mission
@@ -3333,11 +3330,10 @@ export default function Home() {
                       <tr
                         key={idx}
                         style={{
-                          borderBottom: "1px solid rgba(255, 255, 255, 0.05)",
+                          borderBottom: "1px solid rgba(0, 0, 0, 0.2)",
                         }}
                         onMouseEnter={(e) => {
-                          e.target.style.background =
-                            "rgba(255, 255, 255, 0.1)";
+                          e.target.style.background = "rgba(0, 0, 0, 0.5)";
                         }}
                         onMouseLeave={(e) => {
                           e.target.style.background = "transparent";
@@ -3379,7 +3375,7 @@ export default function Home() {
 
               <div
                 style={{
-                  background: "rgba(255, 255, 255, 0.22)",
+                  background: "rgba(0, 0, 0, 0.7)",
                   borderLeft: "4px solid #8072FF",
                   padding: "1.5rem",
                   borderRadius: "0.75rem",
@@ -3420,9 +3416,9 @@ export default function Home() {
                 onClick={() => setShowRagExamples(false)}
                 style={{
                   width: "100%",
-                  background: "rgba(255, 255, 255, 0.22)",
+                  background: "rgba(0, 0, 0, 0.7)",
                   color: "white",
-                  border: "2px solid rgba(255, 255, 255, 0.2)",
+                  border: "2px solid rgba(0, 0, 0, 0.6)",
                   padding: "1rem",
                   borderRadius: "0.75rem",
                   fontSize: "1.1rem",
@@ -3432,12 +3428,12 @@ export default function Home() {
                   fontFamily: "'Inter', sans-serif",
                 }}
                 onMouseEnter={(e) => {
-                  e.target.style.background = "rgba(255, 255, 255, 0.2)";
+                  e.target.style.background = "rgba(0, 0, 0, 0.6)";
                   e.target.style.borderColor = "#8072FF";
                 }}
                 onMouseLeave={(e) => {
-                  e.target.style.background = "rgba(255, 255, 255, 0.1)";
-                  e.target.style.borderColor = "rgba(255, 255, 255, 0.2)";
+                  e.target.style.background = "rgba(0, 0, 0, 0.5)";
+                  e.target.style.borderColor = "rgba(0, 0, 0, 0.6)";
                 }}
               >
                 Close
