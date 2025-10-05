@@ -17,6 +17,98 @@ export default function Home() {
   const [activeNavItem, setActiveNavItem] = useState(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
+  // AI Classifier state
+  const [formData, setFormData] = useState({
+    period: "",
+    duration: "",
+    depth: "",
+    prad: "",
+    teq: "",
+  });
+  const [result, setResult] = useState(null);
+  const [isClassifying, setIsClassifying] = useState(false);
+  const [showRagExamples, setShowRagExamples] = useState(false);
+
+  // Example data for quick testing
+  const examples = {
+    kepler: {
+      period: "9.49",
+      duration: "2.96",
+      depth: "615.8",
+      prad: "2.26",
+      teq: "793",
+    },
+    tess: {
+      period: "3.12",
+      duration: "2.02",
+      depth: "656.9",
+      prad: "5.82",
+      teq: "3127",
+    },
+    k2: {
+      period: "7.78",
+      duration: "3.18",
+      depth: "1320.0",
+      prad: "4.19",
+      teq: "1050",
+    },
+  };
+
+  const handleInputChange = (field, value) => {
+    setFormData({ ...formData, [field]: value });
+  };
+
+  const loadExample = (type) => {
+    setFormData(examples[type]);
+    setResult(null);
+  };
+
+  const resetForm = () => {
+    setFormData({ period: "", duration: "", depth: "", prad: "", teq: "" });
+    setResult(null);
+  };
+
+  const classifyExoplanet = async () => {
+    // Validate inputs
+    if (
+      !formData.period ||
+      !formData.duration ||
+      !formData.depth ||
+      !formData.prad ||
+      !formData.teq
+    ) {
+      alert("Please fill in all fields!");
+      return;
+    }
+
+    setIsClassifying(true);
+    try {
+      const response = await fetch("http://localhost:5002/predict", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          period: parseFloat(formData.period),
+          duration: parseFloat(formData.duration),
+          depth: parseFloat(formData.depth),
+          prad: parseFloat(formData.prad),
+          teq: parseFloat(formData.teq),
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setResult(data);
+      } else {
+        const error = await response.json();
+        alert("Classification failed: " + error.error);
+      }
+    } catch (error) {
+      alert("Error connecting to server: " + error.message);
+    }
+    setIsClassifying(false);
+  };
+
   const handleGetStarted = () => {
     setIsAnimating(true);
     // Immediately show dashboard and fade out original content
@@ -466,7 +558,7 @@ export default function Home() {
             overflow: "auto",
           }}
         >
-          {/* AI Content */}
+          {/* AI Classifier Content */}
           {activeNavItem === "ai" ? (
             <div
               style={{
@@ -475,33 +567,22 @@ export default function Home() {
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
-                justifyContent: "center",
+                overflow: "auto",
               }}
             >
+              {/* Header */}
               <div
                 style={{
                   textAlign: "center",
-                  maxWidth: "800px",
-                  background: "rgba(255, 255, 255, 0.05)",
-                  backdropFilter: "blur(10px)",
-                  borderRadius: "2rem",
-                  padding: "4rem 3rem",
-                  border: "1px solid rgba(255, 255, 255, 0.1)",
+                  marginBottom: "3rem",
+                  maxWidth: "1000px",
                 }}
               >
-                <div
-                  style={{
-                    fontSize: "4rem",
-                    marginBottom: "2rem",
-                  }}
-                >
-                  🤖
-                </div>
                 <h1
                   style={{
-                    fontSize: "3rem",
+                    fontSize: "3.5rem",
                     fontWeight: "800",
-                    margin: "0 0 1.5rem 0",
+                    margin: "0 0 1rem 0",
                     background:
                       "linear-gradient(135deg, #ffffff 0%, #8072FF 100%)",
                     WebkitBackgroundClip: "text",
@@ -510,148 +591,992 @@ export default function Home() {
                     fontFamily: "'Inter', sans-serif",
                   }}
                 >
-                  AI Exoplanet Classifier
+                  🔬 Classify New Exoplanets
                 </h1>
                 <p
                   style={{
                     fontSize: "1.25rem",
                     fontWeight: "300",
                     color: "rgba(255, 255, 255, 0.8)",
-                    margin: "0 0 2rem 0",
+                    margin: "0 0 1.5rem 0",
                     fontFamily: "'Inter', sans-serif",
                     lineHeight: "1.6",
                   }}
                 >
-                  Our advanced machine learning model analyzes exoplanet data to
-                  classify and predict the likelihood of habitability and
-                  planetary characteristics.
+                  Upload CSV or manually enter exoplanet parameters to classify
+                  using our 95.45% accurate LLM-based RAG system
                 </p>
                 <div
                   style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    gap: "1rem",
+                    flexWrap: "wrap",
+                  }}
+                >
+                  <span
+                    style={{
+                      background:
+                        "linear-gradient(135deg, #8072FF 0%, #675DC2 100%)",
+                      color: "white",
+                      padding: "0.75rem 1.5rem",
+                      borderRadius: "1.5rem",
+                      fontWeight: "bold",
+                      fontSize: "1.1rem",
+                    }}
+                  >
+                    95.45% Accurate
+                  </span>
+                  <span
+                    style={{
+                      background: "rgba(255, 255, 255, 0.1)",
+                      color: "rgba(255, 255, 255, 0.8)",
+                      padding: "0.75rem 1.5rem",
+                      borderRadius: "1.5rem",
+                      fontWeight: "600",
+                    }}
+                  >
+                    LLM In-Context Learning
+                  </span>
+                  <span
+                    style={{
+                      background: "rgba(255, 255, 255, 0.1)",
+                      color: "rgba(255, 255, 255, 0.8)",
+                      padding: "0.75rem 1.5rem",
+                      borderRadius: "1.5rem",
+                      fontWeight: "600",
+                    }}
+                  >
+                    25 RAG Examples
+                  </span>
+                </div>
+              </div>
+
+              {/* Quick Examples */}
+              <div
+                style={{
+                  background: "rgba(255, 255, 255, 0.05)",
+                  backdropFilter: "blur(10px)",
+                  borderRadius: "1.5rem",
+                  padding: "2rem",
+                  marginBottom: "2rem",
+                  border: "1px solid rgba(255, 255, 255, 0.1)",
+                  width: "100%",
+                  maxWidth: "1000px",
+                }}
+              >
+                <h3
+                  style={{
+                    color: "white",
+                    fontSize: "1.5rem",
+                    fontWeight: "600",
+                    margin: "0 0 1.5rem 0",
+                    fontFamily: "'Inter', sans-serif",
+                  }}
+                >
+                  🎯 Quick Start - Load Example Data:
+                </h3>
+                <div
+                  style={{
+                    display: "flex",
+                    gap: "1rem",
+                    flexWrap: "wrap",
+                  }}
+                >
+                  <button
+                    onClick={() => loadExample("kepler")}
+                    style={{
+                      flex: "1",
+                      minWidth: "180px",
+                      background: "rgba(255, 255, 255, 0.1)",
+                      color: "white",
+                      border: "2px solid rgba(255, 255, 255, 0.2)",
+                      padding: "1rem 1.5rem",
+                      borderRadius: "0.75rem",
+                      cursor: "pointer",
+                      fontSize: "1rem",
+                      fontWeight: "600",
+                      transition: "all 0.2s",
+                      fontFamily: "'Inter', sans-serif",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.background = "rgba(255, 255, 255, 0.2)";
+                      e.target.style.borderColor = "#8072FF";
+                      e.target.style.transform = "translateY(-2px)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.background = "rgba(255, 255, 255, 0.1)";
+                      e.target.style.borderColor = "rgba(255, 255, 255, 0.2)";
+                      e.target.style.transform = "translateY(0)";
+                    }}
+                  >
+                    🛰️ Kepler Example
+                  </button>
+                  <button
+                    onClick={() => loadExample("tess")}
+                    style={{
+                      flex: "1",
+                      minWidth: "180px",
+                      background: "rgba(255, 255, 255, 0.1)",
+                      color: "white",
+                      border: "2px solid rgba(255, 255, 255, 0.2)",
+                      padding: "1rem 1.5rem",
+                      borderRadius: "0.75rem",
+                      cursor: "pointer",
+                      fontSize: "1rem",
+                      fontWeight: "600",
+                      transition: "all 0.2s",
+                      fontFamily: "'Inter', sans-serif",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.background = "rgba(255, 255, 255, 0.2)";
+                      e.target.style.borderColor = "#8072FF";
+                      e.target.style.transform = "translateY(-2px)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.background = "rgba(255, 255, 255, 0.1)";
+                      e.target.style.borderColor = "rgba(255, 255, 255, 0.2)";
+                      e.target.style.transform = "translateY(0)";
+                    }}
+                  >
+                    🔭 TESS Example
+                  </button>
+                  <button
+                    onClick={() => loadExample("k2")}
+                    style={{
+                      flex: "1",
+                      minWidth: "180px",
+                      background: "rgba(255, 255, 255, 0.1)",
+                      color: "white",
+                      border: "2px solid rgba(255, 255, 255, 0.2)",
+                      padding: "1rem 1.5rem",
+                      borderRadius: "0.75rem",
+                      cursor: "pointer",
+                      fontSize: "1rem",
+                      fontWeight: "600",
+                      transition: "all 0.2s",
+                      fontFamily: "'Inter', sans-serif",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.background = "rgba(255, 255, 255, 0.2)";
+                      e.target.style.borderColor = "#8072FF";
+                      e.target.style.transform = "translateY(-2px)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.background = "rgba(255, 255, 255, 0.1)";
+                      e.target.style.borderColor = "rgba(255, 255, 255, 0.2)";
+                      e.target.style.transform = "translateY(0)";
+                    }}
+                  >
+                    🌟 K2 Example
+                  </button>
+                </div>
+              </div>
+
+              {/* Classification Form */}
+              <div
+                style={{
+                  background: "rgba(255, 255, 255, 0.05)",
+                  backdropFilter: "blur(10px)",
+                  borderRadius: "1.5rem",
+                  padding: "2rem",
+                  marginBottom: "2rem",
+                  border: "1px solid rgba(255, 255, 255, 0.1)",
+                  width: "100%",
+                  maxWidth: "1000px",
+                }}
+              >
+                <h2
+                  style={{
+                    color: "white",
+                    fontSize: "1.75rem",
+                    fontWeight: "600",
+                    margin: "0 0 2rem 0",
+                    fontFamily: "'Inter', sans-serif",
+                  }}
+                >
+                  📝 Enter Exoplanet Parameters
+                </h2>
+
+                <div
+                  style={{
                     display: "grid",
-                    gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+                    gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
                     gap: "1.5rem",
-                    marginTop: "2rem",
+                    marginBottom: "2rem",
+                  }}
+                >
+                  <div style={{ display: "flex", flexDirection: "column" }}>
+                    <label
+                      style={{
+                        color: "rgba(255, 255, 255, 0.9)",
+                        fontSize: "0.95rem",
+                        marginBottom: "0.5rem",
+                        fontWeight: "600",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "0.5rem",
+                        fontFamily: "'Inter', sans-serif",
+                      }}
+                    >
+                      <span style={{ fontSize: "1.2rem" }}>🌍</span>
+                      Orbital Period (days)
+                    </label>
+                    <input
+                      type="number"
+                      step="0.01"
+                      value={formData.period}
+                      onChange={(e) =>
+                        handleInputChange("period", e.target.value)
+                      }
+                      placeholder="e.g., 9.49"
+                      style={{
+                        background: "rgba(255, 255, 255, 0.1)",
+                        border: "2px solid rgba(255, 255, 255, 0.2)",
+                        borderRadius: "0.75rem",
+                        padding: "1rem",
+                        color: "white",
+                        fontSize: "1rem",
+                        transition: "border-color 0.2s",
+                        fontFamily: "'Inter', sans-serif",
+                      }}
+                      onFocus={(e) => {
+                        e.target.style.outline = "none";
+                        e.target.style.borderColor = "#8072FF";
+                      }}
+                      onBlur={(e) => {
+                        e.target.style.borderColor = "rgba(255, 255, 255, 0.2)";
+                      }}
+                    />
+                  </div>
+
+                  <div style={{ display: "flex", flexDirection: "column" }}>
+                    <label
+                      style={{
+                        color: "rgba(255, 255, 255, 0.9)",
+                        fontSize: "0.95rem",
+                        marginBottom: "0.5rem",
+                        fontWeight: "600",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "0.5rem",
+                        fontFamily: "'Inter', sans-serif",
+                      }}
+                    >
+                      <span style={{ fontSize: "1.2rem" }}>⏱️</span>
+                      Transit Duration (hours)
+                    </label>
+                    <input
+                      type="number"
+                      step="0.001"
+                      value={formData.duration}
+                      onChange={(e) =>
+                        handleInputChange("duration", e.target.value)
+                      }
+                      placeholder="e.g., 2.96"
+                      style={{
+                        background: "rgba(255, 255, 255, 0.1)",
+                        border: "2px solid rgba(255, 255, 255, 0.2)",
+                        borderRadius: "0.75rem",
+                        padding: "1rem",
+                        color: "white",
+                        fontSize: "1rem",
+                        transition: "border-color 0.2s",
+                        fontFamily: "'Inter', sans-serif",
+                      }}
+                      onFocus={(e) => {
+                        e.target.style.outline = "none";
+                        e.target.style.borderColor = "#8072FF";
+                      }}
+                      onBlur={(e) => {
+                        e.target.style.borderColor = "rgba(255, 255, 255, 0.2)";
+                      }}
+                    />
+                  </div>
+
+                  <div style={{ display: "flex", flexDirection: "column" }}>
+                    <label
+                      style={{
+                        color: "rgba(255, 255, 255, 0.9)",
+                        fontSize: "0.95rem",
+                        marginBottom: "0.5rem",
+                        fontWeight: "600",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "0.5rem",
+                        fontFamily: "'Inter', sans-serif",
+                      }}
+                    >
+                      <span style={{ fontSize: "1.2rem" }}>📉</span>
+                      Transit Depth (ppm)
+                    </label>
+                    <input
+                      type="number"
+                      step="0.1"
+                      value={formData.depth}
+                      onChange={(e) =>
+                        handleInputChange("depth", e.target.value)
+                      }
+                      placeholder="e.g., 615.8"
+                      style={{
+                        background: "rgba(255, 255, 255, 0.1)",
+                        border: "2px solid rgba(255, 255, 255, 0.2)",
+                        borderRadius: "0.75rem",
+                        padding: "1rem",
+                        color: "white",
+                        fontSize: "1rem",
+                        transition: "border-color 0.2s",
+                        fontFamily: "'Inter', sans-serif",
+                      }}
+                      onFocus={(e) => {
+                        e.target.style.outline = "none";
+                        e.target.style.borderColor = "#8072FF";
+                      }}
+                      onBlur={(e) => {
+                        e.target.style.borderColor = "rgba(255, 255, 255, 0.2)";
+                      }}
+                    />
+                  </div>
+
+                  <div style={{ display: "flex", flexDirection: "column" }}>
+                    <label
+                      style={{
+                        color: "rgba(255, 255, 255, 0.9)",
+                        fontSize: "0.95rem",
+                        marginBottom: "0.5rem",
+                        fontWeight: "600",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "0.5rem",
+                        fontFamily: "'Inter', sans-serif",
+                      }}
+                    >
+                      <span style={{ fontSize: "1.2rem" }}>🪐</span>
+                      Planetary Radius (R⊕)
+                    </label>
+                    <input
+                      type="number"
+                      step="0.01"
+                      value={formData.prad}
+                      onChange={(e) =>
+                        handleInputChange("prad", e.target.value)
+                      }
+                      placeholder="e.g., 2.26"
+                      style={{
+                        background: "rgba(255, 255, 255, 0.1)",
+                        border: "2px solid rgba(255, 255, 255, 0.2)",
+                        borderRadius: "0.75rem",
+                        padding: "1rem",
+                        color: "white",
+                        fontSize: "1rem",
+                        transition: "border-color 0.2s",
+                        fontFamily: "'Inter', sans-serif",
+                      }}
+                      onFocus={(e) => {
+                        e.target.style.outline = "none";
+                        e.target.style.borderColor = "#8072FF";
+                      }}
+                      onBlur={(e) => {
+                        e.target.style.borderColor = "rgba(255, 255, 255, 0.2)";
+                      }}
+                    />
+                  </div>
+
+                  <div style={{ display: "flex", flexDirection: "column" }}>
+                    <label
+                      style={{
+                        color: "rgba(255, 255, 255, 0.9)",
+                        fontSize: "0.95rem",
+                        marginBottom: "0.5rem",
+                        fontWeight: "600",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "0.5rem",
+                        fontFamily: "'Inter', sans-serif",
+                      }}
+                    >
+                      <span style={{ fontSize: "1.2rem" }}>🌡️</span>
+                      Equilibrium Temp (K)
+                    </label>
+                    <input
+                      type="number"
+                      step="1"
+                      value={formData.teq}
+                      onChange={(e) => handleInputChange("teq", e.target.value)}
+                      placeholder="e.g., 793"
+                      style={{
+                        background: "rgba(255, 255, 255, 0.1)",
+                        border: "2px solid rgba(255, 255, 255, 0.2)",
+                        borderRadius: "0.75rem",
+                        padding: "1rem",
+                        color: "white",
+                        fontSize: "1rem",
+                        transition: "border-color 0.2s",
+                        fontFamily: "'Inter', sans-serif",
+                      }}
+                      onFocus={(e) => {
+                        e.target.style.outline = "none";
+                        e.target.style.borderColor = "#8072FF";
+                      }}
+                      onBlur={(e) => {
+                        e.target.style.borderColor = "rgba(255, 255, 255, 0.2)";
+                      }}
+                    />
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div
+                  style={{
+                    display: "flex",
+                    gap: "1rem",
+                    flexWrap: "wrap",
+                  }}
+                >
+                  <button
+                    onClick={classifyExoplanet}
+                    disabled={isClassifying}
+                    style={{
+                      flex: "3",
+                      background:
+                        "linear-gradient(135deg, #8072FF 0%, #675DC2 100%)",
+                      color: "white",
+                      border: "none",
+                      padding: "1rem 2rem",
+                      borderRadius: "0.75rem",
+                      fontSize: "1.15rem",
+                      fontWeight: "bold",
+                      cursor: isClassifying ? "not-allowed" : "pointer",
+                      transition: "transform 0.2s",
+                      fontFamily: "'Inter', sans-serif",
+                      opacity: isClassifying ? 0.6 : 1,
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!isClassifying) {
+                        e.target.style.transform = "scale(1.02)";
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!isClassifying) {
+                        e.target.style.transform = "scale(1)";
+                      }
+                    }}
+                  >
+                    {isClassifying
+                      ? "⏳ Classifying..."
+                      : "🚀 Classify with AI"}
+                  </button>
+                  <button
+                    onClick={resetForm}
+                    style={{
+                      flex: "1",
+                      background: "rgba(255, 255, 255, 0.1)",
+                      color: "white",
+                      border: "2px solid rgba(255, 255, 255, 0.2)",
+                      padding: "1rem 2rem",
+                      borderRadius: "0.75rem",
+                      fontSize: "1.15rem",
+                      fontWeight: "bold",
+                      cursor: "pointer",
+                      transition: "all 0.2s",
+                      fontFamily: "'Inter', sans-serif",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.background = "rgba(255, 255, 255, 0.2)";
+                      e.target.style.borderColor = "#8072FF";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.background = "rgba(255, 255, 255, 0.1)";
+                      e.target.style.borderColor = "rgba(255, 255, 255, 0.2)";
+                    }}
+                  >
+                    🔄 Reset
+                  </button>
+                </div>
+              </div>
+
+              {/* Results Section */}
+              {result && (
+                <div
+                  style={{
+                    background: "rgba(255, 255, 255, 0.05)",
+                    backdropFilter: "blur(10px)",
+                    borderRadius: "1.5rem",
+                    padding: "2rem",
+                    marginBottom: "2rem",
+                    border: "1px solid rgba(255, 255, 255, 0.1)",
+                    width: "100%",
+                    maxWidth: "1000px",
+                  }}
+                >
+                  <h2
+                    style={{
+                      color: "white",
+                      fontSize: "2rem",
+                      fontWeight: "600",
+                      margin: "0 0 1.5rem 0",
+                      fontFamily: "'Inter', sans-serif",
+                    }}
+                  >
+                    🎯 Classification Result
+                  </h2>
+
+                  <div
+                    style={{
+                      background: "rgba(255, 255, 255, 0.05)",
+                      borderRadius: "1rem",
+                      padding: "2rem",
+                      marginBottom: "1.5rem",
+                      border: "1px solid rgba(255, 255, 255, 0.1)",
+                    }}
+                  >
+                    {/* Main Result */}
+                    <div
+                      style={{
+                        paddingBottom: "1.5rem",
+                        borderBottom: "2px solid rgba(255, 255, 255, 0.1)",
+                        marginBottom: "1.5rem",
+                      }}
+                    >
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          flexWrap: "wrap",
+                          gap: "1rem",
+                        }}
+                      >
+                        <span
+                          style={{
+                            background:
+                              result.prediction === "CANDIDATE"
+                                ? "#48bb78"
+                                : "#f56565",
+                            color: "white",
+                            padding: "1rem 2rem",
+                            borderRadius: "1rem",
+                            fontSize: "1.5rem",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          {result.prediction === "CANDIDATE"
+                            ? "✅ CANDIDATE"
+                            : "❌ FALSE POSITIVE"}
+                        </span>
+                        <span
+                          style={{
+                            color: "rgba(255, 255, 255, 0.8)",
+                            fontSize: "1.3rem",
+                            fontWeight: "600",
+                          }}
+                        >
+                          {(result.confidence * 100).toFixed(1)}% confidence
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Result Details */}
+                    <div
+                      style={{
+                        background: "rgba(255, 255, 255, 0.1)",
+                        padding: "1.5rem",
+                        borderRadius: "0.75rem",
+                        marginBottom: "1.5rem",
+                      }}
+                    >
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          padding: "0.75rem 0",
+                          borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
+                        }}
+                      >
+                        <span
+                          style={{
+                            color: "rgba(255, 255, 255, 0.8)",
+                            fontWeight: "600",
+                          }}
+                        >
+                          Model:
+                        </span>
+                        <span
+                          style={{
+                            color: "white",
+                            fontWeight: "500",
+                          }}
+                        >
+                          {result.model}
+                        </span>
+                      </div>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          padding: "0.75rem 0",
+                          borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
+                        }}
+                      >
+                        <span
+                          style={{
+                            color: "rgba(255, 255, 255, 0.8)",
+                            fontWeight: "600",
+                          }}
+                        >
+                          RAG Examples Used:
+                        </span>
+                        <span
+                          style={{
+                            color: "white",
+                            fontWeight: "500",
+                          }}
+                        >
+                          {result.similar_examples_used} most similar entries
+                        </span>
+                      </div>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          padding: "0.75rem 0",
+                        }}
+                      >
+                        <span
+                          style={{
+                            color: "rgba(255, 255, 255, 0.8)",
+                            fontWeight: "600",
+                          }}
+                        >
+                          Processing Time:
+                        </span>
+                        <span
+                          style={{
+                            color: "white",
+                            fontWeight: "500",
+                          }}
+                        >
+                          {result.processing_time}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Input Summary */}
+                    <div
+                      style={{
+                        background: "rgba(255, 255, 255, 0.1)",
+                        padding: "1.5rem",
+                        borderRadius: "0.75rem",
+                        marginBottom: "1.5rem",
+                      }}
+                    >
+                      <h4
+                        style={{
+                          margin: "0 0 1rem 0",
+                          color: "white",
+                          fontSize: "1.1rem",
+                          fontWeight: "600",
+                        }}
+                      >
+                        📋 Input Parameters:
+                      </h4>
+                      <div
+                        style={{
+                          display: "grid",
+                          gridTemplateColumns:
+                            "repeat(auto-fit, minmax(180px, 1fr))",
+                          gap: "0.75rem",
+                          color: "rgba(255, 255, 255, 0.8)",
+                          fontSize: "0.95rem",
+                        }}
+                      >
+                        <span>Period: {formData.period} days</span>
+                        <span>Duration: {formData.duration} hrs</span>
+                        <span>Depth: {formData.depth} ppm</span>
+                        <span>Radius: {formData.prad} R⊕</span>
+                        <span>Temp: {formData.teq} K</span>
+                      </div>
+                    </div>
+
+                    {/* RAG Examples Button */}
+                    {result.similar_examples &&
+                      result.similar_examples.length > 0 && (
+                        <button
+                          onClick={() => setShowRagExamples(true)}
+                          style={{
+                            width: "100%",
+                            background: "#4299e1",
+                            color: "white",
+                            border: "none",
+                            padding: "1rem",
+                            borderRadius: "0.75rem",
+                            fontSize: "1.1rem",
+                            fontWeight: "bold",
+                            cursor: "pointer",
+                            transition: "background 0.2s",
+                            fontFamily: "'Inter', sans-serif",
+                          }}
+                          onMouseEnter={(e) => {
+                            e.target.style.background = "#3182ce";
+                          }}
+                          onMouseLeave={(e) => {
+                            e.target.style.background = "#4299e1";
+                          }}
+                        >
+                          🔍 View {result.similar_examples.length} RAG Examples
+                          Used
+                        </button>
+                      )}
+                  </div>
+
+                  {/* What This Means */}
+                  <div
+                    style={{
+                      background: "rgba(255, 255, 255, 0.1)",
+                      borderLeft: "4px solid #8072FF",
+                      padding: "1.5rem",
+                      borderRadius: "0.75rem",
+                      marginBottom: "1.5rem",
+                    }}
+                  >
+                    <h3
+                      style={{
+                        margin: "0 0 1rem 0",
+                        color: "white",
+                        fontSize: "1.2rem",
+                        fontWeight: "600",
+                      }}
+                    >
+                      💡 What Does This Mean?
+                    </h3>
+                    {result.prediction === "CANDIDATE" ? (
+                      <p
+                        style={{
+                          color: "rgba(255, 255, 255, 0.8)",
+                          lineHeight: "1.7",
+                          margin: "0",
+                          fontSize: "1rem",
+                        }}
+                      >
+                        <strong>CANDIDATE:</strong> Our AI predicts this is
+                        likely a real exoplanet! The parameters match patterns
+                        of confirmed exoplanets in our training data. This
+                        detection would typically require further verification
+                        through additional observations.
+                      </p>
+                    ) : (
+                      <p
+                        style={{
+                          color: "rgba(255, 255, 255, 0.8)",
+                          lineHeight: "1.7",
+                          margin: "0",
+                          fontSize: "1rem",
+                        }}
+                      >
+                        <strong>FALSE POSITIVE:</strong> Our AI predicts this
+                        signal is likely noise or a detection artifact, not a
+                        real exoplanet. The parameters match patterns of
+                        previously identified false positives.
+                      </p>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* How It Works */}
+              <div
+                style={{
+                  background: "rgba(255, 255, 255, 0.05)",
+                  backdropFilter: "blur(10px)",
+                  borderRadius: "1.5rem",
+                  padding: "2rem",
+                  border: "1px solid rgba(255, 255, 255, 0.1)",
+                  width: "100%",
+                  maxWidth: "1000px",
+                }}
+              >
+                <h3
+                  style={{
+                    margin: "0 0 2rem 0",
+                    fontSize: "1.8rem",
+                    textAlign: "center",
+                    color: "white",
+                    fontWeight: "600",
+                    fontFamily: "'Inter', sans-serif",
+                  }}
+                >
+                  🧠 How Our AI Works
+                </h3>
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+                    gap: "1.5rem",
                   }}
                 >
                   <div
                     style={{
-                      background: "rgba(128, 114, 255, 0.1)",
-                      padding: "1.5rem",
+                      background: "rgba(255, 255, 255, 0.1)",
+                      padding: "2rem",
                       borderRadius: "1rem",
-                      border: "1px solid rgba(128, 114, 255, 0.2)",
+                      textAlign: "center",
+                      transition: "transform 0.2s",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.transform = "translateY(-5px)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.transform = "translateY(0)";
                     }}
                   >
-                    <h3
+                    <span
                       style={{
-                        color: "#8072FF",
-                        fontSize: "1.125rem",
-                        fontWeight: "600",
-                        margin: "0 0 0.5rem 0",
-                        fontFamily: "'Inter', sans-serif",
+                        display: "inline-block",
+                        background:
+                          "linear-gradient(135deg, #8072FF 0%, #675DC2 100%)",
+                        color: "white",
+                        width: "50px",
+                        height: "50px",
+                        lineHeight: "50px",
+                        borderRadius: "50%",
+                        fontSize: "1.5rem",
+                        fontWeight: "bold",
+                        marginBottom: "1rem",
                       }}
                     >
-                      Classification
-                    </h3>
+                      1
+                    </span>
+                    <h4
+                      style={{
+                        color: "white",
+                        margin: "1rem 0 0.75rem 0",
+                        fontSize: "1.1rem",
+                        fontWeight: "600",
+                      }}
+                    >
+                      RAG Retrieval
+                    </h4>
                     <p
                       style={{
-                        color: "rgba(255, 255, 255, 0.7)",
-                        fontSize: "0.875rem",
+                        color: "rgba(255, 255, 255, 0.8)",
+                        fontSize: "0.95rem",
+                        lineHeight: "1.6",
                         margin: "0",
-                        fontFamily: "'Inter', sans-serif",
                       }}
                     >
-                      Predict planet types and characteristics
+                      Finds 25 most similar exoplanets from 17,594 labeled
+                      entries using vector embeddings
                     </p>
                   </div>
                   <div
                     style={{
-                      background: "rgba(128, 114, 255, 0.1)",
-                      padding: "1.5rem",
+                      background: "rgba(255, 255, 255, 0.1)",
+                      padding: "2rem",
                       borderRadius: "1rem",
-                      border: "1px solid rgba(128, 114, 255, 0.2)",
+                      textAlign: "center",
+                      transition: "transform 0.2s",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.transform = "translateY(-5px)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.transform = "translateY(0)";
                     }}
                   >
-                    <h3
+                    <span
                       style={{
-                        color: "#8072FF",
-                        fontSize: "1.125rem",
-                        fontWeight: "600",
-                        margin: "0 0 0.5rem 0",
-                        fontFamily: "'Inter', sans-serif",
+                        display: "inline-block",
+                        background:
+                          "linear-gradient(135deg, #8072FF 0%, #675DC2 100%)",
+                        color: "white",
+                        width: "50px",
+                        height: "50px",
+                        lineHeight: "50px",
+                        borderRadius: "50%",
+                        fontSize: "1.5rem",
+                        fontWeight: "bold",
+                        marginBottom: "1rem",
                       }}
                     >
-                      Habitability
-                    </h3>
+                      2
+                    </span>
+                    <h4
+                      style={{
+                        color: "white",
+                        margin: "1rem 0 0.75rem 0",
+                        fontSize: "1.1rem",
+                        fontWeight: "600",
+                      }}
+                    >
+                      In-Context Learning
+                    </h4>
                     <p
                       style={{
-                        color: "rgba(255, 255, 255, 0.7)",
-                        fontSize: "0.875rem",
+                        color: "rgba(255, 255, 255, 0.8)",
+                        fontSize: "0.95rem",
+                        lineHeight: "1.6",
                         margin: "0",
-                        fontFamily: "'Inter', sans-serif",
                       }}
                     >
-                      Assess potential for life
+                      Sends similar examples to GPT-4o-mini as context for
+                      classification
                     </p>
                   </div>
                   <div
                     style={{
-                      background: "rgba(128, 114, 255, 0.1)",
-                      padding: "1.5rem",
+                      background: "rgba(255, 255, 255, 0.1)",
+                      padding: "2rem",
                       borderRadius: "1rem",
-                      border: "1px solid rgba(128, 114, 255, 0.2)",
+                      textAlign: "center",
+                      transition: "transform 0.2s",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.transform = "translateY(-5px)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.transform = "translateY(0)";
                     }}
                   >
-                    <h3
+                    <span
                       style={{
-                        color: "#8072FF",
-                        fontSize: "1.125rem",
-                        fontWeight: "600",
-                        margin: "0 0 0.5rem 0",
-                        fontFamily: "'Inter', sans-serif",
+                        display: "inline-block",
+                        background:
+                          "linear-gradient(135deg, #8072FF 0%, #675DC2 100%)",
+                        color: "white",
+                        width: "50px",
+                        height: "50px",
+                        lineHeight: "50px",
+                        borderRadius: "50%",
+                        fontSize: "1.5rem",
+                        fontWeight: "bold",
+                        marginBottom: "1rem",
                       }}
                     >
-                      Analysis
-                    </h3>
+                      3
+                    </span>
+                    <h4
+                      style={{
+                        color: "white",
+                        margin: "1rem 0 0.75rem 0",
+                        fontSize: "1.1rem",
+                        fontWeight: "600",
+                      }}
+                    >
+                      Expert Decision
+                    </h4>
                     <p
                       style={{
-                        color: "rgba(255, 255, 255, 0.7)",
-                        fontSize: "0.875rem",
+                        color: "rgba(255, 255, 255, 0.8)",
+                        fontSize: "0.95rem",
+                        lineHeight: "1.6",
                         margin: "0",
-                        fontFamily: "'Inter', sans-serif",
                       }}
                     >
-                      Deep learning insights
+                      LLM analyzes patterns and predicts: CANDIDATE or FALSE
+                      POSITIVE
                     </p>
                   </div>
                 </div>
-                <button
-                  style={{
-                    background:
-                      "linear-gradient(135deg, #8072FF 0%, #675DC2 100%)",
-                    color: "white",
-                    border: "none",
-                    padding: "1rem 2rem",
-                    borderRadius: "1rem",
-                    fontSize: "1.125rem",
-                    fontWeight: "600",
-                    fontFamily: "'Inter', sans-serif",
-                    cursor: "pointer",
-                    marginTop: "2rem",
-                    transition: "all 0.3s ease",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.target.style.transform = "translateY(-2px)";
-                    e.target.style.boxShadow =
-                      "0 10px 30px rgba(128, 114, 255, 0.4)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.target.style.transform = "translateY(0)";
-                    e.target.style.boxShadow = "none";
-                  }}
-                >
-                  Try AI Classifier
-                </button>
               </div>
             </div>
           ) : (
@@ -1233,6 +2158,324 @@ export default function Home() {
             zachary fiel • david castro • kent lacno
           </div>
         </div>
+
+        {/* RAG Examples Modal */}
+        {showRagExamples && result && result.similar_examples && (
+          <div
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: "rgba(0, 0, 0, 0.85)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              zIndex: 1000,
+              padding: "20px",
+            }}
+            onClick={() => setShowRagExamples(false)}
+          >
+            <div
+              style={{
+                background: "rgba(255, 255, 255, 0.05)",
+                backdropFilter: "blur(10px)",
+                border: "2px solid rgba(255, 255, 255, 0.1)",
+                borderRadius: "1.5rem",
+                padding: "2rem",
+                maxWidth: "1200px",
+                width: "100%",
+                maxHeight: "90vh",
+                overflowY: "auto",
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h3
+                style={{
+                  margin: "0 0 1rem 0",
+                  fontSize: "1.8rem",
+                  color: "white",
+                  fontWeight: "600",
+                  fontFamily: "'Inter', sans-serif",
+                }}
+              >
+                🔍 RAG Examples Used for Classification
+              </h3>
+              <p
+                style={{
+                  color: "rgba(255, 255, 255, 0.8)",
+                  marginBottom: "1.5rem",
+                  fontSize: "1rem",
+                  lineHeight: "1.6",
+                }}
+              >
+                These are the 25 most similar examples the AI retrieved from the
+                training data:
+              </p>
+
+              <div
+                style={{
+                  display: "flex",
+                  gap: "1.5rem",
+                  marginBottom: "1.5rem",
+                  padding: "1rem",
+                  background: "rgba(255, 255, 255, 0.1)",
+                  borderRadius: "0.75rem",
+                  fontWeight: "600",
+                  fontSize: "0.95rem",
+                }}
+              >
+                <span style={{ color: "#48bb78" }}>
+                  ✅ Candidates:{" "}
+                  {
+                    result.similar_examples.filter(
+                      (e) => e.disposition === "CANDIDATE"
+                    ).length
+                  }
+                </span>
+                <span style={{ color: "#f56565" }}>
+                  ❌ False Positives:{" "}
+                  {
+                    result.similar_examples.filter(
+                      (e) => e.disposition === "FALSE POSITIVE"
+                    ).length
+                  }
+                </span>
+              </div>
+
+              <div
+                style={{
+                  overflowX: "auto",
+                  border: "1px solid rgba(255, 255, 255, 0.1)",
+                  borderRadius: "0.75rem",
+                  marginBottom: "1.5rem",
+                }}
+              >
+                <table
+                  style={{
+                    width: "100%",
+                    borderCollapse: "collapse",
+                    color: "white",
+                    fontSize: "0.9rem",
+                    fontFamily: "'Inter', sans-serif",
+                  }}
+                >
+                  <thead>
+                    <tr
+                      style={{
+                        background: "rgba(255, 255, 255, 0.1)",
+                        position: "sticky",
+                        top: 0,
+                      }}
+                    >
+                      <th
+                        style={{
+                          padding: "1rem",
+                          textAlign: "left",
+                          fontWeight: "bold",
+                          borderBottom: "2px solid rgba(255, 255, 255, 0.2)",
+                        }}
+                      >
+                        #
+                      </th>
+                      <th
+                        style={{
+                          padding: "1rem",
+                          textAlign: "left",
+                          fontWeight: "bold",
+                          borderBottom: "2px solid rgba(255, 255, 255, 0.2)",
+                        }}
+                      >
+                        Name
+                      </th>
+                      <th
+                        style={{
+                          padding: "1rem",
+                          textAlign: "left",
+                          fontWeight: "bold",
+                          borderBottom: "2px solid rgba(255, 255, 255, 0.2)",
+                        }}
+                      >
+                        Period
+                      </th>
+                      <th
+                        style={{
+                          padding: "1rem",
+                          textAlign: "left",
+                          fontWeight: "bold",
+                          borderBottom: "2px solid rgba(255, 255, 255, 0.2)",
+                        }}
+                      >
+                        Duration
+                      </th>
+                      <th
+                        style={{
+                          padding: "1rem",
+                          textAlign: "left",
+                          fontWeight: "bold",
+                          borderBottom: "2px solid rgba(255, 255, 255, 0.2)",
+                        }}
+                      >
+                        Depth
+                      </th>
+                      <th
+                        style={{
+                          padding: "1rem",
+                          textAlign: "left",
+                          fontWeight: "bold",
+                          borderBottom: "2px solid rgba(255, 255, 255, 0.2)",
+                        }}
+                      >
+                        Radius
+                      </th>
+                      <th
+                        style={{
+                          padding: "1rem",
+                          textAlign: "left",
+                          fontWeight: "bold",
+                          borderBottom: "2px solid rgba(255, 255, 255, 0.2)",
+                        }}
+                      >
+                        Temp
+                      </th>
+                      <th
+                        style={{
+                          padding: "1rem",
+                          textAlign: "left",
+                          fontWeight: "bold",
+                          borderBottom: "2px solid rgba(255, 255, 255, 0.2)",
+                        }}
+                      >
+                        Label
+                      </th>
+                      <th
+                        style={{
+                          padding: "1rem",
+                          textAlign: "left",
+                          fontWeight: "bold",
+                          borderBottom: "2px solid rgba(255, 255, 255, 0.2)",
+                        }}
+                      >
+                        Mission
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {result.similar_examples.map((ex, idx) => (
+                      <tr
+                        key={idx}
+                        style={{
+                          borderBottom: "1px solid rgba(255, 255, 255, 0.05)",
+                        }}
+                        onMouseEnter={(e) => {
+                          e.target.style.background =
+                            "rgba(255, 255, 255, 0.1)";
+                        }}
+                        onMouseLeave={(e) => {
+                          e.target.style.background = "transparent";
+                        }}
+                      >
+                        <td style={{ padding: "0.75rem 1rem" }}>{idx + 1}</td>
+                        <td style={{ padding: "0.75rem 1rem" }}>{ex.name}</td>
+                        <td style={{ padding: "0.75rem 1rem" }}>{ex.period}</td>
+                        <td style={{ padding: "0.75rem 1rem" }}>
+                          {ex.duration}
+                        </td>
+                        <td style={{ padding: "0.75rem 1rem" }}>{ex.depth}</td>
+                        <td style={{ padding: "0.75rem 1rem" }}>{ex.prad}</td>
+                        <td style={{ padding: "0.75rem 1rem" }}>{ex.teq}</td>
+                        <td style={{ padding: "0.75rem 1rem" }}>
+                          <span
+                            style={{
+                              background:
+                                ex.disposition === "CANDIDATE"
+                                  ? "#48bb78"
+                                  : "#f56565",
+                              color: "white",
+                              padding: "0.25rem 0.75rem",
+                              borderRadius: "1rem",
+                              fontSize: "0.85rem",
+                              fontWeight: "bold",
+                              display: "inline-block",
+                            }}
+                          >
+                            {ex.disposition}
+                          </span>
+                        </td>
+                        <td style={{ padding: "0.75rem 1rem" }}>{ex.type}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <div
+                style={{
+                  background: "rgba(255, 255, 255, 0.1)",
+                  borderLeft: "4px solid #8072FF",
+                  padding: "1.5rem",
+                  borderRadius: "0.75rem",
+                  marginBottom: "1.5rem",
+                }}
+              >
+                <h4
+                  style={{
+                    margin: "0 0 0.75rem 0",
+                    color: "white",
+                    fontSize: "1.1rem",
+                    fontWeight: "600",
+                  }}
+                >
+                  💡 How RAG Works
+                </h4>
+                <p
+                  style={{
+                    color: "rgba(255, 255, 255, 0.8)",
+                    lineHeight: "1.7",
+                    margin: "0",
+                    fontSize: "1rem",
+                  }}
+                >
+                  Our system uses{" "}
+                  <strong>Retrieval-Augmented Generation (RAG)</strong> to find
+                  the most similar examples from our training data. It converts
+                  each exoplanet's parameters into a vector embedding and uses
+                  cosine similarity to find the nearest neighbors. These
+                  examples provide context to the LLM, enabling accurate
+                  classification through in-context learning.
+                </p>
+              </div>
+
+              <button
+                onClick={() => setShowRagExamples(false)}
+                style={{
+                  width: "100%",
+                  background: "rgba(255, 255, 255, 0.1)",
+                  color: "white",
+                  border: "2px solid rgba(255, 255, 255, 0.2)",
+                  padding: "1rem",
+                  borderRadius: "0.75rem",
+                  fontSize: "1.1rem",
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                  transition: "all 0.2s",
+                  fontFamily: "'Inter', sans-serif",
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.background = "rgba(255, 255, 255, 0.2)";
+                  e.target.style.borderColor = "#8072FF";
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.background = "rgba(255, 255, 255, 0.1)";
+                  e.target.style.borderColor = "rgba(255, 255, 255, 0.2)";
+                }}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        )}
       </Layout>
     </>
   );
