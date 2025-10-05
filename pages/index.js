@@ -285,7 +285,7 @@ export default function Home() {
     }
     
     try {
-      const response = await fetch('http://localhost:5002/data/remove_row', {
+      const response = await fetch('/api/ml-proxy/data/remove_row', {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -390,8 +390,7 @@ export default function Home() {
 
     setIsClassifying(true);
     try {
-      const baseUrl = process.env.NEXT_PUBLIC_ML_SERVICE_URL || 'http://localhost:5001';
-      const response = await fetch(`${baseUrl}/predict`, {
+      const response = await fetch('/api/ml-proxy/predict', {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -399,7 +398,7 @@ export default function Home() {
           period: parseFloat(formData.period),
           duration: parseFloat(formData.duration),
           depth: parseFloat(formData.depth),
-          prad: parseFloat(formData.prad),
+          prad: parseFloat(formData.period),
           teq: parseFloat(formData.teq),
         }),
       });

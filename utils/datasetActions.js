@@ -3,7 +3,7 @@ export const uploadUserData = async (file) => {
     const formData = new FormData();
     formData.append('file', file);
 
-    const response = await fetch('http://localhost:5002/data/upload_user_data', {
+    const response = await fetch('/api/ml-proxy/data/upload_user_data', {
       method: 'POST',
       body: formData,
       credentials: 'include',
@@ -23,12 +23,12 @@ export const uploadUserData = async (file) => {
 
 export const filterData = async (displayTypes) => {
   try {
-    const response = await fetch('http://localhost:5002/data/filter_data', {
+    const response = await fetch('/api/ml-proxy/data/filter_data', {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ display_types: displayTypes }), // Send as a JSON object
+      body: JSON.stringify({ display_types: displayTypes }),
       credentials: 'include',
     });
 
@@ -46,7 +46,7 @@ export const filterData = async (displayTypes) => {
 
 export const saveDataset = async (data) => {
   try {
-    const response = await fetch('http://localhost:5002/data/save_dataset', {
+    const response = await fetch('/api/ml-proxy/data/save_dataset', {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -69,14 +69,12 @@ export const saveDataset = async (data) => {
 
 export const getVectorTaskStatus = async (task_id) => {
   try {
-    const response = await fetch(`http://localhost:5002/tasks/status/${task_id}`, {
+    const response = await fetch(`/api/ml-proxy/tasks/status/${task_id}`, {
       method: 'GET',
       credentials: 'include',
     });
 
     if (!response.ok) {
-      // If the response is not OK, read it as text to avoid JSON parsing errors
-      // on HTML error pages (like 502 Bad Gateway).
       const errorText = await response.text();
       console.error("Received non-JSON response from server:", errorText);
       throw new Error(`Server returned an error: ${response.status} ${response.statusText}`);
@@ -84,7 +82,6 @@ export const getVectorTaskStatus = async (task_id) => {
 
     return await response.json();
   } catch (error) {
-    // Log the original error, which might be more informative now
     console.error('Error in getVectorTaskStatus:', error);
     throw error;
   }

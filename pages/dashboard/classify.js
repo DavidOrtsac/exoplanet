@@ -71,7 +71,7 @@ export default function Classify() {
 
     setIsClassifying(true);
     try {
-      const response = await fetch("http://localhost:5002/predict", {
+      const response = await fetch("/api/ml-proxy/predict", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
