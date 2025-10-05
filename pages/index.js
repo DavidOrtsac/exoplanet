@@ -277,12 +277,54 @@ export default function Home() {
       return;
     }
     try {
-      await saveDataset(datasetData);
+      const response = await saveDataset(datasetData);
+      console.log("Save dataset response:", response);
+      
+      // If we got a task_id, poll for status
+      if (response.task_id) {
+        const taskId = response.task_id;
+        console.log("Polling for task status:", taskId);
+        
+        // Import getVectorTaskStatus dynamically if needed
+        const { getVectorTaskStatus } = await import("../utils/datasetActions");
+        
+        // Poll until complete
+        const pollStatus = async () => {
+          try {
+            const statusResponse = await getVectorTaskStatus(taskId);
+            console.log("Task status:", statusResponse);
+            
+            if (statusResponse.status === "SUCCESS") {
+              console.log("Vector store creation completed successfully!");
+              setIsSavingDataset(false);
+              alert("Dataset saved and vector store created successfully!");
+            } else if (statusResponse.status === "FAILURE") {
+              console.error("Vector store creation failed:", statusResponse.error_message);
+              setIsSavingDataset(false);
+              alert(`Failed to create vector store: ${statusResponse.error_message || "Unknown error"}`);
+            } else {
+              // Still in progress, poll again after 2 seconds
+              setTimeout(pollStatus, 2000);
+            }
+          } catch (error) {
+            console.error("Error polling task status:", error);
+            setIsSavingDataset(false);
+            alert("Error checking task status. Please check the console.");
+          }
+        };
+        
+        // Start polling
+        pollStatus();
+      } else {
+        // No task_id means it completed immediately
+        setIsSavingDataset(false);
+        alert("Dataset saved successfully!");
+      }
     } catch (error) {
       console.error("Error saving dataset:", error);
       setIsSavingDataset(false);
+      alert(`Error saving dataset: ${error.message}`);
     }
-    // Note: Don't set isSavingDataset to false here - let LoadingOverlay handle it
   };
 
   const classifyExoplanet = async () => {
@@ -980,10 +1022,9 @@ export default function Home() {
         {/* Save Dataset Loading Overlay */}
         <LoadingOverlay
           isVisible={isSavingDataset}
-          duration={500}
+          duration={999999}
           title="Saving Dataset..."
-          subtitle="Processing your dataset and updating the AI model"
-          onComplete={() => setIsSavingDataset(false)}
+          subtitle="Creating vector store in the background... This may take a minute."
         />
 
         {/* Dashboard Content - Scrollable Container */}
