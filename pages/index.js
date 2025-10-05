@@ -398,7 +398,7 @@ export default function Home() {
           period: parseFloat(formData.period),
           duration: parseFloat(formData.duration),
           depth: parseFloat(formData.depth),
-          prad: parseFloat(formData.period),
+          prad: parseFloat(formData.prad),
           teq: parseFloat(formData.teq),
         }),
       });
