@@ -9,7 +9,7 @@
     "build:backend": "echo 'Backend build completed - Python ML service ready for deployment'",
     "build:production": "npm run build && npm run verify:build",
     "verify:build": "echo 'Verifying production build...' && ls -la .next && echo '✅ Frontend build verified'",
-    "start": "next start",
+    "start": "next start -p ${PORT:-3000}",
     "lint": "next lint",
     "prebuild": "echo '🚀 Starting production build process...'",
     "postbuild": "echo '✅ Production build completed successfully!'"
