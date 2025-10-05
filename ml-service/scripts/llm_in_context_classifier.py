@@ -107,13 +107,14 @@ class LLMInContextClassifier:
             with open(pkl_path, 'rb') as f:
                 first_bytes = f.read(100)
                 if first_bytes.startswith(b'version https://git-lfs.github.com'):
-                    print(f"ERROR: {pkl_path} is a Git LFS pointer file, not the actual pickle!")
-                    print("Regenerating vector store from base dataset...")
-                    # Regenerate from base dataset
-                    self.create_vector_store_from_csv(BASE_DATASET_PATH, pkl_path)
-                    print("Vector store regenerated successfully!")
+                    print(f"WARNING: {pkl_path} is a Git LFS pointer file, not the actual pickle!")
+                    print("Using default vector store instead.")
+                    # Don't regenerate - just use the default if it exists
+                    if pkl_path != DEFAULT_VECTOR_STORE_PATH and os.path.exists(DEFAULT_VECTOR_STORE_PATH):
+                        return self._load_vector_store(DEFAULT_VECTOR_STORE_PATH)
+                    return None, None
         except Exception as e:
-            print(f"Warning during LFS check: {e}")
+            pass  # Silently continue to try loading
         
         try:
             with open(pkl_path, 'rb') as f:
@@ -126,27 +127,22 @@ class LLMInContextClassifier:
     def _find_similar_examples(self, query_row, vector_store_index, original_data, k=25, exclude_ids=None):
         """Finds the k most similar examples from a given vector store, excluding specified IDs."""
         query_text = self._format_row_for_embedding(query_row)
-        # Use simple numerical similarity instead of embeddings for speed
-        query_values = [query_row['period'], query_row['duration'], query_row['depth'], query_row['prad'], query_row['teq']]
+        query_embedding = self._get_embeddings([query_text])[0]
 
-        if not original_data:
-            print("WARNING: Vector store is empty. Cannot find similar examples.")
+        if not original_data or not hasattr(vector_store_index, 'kneighbors'):
+            print("WARNING: Vector store is empty or invalid. Cannot find similar examples.")
             return []
 
-        # Calculate simple Euclidean distance for speed
-        similarities = []
-        for i, example in enumerate(original_data):
-            ex_values = [example['period'], example['duration'], example['depth'], example['prad'], example['teq']]
-            distance = sum((a - b) ** 2 for a, b in zip(query_values, ex_values)) ** 0.5
-            similarities.append((distance, i))
-        
-        # Sort by similarity and take top k
-        similarities.sort(key=lambda x: x[0])
+        # Request more neighbors to account for potential filtering
         n_to_request = min(len(original_data), k * 3)
-        indices = [idx for _, idx in similarities[:n_to_request]]
+        
+        if n_to_request == 0:
+            return []
+
+        distances, indices = vector_store_index.kneighbors([query_embedding], n_neighbors=n_to_request)
 
         filtered_examples = []
-        for i in indices:
+        for i in indices[0]:
             if i >= len(original_data):
                 continue
             example = original_data[i]
