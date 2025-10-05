@@ -16,14 +16,8 @@ export PYTHONPATH=$(pwd)/ml-service:$(pwd)/ml-service/scripts:$PYTHONPATH
 if [ ! -f "ml-service/data/default_vector_store.pkl" ]; then
     echo "🧠 Generating vector store (this may take 2-3 minutes)..."
     cd ml-service
-    python3 << 'PYEOF'
-import sys
-sys.path.insert(0, 'scripts')
-from llm_in_context_classifier import LLMInContextClassifier
-print('Initializing classifier...')
-classifier = LLMInContextClassifier()
-print('✅ Vector store generated successfully!')
-PYEOF
+    export PYTHONPATH=$(pwd):$(pwd)/scripts:$PYTHONPATH
+    python3 -c "from scripts.llm_in_context_classifier import LLMInContextClassifier; print('Initializing classifier...'); LLMInContextClassifier(); print('✅ Vector store generated!')"
     cd ..
     echo "✅ Vector store generation complete!"
 else
