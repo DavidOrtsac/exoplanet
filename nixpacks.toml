@@ -1,15 +1,15 @@
 [phases.setup]
-nixPkgs = ["nodejs_18", "python312", "python312Packages.pip"]
+nixPkgs = ["nodejs_18", "python312", "python312Packages.pip", "python312Packages.virtualenv"]
 
 [phases.install]
 cmds = [
   "npm ci",
-  "pip install -r ml-service/requirements.txt"
+  "python3 -m venv /opt/venv",
+  ". /opt/venv/bin/activate && pip install -r ml-service/requirements.txt"
 ]
 
 [phases.build]
 cmds = ["npm run build"]
 
 [start]
-cmd = "bash start.sh"
-
+cmd = ". /opt/venv/bin/activate && bash start.sh"
