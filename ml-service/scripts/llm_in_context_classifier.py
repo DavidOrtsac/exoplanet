@@ -126,22 +126,27 @@ class LLMInContextClassifier:
     def _find_similar_examples(self, query_row, vector_store_index, original_data, k=25, exclude_ids=None):
         """Finds the k most similar examples from a given vector store, excluding specified IDs."""
         query_text = self._format_row_for_embedding(query_row)
-        query_embedding = self._get_embeddings([query_text])[0]
+        # Use simple numerical similarity instead of embeddings for speed
+        query_values = [query_row['period'], query_row['duration'], query_row['depth'], query_row['prad'], query_row['teq']]
 
-        if not original_data or not hasattr(vector_store_index, 'kneighbors'):
-            print("WARNING: Vector store is empty or invalid. Cannot find similar examples.")
+        if not original_data:
+            print("WARNING: Vector store is empty. Cannot find similar examples.")
             return []
 
-        # Request more neighbors to account for potential filtering
-        n_to_request = min(len(original_data), k * 3)
+        # Calculate simple Euclidean distance for speed
+        similarities = []
+        for i, example in enumerate(original_data):
+            ex_values = [example['period'], example['duration'], example['depth'], example['prad'], example['teq']]
+            distance = sum((a - b) ** 2 for a, b in zip(query_values, ex_values)) ** 0.5
+            similarities.append((distance, i))
         
-        if n_to_request == 0:
-            return []
-
-        distances, indices = vector_store_index.kneighbors([query_embedding], n_neighbors=n_to_request)
+        # Sort by similarity and take top k
+        similarities.sort(key=lambda x: x[0])
+        n_to_request = min(len(original_data), k * 3)
+        indices = [idx for _, idx in similarities[:n_to_request]]
 
         filtered_examples = []
-        for i in indices[0]:
+        for i in indices:
             if i >= len(original_data):
                 continue
             example = original_data[i]
