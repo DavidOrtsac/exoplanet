@@ -109,7 +109,8 @@ export async function loadTESSData() {
 
 export async function loadDatasetData() {
   try {
-    const response = await fetch("http://localhost:5002/data/dataset", {
+    const baseUrl = process.env.NEXT_PUBLIC_ML_SERVICE_URL || 'http://localhost:5001';
+    const response = await fetch(`${baseUrl}/data/dataset`, {
       credentials: 'include',
     });
 
