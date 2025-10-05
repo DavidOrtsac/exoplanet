@@ -22,6 +22,7 @@ export default function Dataset() {
   const [typeFilter, setTypeFilter] = useState([]);
   const timerId = useRef(null);
   const [savingDisabled, setSavingDisabled] = useState(false);
+  const [taskProgress, setTaskProgress] = useState(null);
 
   const tableColumns = [
     { key: 'type', label: 'Telescope Type' },
@@ -62,19 +63,35 @@ export default function Dataset() {
     setSavingDisabled(true);
     const result = await getVectorTaskStatus(task_id);
 
-    if (result.status === 'STARTED') {
-      timerId.current = setTimeout(() => getStatus(task_id), 5000);
-    } else if (result.status === 'SUCCESS' || result.status === 'FAILURE') {
+    const onDone = (message) => {
       localStorage.removeItem('task_id');
       setSavingDisabled(false);
       setLoading(false);
+      setTaskProgress(null);
+      alert(message);
       if (timerId.current) {
         clearTimeout(timerId.current);
         timerId.current = null;
       }
     }
+    console.log(result);
+    if (result.status === 'STARTED') {
+      setTaskProgress(0);
+      timerId.current = setTimeout(() => getStatus(task_id), 2000);
+    } else if (result.status === 'PROGRESS') {
+      // Update progress information
+      setTaskProgress(result.progress?.current || 0);
+      timerId.current = setTimeout(() => getStatus(task_id), 5000);
+    } else if (result.status === 'SUCCESS') {
+      onDone('Vector store created successfully!');
+    } else if (result.status === 'FAILURE') {
+      onDone(`Vector store creation failed: ${result.error || 'Unknown error'}`);
+    } else if (result.status === 'UNKNOWN') {
+      onDone('Unknown error');
+    }
   };
 
+  console.log(taskProgress);
 
   useEffect(() => {
     if (data.length > 0) {

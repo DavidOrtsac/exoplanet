@@ -33,7 +33,6 @@ celery_app.conf.update(
     broker_connection_retry_on_startup=True
 )
 
-# Helper function to get embeddings with progress reporting
 def _get_embeddings_with_progress(task_instance, texts):
     batch_size = 500
     embeddings = []
@@ -45,22 +44,17 @@ def _get_embeddings_with_progress(task_instance, texts):
         
         task_instance.update_state(
             state='PROGRESS',
-            meta={
-                'current': i + 1, 
-                'total': total_batches, 
-                'status': f'Generating embeddings (batch {i+1} of {total_batches})'
-            }
+            meta={'current': int(((i + 1) / total_batches) * 100)}
         )
     return embeddings
 
-# --- Celery Task Definition ---
 @celery_app.task(name='create_vector_store_task', bind=True)
 def create_vector_store_task(self, csv_path, output_pkl_path):
     """
     This is the background task that creates a vector store and reports progress.
     """
     try:
-        self.update_state(state='PROGRESS', meta={'current': 0, 'total': 100, 'status': 'Reading dataset...'})
+        self.update_state(state='PROGRESS', meta={'current': 0})
         
         df = pd.read_csv(csv_path, comment='#')
         df_clean = df.dropna(subset=['period', 'duration', 'depth', 'prad', 'teq'])
@@ -74,16 +68,15 @@ def create_vector_store_task(self, csv_path, output_pkl_path):
 
         embeddings = _get_embeddings_with_progress(self, texts_to_embed)
 
-        self.update_state(state='PROGRESS', meta={'current': 98, 'total': 100, 'status': 'Building vector index...'})
+        self.update_state(state='PROGRESS', meta={'current': 98})
         vector_store_index = NearestNeighbors(n_neighbors=25, algorithm='ball_tree')
         if embeddings:
             vector_store_index.fit(embeddings)
 
-        self.update_state(state='PROGRESS', meta={'current': 99, 'total': 100, 'status': 'Saving vector store...'})
+        self.update_state(state='PROGRESS', meta={'current': 99})
         with open(output_pkl_path, 'wb') as f:
             pickle.dump({'vector_store_index': vector_store_index, 'original_data': original_data}, f)
-        
-        print(f"Successfully created vector store at '{output_pkl_path}'")
+    
         return {'status': 'Success', 'output_path': output_pkl_path}
         
     except Exception as e:
