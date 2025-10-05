@@ -40,71 +40,154 @@ export default function Home() {
           content="Explore exoplanets with NASA's interactive 3D Earth"
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+          rel="stylesheet"
+        />
       </Head>
 
       <Layout>
-        {/* Navigation */}
-        <nav
+        {/* Submission Text */}
+        <div
           style={{
             position: "fixed",
-            top: "20px",
-            right: "20px",
-            zIndex: 1000,
-            display: "flex",
-            gap: "20px",
+            top: "2rem",
+            left: "50%",
+            transform: "translateX(-50%)",
+            textAlign: "center",
+            color: "rgba(255, 255, 255, 0.8)",
+            fontFamily: "'Inter', sans-serif",
+            fontSize: "0.875rem",
+            zIndex: 10,
+            letterSpacing: "0.3em",
+            fontWeight: "100",
           }}
         >
-          <Link
-            href="/dashboard"
-            style={{
-              color: "#4A90E2",
-              textDecoration: "none",
-              fontSize: "18px",
-              background: "rgba(255, 255, 255, 0.1)",
-              padding: "10px 20px",
-              borderRadius: "8px",
-              border: "1px solid rgba(255, 255, 255, 0.2)",
-              transition: "all 0.3s ease",
-            }}
-            onMouseEnter={(e) => {
-              e.target.style.background = "rgba(74, 144, 226, 0.2)";
-              e.target.style.borderColor = "#4A90E2";
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.background = "rgba(255, 255, 255, 0.1)";
-              e.target.style.borderColor = "rgba(255, 255, 255, 0.2)";
-            }}
-          >
-            Open Dashboard →
-          </Link>
-        </nav>
+          in submission to A World Away: Hunting for Exoplanets with{" "}
+          <strong>AI</strong>
+        </div>
 
         <div className="stars">{generateStars()}</div>
         <ThreeJSEarth />
-        <header className="App-header">
-          <h1>NASA</h1>
-          <p style={{ fontSize: "1.5rem", marginTop: "20px", opacity: 0.9 }}>
-            Exoplanet Explorer
-          </p>
+        <header
+          className="App-header"
+          style={{
+            position: "absolute",
+            right: "16%",
+            top: "48%",
+            transform: "translateY(-50%)",
+            textAlign: "right",
+            zIndex: 10,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-end",
+          }}
+        >
+          <h1
+            style={{
+              margin: "0",
+              textAlign: "right",
+              fontFamily: "'Inter', sans-serif",
+              fontWeight: "400",
+              color: "white",
+              fontSize: "4rem",
+            }}
+          >
+            Crackin'
+          </h1>
+          <h2
+            style={{
+              margin: "-0.5rem 0 0 0",
+              textAlign: "right",
+              fontFamily: "'Inter', sans-serif",
+              fontWeight: "700",
+              color: "#8072FF",
+              fontSize: "4rem",
+            }}
+          >
+            exoplanets
+          </h2>
+          {/* Placeholder image with 340:142 ratio */}
+          <img
+            src="/images/spaceapps_logo.jpeg"
+            alt="Space Apps Logo"
+            style={{
+              width: "21.25rem",
+              height: "8.875rem",
+              objectFit: "contain",
+              borderRadius: "0.5rem",
+              margin: "0.5rem 0",
+            }}
+          />
           <Link
             href="/dashboard"
             style={{
               display: "inline-block",
-              background: "#4A90E2",
+              background: "#675DC2",
               color: "white",
               textDecoration: "none",
-              padding: "15px 30px",
-              borderRadius: "10px",
-              fontSize: "1.2rem",
-              marginTop: "30px",
-              transition: "background 0.3s ease",
+              padding: "1.125rem 2.25rem",
+              borderRadius: "0.75rem",
+              fontSize: "1.375rem",
+              marginTop: "1rem",
+              transition: "all 0.4s ease",
+              textAlign: "center",
+              alignSelf: "flex-end",
+              fontFamily: "'Inter', sans-serif",
+              fontWeight: "600",
+              border: "2px solid #675DC2",
+              position: "relative",
+              overflow: "hidden",
             }}
-            onMouseEnter={(e) => (e.target.style.background = "#357ABD")}
-            onMouseLeave={(e) => (e.target.style.background = "#4A90E2")}
+            onMouseEnter={(e) => {
+              e.target.style.background = "white";
+              e.target.style.color = "#675DC2";
+              e.target.style.borderColor = "white";
+              e.target.style.transform = "translateY(-2px)";
+              e.target.style.boxShadow = "0 8px 25px rgba(103, 93, 194, 0.3)";
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.background = "#675DC2";
+              e.target.style.color = "white";
+              e.target.style.borderColor = "#675DC2";
+              e.target.style.transform = "translateY(0)";
+              e.target.style.boxShadow = "none";
+            }}
           >
-            Explore Data Dashboard
+            Get Started
           </Link>
         </header>
+
+        {/* Credits */}
+        <div
+          style={{
+            position: "fixed",
+            bottom: "2rem",
+            left: "50%",
+            transform: "translateX(-50%)",
+            textAlign: "center",
+            color: "rgba(255, 255, 255, 0.7)",
+            fontFamily: "'Inter', sans-serif",
+            fontSize: "0.875rem",
+            zIndex: 10,
+            letterSpacing: "0.15em",
+          }}
+        >
+          <div style={{ fontWeight: "500", marginBottom: "0.25rem" }}>
+            created by the Maroon and the Blues
+          </div>
+          <div
+            style={{
+              fontWeight: "300",
+              fontSize: "0.8rem",
+              letterSpacing: "0.1em",
+            }}
+          >
+            zachary fiel • david castro • kent lacno
+          </div>
+        </div>
       </Layout>
     </>
   );

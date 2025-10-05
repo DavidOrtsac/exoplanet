@@ -22,7 +22,8 @@ export default function ThreeJSEarth() {
 
     // Create camera
     const camera = new THREE.PerspectiveCamera(75, w / h, 0.1, 1000);
-    camera.position.z = 5;
+    camera.position.x = -1.5; // Move camera left to compensate for Earth position
+    camera.position.z = 3.7; // Move camera back for better distance
 
     // Create renderer
     const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -36,17 +37,19 @@ export default function ThreeJSEarth() {
     // Create Earth group
     const earthGroup = new THREE.Group();
     earthGroup.rotation.z = (-23.4 * Math.PI) / 180;
+    earthGroup.position.x = -1.5; // Move Earth to the left side of screen
     scene.add(earthGroup);
 
     // Add controls
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
+    controls.enableZoom = false; // Disable zoom to prevent size changes
 
     // Create Earth geometry and materials
     const detail = 12;
     const loader = new THREE.TextureLoader();
-    const geometry = new THREE.IcosahedronGeometry(1, detail);
+    const geometry = new THREE.IcosahedronGeometry(1.4, detail);
 
     // Earth material
     const material = new THREE.MeshPhongMaterial({
@@ -98,11 +101,11 @@ export default function ThreeJSEarth() {
     function animate() {
       animationRef.current = requestAnimationFrame(animate);
 
-      earthMesh.rotation.y += 0.002;
-      lightsMesh.rotation.y += 0.002;
-      cloudsMesh.rotation.y += 0.0023;
-      glowMesh.rotation.y += 0.002;
-      stars.rotation.y -= 0.0002;
+      earthMesh.rotation.y += 0.001;
+      lightsMesh.rotation.y += 0.001;
+      cloudsMesh.rotation.y += 0.00115;
+      glowMesh.rotation.y += 0.001;
+      stars.rotation.y -= 0.0001;
 
       controls.update();
       renderer.render(scene, camera);
