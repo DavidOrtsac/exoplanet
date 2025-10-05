@@ -8,24 +8,27 @@ echo "🚀 Starting deployment..."
 echo "📍 Current directory: $(pwd)"
 echo "📍 Python: $(which python3)"
 
-# Generate vector store if it doesn't exist
-if [ ! -f "ml-service/data/default_vector_store.pkl" ]; then
-    echo "🧠 Generating vector store (this may take 2-3 minutes)..."
-    echo "🔎 Python site info before generating vector store:"
-    python3 - <<'PY'
-import sys, site, numpy as np
-print('sys.prefix=', sys.prefix)
-print('sys.path=')
-for p in sys.path: print(' -', p)
-print('numpy version:', np.__version__)
-print('numpy file:', getattr(np, '__file__', 'N/A'))
-PY
-    # Run from root to avoid numpy import issues, script now uses absolute paths
-    python3 -c "import sys; sys.path.append('ml-service'); sys.path.append('ml-service/scripts'); from llm_in_context_classifier import LLMInContextClassifier; print('Initializing classifier...'); classifier = LLMInContextClassifier(); classifier.ensure_default_vector_store(); print('✅ Vector store generated!')"
-    echo "✅ Vector store generation complete!"
-else
-    echo "✅ Vector store already exists."
-fi
+# Check and fix vector store
+echo "🔍 Checking vector store..."
+python3 -c "
+import sys
+import os
+sys.path.append('ml-service')
+sys.path.append('ml-service/scripts')
+
+# Check if vector store exists and is valid
+vector_store_path = 'ml-service/data/default_vector_store.pkl'
+if os.path.exists(vector_store_path):
+    with open(vector_store_path, 'rb') as f:
+        first_bytes = f.read(10)
+        if first_bytes.startswith(b'version'):
+            print('⚠️ Vector store is a Git LFS pointer file!')
+            print('🧠 Will regenerate on first use (takes 2-3 minutes once)...')
+        else:
+            print('✅ Vector store exists and appears valid.')
+else:
+    print('⚠️ Vector store not found. Will generate on first use.')
+"
 
 # Start Flask backend with Gunicorn
 echo "🚀 Starting Flask ML service with Gunicorn on port 5001..."

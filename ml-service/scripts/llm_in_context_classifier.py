@@ -102,26 +102,54 @@ class LLMInContextClassifier:
         if not os.path.exists(pkl_path):
             return None, None
         
-        # Check if this is a Git LFS pointer file (text file starting with "version")
+        # Try to load the pickle file
         try:
             with open(pkl_path, 'rb') as f:
-                first_bytes = f.read(100)
-                if first_bytes.startswith(b'version https://git-lfs.github.com'):
-                    print(f"WARNING: {pkl_path} is a Git LFS pointer file, not the actual pickle!")
-                    print("Using default vector store instead.")
-                    # Don't regenerate - just use the default if it exists
-                    if pkl_path != DEFAULT_VECTOR_STORE_PATH and os.path.exists(DEFAULT_VECTOR_STORE_PATH):
-                        return self._load_vector_store(DEFAULT_VECTOR_STORE_PATH)
+                # Check if this is a Git LFS pointer file
+                first_bytes = f.read(10)
+                f.seek(0)  # Reset to beginning
+                
+                if first_bytes.startswith(b'version'):
+                    print(f"WARNING: {pkl_path} is a Git LFS pointer, not actual data!")
+                    print(f"Regenerating vector store from base dataset...")
+                    
+                    # Only regenerate the default store ONCE
+                    if pkl_path == DEFAULT_VECTOR_STORE_PATH:
+                        # Delete the bad pointer file
+                        os.remove(pkl_path)
+                        # Generate a new one from the base dataset
+                        self.ensure_default_vector_store()
+                        # Now try loading the freshly generated one
+                        with open(pkl_path, 'rb') as f2:
+                            data = pickle.load(f2)
+                            print("✅ Vector store regenerated and loaded successfully!")
+                            return data['vector_store_index'], data['original_data']
+                    else:
+                        # For user stores, just use default
+                        if os.path.exists(DEFAULT_VECTOR_STORE_PATH):
+                            print("Using default vector store instead of corrupt user store.")
+                            return self._load_vector_store(DEFAULT_VECTOR_STORE_PATH)
                     return None, None
-        except Exception as e:
-            pass  # Silently continue to try loading
-        
-        try:
-            with open(pkl_path, 'rb') as f:
+                
+                # Normal pickle load
                 data = pickle.load(f)
                 return data['vector_store_index'], data['original_data']
+                
         except Exception as e:
             print(f"ERROR loading vector store from {pkl_path}: {e}")
+            
+            # If default store is corrupt, regenerate it
+            if pkl_path == DEFAULT_VECTOR_STORE_PATH:
+                print("Default vector store is corrupt. Regenerating...")
+                os.remove(pkl_path) if os.path.exists(pkl_path) else None
+                self.ensure_default_vector_store()
+                try:
+                    with open(pkl_path, 'rb') as f:
+                        data = pickle.load(f)
+                        return data['vector_store_index'], data['original_data']
+                except:
+                    pass
+            
             return None, None
 
     def _find_similar_examples(self, query_row, vector_store_index, original_data, k=25, exclude_ids=None):
