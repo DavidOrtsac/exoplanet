@@ -421,19 +421,24 @@ export default function Home() {
   const loadTrainingAndHeldOutData = async () => {
     try {
       // Fetch training data (full dataset)
+      console.log('Fetching training data from:', `${apiBaseUrl}/data/dataset`);
       const trainingResponse = await fetch(`${apiBaseUrl}/data/dataset`, {
         credentials: 'include',
       });
       if (!trainingResponse.ok) throw new Error('Failed to fetch training data');
       const trainingJson = await trainingResponse.json();
+      console.log('Training data loaded:', trainingJson.length, 'rows');
       setTrainingData(trainingJson);
 
       // Fetch held-out data
+      console.log('Fetching held-out data from:', `${apiBaseUrl}/data/held_out`);
       const heldOutResponse = await fetch(`${apiBaseUrl}/data/held_out`, {
         credentials: 'include',
       });
+      console.log('Held-out response status:', heldOutResponse.status);
       if (!heldOutResponse.ok) throw new Error('Failed to fetch held-out data');
       const heldOutJson = await heldOutResponse.json();
+      console.log('Held-out data loaded:', heldOutJson.length, 'rows');
       setHeldOutData(heldOutJson);
 
     } catch (err) {
@@ -467,11 +472,15 @@ export default function Home() {
       if (response.ok) {
         const result = await response.json();
         console.log('Split result:', result);
-        alert(`✅ Dataset split successfully!\n\nTraining: ${result.training_count} rows\nHeld-out: ${result.held_out_count} rows\n\n${result.note || ''}`);
         
-        // Reload data
+        // Reload data BEFORE showing alert
+        console.log('Reloading training and held-out data...');
         await loadTrainingAndHeldOutData();
+        console.log('Training data count:', trainingData.length);
+        console.log('Held-out data count:', heldOutData.length);
         setIsTestMode(true);
+        
+        alert(`✅ Dataset split successfully!\n\nTraining: ${result.training_count} rows\nHeld-out: ${result.held_out_count} rows\n\n${result.note || ''}`);
       } else {
         const errorData = await response.json();
         console.error('Split error:', errorData);
