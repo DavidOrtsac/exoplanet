@@ -7,17 +7,12 @@ source /opt/venv/bin/activate
 echo "🚀 Starting deployment..."
 echo "📍 Current directory: $(pwd)"
 echo "📍 Python: $(which python3)"
-echo "📍 PYTHONPATH: $PYTHONPATH"
-
-# Set the Python path
-export PYTHONPATH=$(pwd)/ml-service:$(pwd)/ml-service/scripts:$PYTHONPATH
 
 # Generate vector store if it doesn't exist
 if [ ! -f "ml-service/data/default_vector_store.pkl" ]; then
     echo "🧠 Generating vector store (this may take 2-3 minutes)..."
     cd ml-service
-    export PYTHONPATH=$(pwd):$(pwd)/scripts:$PYTHONPATH
-    python3 -c "from scripts.llm_in_context_classifier import LLMInContextClassifier; print('Initializing classifier...'); LLMInContextClassifier(); print('✅ Vector store generated!')"
+    python3 -c "import sys; sys.path.insert(0, '.'); sys.path.insert(0, 'scripts'); from llm_in_context_classifier import LLMInContextClassifier; print('Initializing classifier...'); classifier = LLMInContextClassifier(); classifier.ensure_default_vector_store(); print('✅ Vector store generated!')"
     cd ..
     echo "✅ Vector store generation complete!"
 else
@@ -27,8 +22,7 @@ fi
 # Start Flask backend with Gunicorn
 echo "🚀 Starting Flask ML service with Gunicorn on port 5001..."
 cd ml-service
-export PYTHONPATH=$(pwd):$(pwd)/scripts:$PYTHONPATH
-gunicorn --bind 0.0.0.0:5001 --workers 2 --timeout 120 --log-level info --access-logfile '-' --error-logfile '-' app:app &
+gunicorn --bind 0.0.0.0:5001 --workers 2 --timeout 120 --log-level info --access-logfile '-' --error-logfile '-' --pythonpath . app:app &
 FLASK_PID=$!
 echo "Flask PID: $FLASK_PID"
 cd ..

@@ -25,20 +25,15 @@ app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY', os.urandom(24))
 
 # Configure CORS to allow credentials from your frontend's origin(s)
-# Include both 3000 and 3001 since Next.js may switch ports in dev
-CORS(app, supports_credentials=True, origins=["http://localhost:3000", "http://localhost:3001"])
-
-@app.route('/health', methods=['GET'])
-def health_check():
-    """Health check endpoint for Railway deployment"""
-    return jsonify({'status': 'ok', 'llm_available': llm_available}), 200
-
-@app.before_request
-def ensure_session_id():
-    """Ensure every user has a unique session ID stored in their cookie."""
-    if 'session_id' not in session:
-        session['session_id'] = str(uuid.uuid4())
-        print(f"New session created with ID: {session['session_id']}")
+# Include both local development and production Railway domain
+allowed_origins = [
+    "http://localhost:3000",
+    "http://localhost:3001",
+    os.getenv('FRONTEND_URL', '*')  # Railway production URL
+]
+# Remove any None or empty strings
+allowed_origins = [origin for origin in allowed_origins if origin]
+CORS(app, supports_credentials=True, origins=allowed_origins if allowed_origins else '*')
 
 # Initialize LLM classifier (this will load the vector store)
 print("🧠 Initializing LLM In-Context Classifier...")
@@ -52,6 +47,13 @@ except Exception as e:
     print(f"⚠️  LLM classifier failed to initialize: {e}")
     print("🔄 Web app will run with RandomForest only")
     llm_available = False
+
+@app.before_request
+def ensure_session_id():
+    """Ensure every user has a unique session ID stored in their cookie."""
+    if 'session_id' not in session:
+        session['session_id'] = str(uuid.uuid4())
+        print(f"New session created with ID: {session['session_id']}")
 
 def cleanup_old_sessions(max_sessions=20):
     user_dir = 'data/user_sessions'
@@ -88,8 +90,9 @@ def home():
 @app.route('/api/session/start', methods=['POST'])
 def start_session():
     """generates new session token and returns to the frontend"""
-    session_token = str(uuid.uuid4())
-    SESSIONS[session_token] = {} # Initialize an empty session data dictionary
+    # Session is already managed by Flask's session mechanism via ensure_session_id
+    session_token = session.get('session_id', str(uuid.uuid4()))
+    session['session_id'] = session_token
     print(f"New session started: {session_token}")
     return jsonify({'session_token': session_token})
 
@@ -349,9 +352,9 @@ def get_task_status(task_id):
     return jsonify(response_data)
 
 
-@app.route('/health')
+@app.route('/health', methods=['GET'])
 def health():
-    """Health check endpoint"""
+    """Health check endpoint for Railway deployment"""
     return jsonify({
         'status': 'healthy',
         'randomforest_available': True,

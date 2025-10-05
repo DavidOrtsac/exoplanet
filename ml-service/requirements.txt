@@ -7,3 +7,5 @@ celery
 redis
 Flask-Cors
 gunicorn
+openai
+tqdm
