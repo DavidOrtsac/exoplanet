@@ -690,6 +690,21 @@ export default function Home() {
           <strong>AI</strong>
         </div>
 
+        <img
+          src="/images/spaceapps_logo.jpeg"
+          alt="NASA Logo"
+          style={{
+            position: "fixed",
+            top: "1.5rem",
+            right: "2rem",
+            width: "200px",
+            height: "auto",
+            zIndex: 20,
+            opacity: 0.92,
+            pointerEvents: "none",
+            userSelect: "none",
+          }}
+        />
         <div className="stars">{generateStars()}</div>
         <ThreeJSEarth
           ref={earthRef}
