@@ -379,6 +379,25 @@ def get_task_status(task_id):
     return jsonify(response_data)
 
 
+# Each /predict loads the ~216 MB vector store pickle. Once the request is done those
+# objects are garbage, but glibc keeps the freed pages, so RSS (what Railway bills)
+# stays ~270 MB higher until the worker restarts. Hand the pages back after heavy routes.
+_HEAVY_PATHS = ('/predict', '/data/split_dataset', '/data/upload_user_data')
+try:
+    import ctypes
+    _malloc_trim = ctypes.CDLL('libc.so.6').malloc_trim
+except (OSError, AttributeError):
+    _malloc_trim = None  # not glibc (e.g. macOS dev), nothing to trim
+
+
+@app.teardown_request
+def release_memory_after_heavy_requests(_exc):
+    if _malloc_trim and request.path in _HEAVY_PATHS:
+        import gc
+        gc.collect()
+        _malloc_trim(0)
+
+
 @app.route('/health', methods=['GET'])
 def health():
     """Health check endpoint for Railway deployment"""
