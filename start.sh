@@ -66,4 +66,5 @@ done
 # Start Next.js frontend
 echo "🌐 Starting Next.js frontend on port ${PORT}..."
 trap "kill $FLASK_PID" EXIT
-npm run start
+# Run node directly: `npm run start` keeps an idle ~50 MB npm process alive as a wrapper
+HOSTNAME=0.0.0.0 PORT="${PORT:-3000}" node .next/standalone/server.js
