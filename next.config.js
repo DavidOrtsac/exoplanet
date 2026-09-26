@@ -1,6 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  // Single-process server (.next/standalone/server.js) instead of `next start`
+  output: 'standalone',
 
   async rewrites() {
     return [

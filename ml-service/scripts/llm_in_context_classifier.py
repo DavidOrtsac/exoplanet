@@ -24,6 +24,24 @@ CLASSIFIER_MODEL = "gpt-4o-mini"
 DEFAULT_VECTOR_STORE_PATH = os.path.join(_ML_SERVICE_DIR, "data/default_vector_store.pkl")
 BASE_DATASET_PATH = os.path.join(_ML_SERVICE_DIR, 'data/dataset.csv')
 
+def drop_file_cache(path):
+    """Tell the kernel it may evict a file's cached pages.
+
+    Railway bills container memory including the page cache, so every 216 MB vector
+    store read (and the download at boot) would otherwise stay billed as memory.
+    """
+    if not hasattr(os, 'posix_fadvise') or not os.path.exists(path):
+        return
+    fd = os.open(path, os.O_RDONLY)
+    try:
+        os.fsync(fd)  # pages must be clean to be dropped
+        os.posix_fadvise(fd, 0, 0, os.POSIX_FADV_DONTNEED)
+    except OSError as e:
+        print(f"WARNING: could not drop page cache for {path}: {e}")
+    finally:
+        os.close(fd)
+
+
 class LLMInContextClassifier:
     """
     A classifier that can create and use on-demand, session-specific vector stores.
@@ -133,7 +151,8 @@ class LLMInContextClassifier:
                 
                 # Normal pickle load
                 data = pickle.load(f)
-                return data['vector_store_index'], data['original_data']
+            drop_file_cache(pkl_path)
+            return data['vector_store_index'], data['original_data']
                 
         except Exception as e:
             print(f"ERROR loading vector store from {pkl_path}: {e}")

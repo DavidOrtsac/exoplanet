@@ -31,7 +31,14 @@ fi
 # Start Flask backend with Gunicorn
 echo "🚀 Starting Flask ML service with Gunicorn on port 5001..."
 cd ml-service
-gunicorn --bind 0.0.0.0:5001 --workers 2 --timeout 300 --log-level info --access-logfile '-' --error-logfile '-' --pythonpath . app:app &
+# One worker: each extra worker duplicates the whole pandas/sklearn/openai stack in RAM,
+# and every worker must share SECRET_KEY or session cookies fail across them.
+# Cap glibc arenas: each gunicorn thread would otherwise get its own and hold freed memory
+export MALLOC_ARENA_MAX=2
+# numpy/sklearn math libs start one thread per visible vCPU (8 on Railway), each holding a
+# large scratch buffer for the life of the process; one kNN lookup per request needs one thread
+export OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1
+gunicorn --bind 0.0.0.0:5001 --workers 1 --threads 4 --max-requests 200 --max-requests-jitter 50 --timeout 300 --log-level info --access-logfile '-' --error-logfile '-' --pythonpath . app:app &
 FLASK_PID=$!
 echo "Flask PID: $FLASK_PID"
 cd ..
@@ -59,4 +66,5 @@ done
 # Start Next.js frontend
 echo "🌐 Starting Next.js frontend on port ${PORT}..."
 trap "kill $FLASK_PID" EXIT
-npm run start
+# Run node directly: `npm run start` keeps an idle ~50 MB npm process alive as a wrapper
+HOSTNAME=0.0.0.0 PORT="${PORT:-3000}" node .next/standalone/server.js

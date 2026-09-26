@@ -16,7 +16,7 @@ from celery_worker import create_vector_store_task, celery_app
 load_dotenv()
 sys.path.append('scripts')
 from feature_engineering import add_engineered_features, RAW_FEATURES
-from llm_in_context_classifier import LLMInContextClassifier
+from llm_in_context_classifier import LLMInContextClassifier, drop_file_cache, DEFAULT_VECTOR_STORE_PATH
 from select_data import SelectData
 
 app = Flask(__name__)
@@ -40,6 +40,7 @@ print("🧠 Initializing LLM In-Context Classifier...")
 try:
     llm_in_context_classifier = LLMInContextClassifier()
     llm_in_context_classifier.ensure_default_vector_store()
+    drop_file_cache(DEFAULT_VECTOR_STORE_PATH)  # evict the copy start.sh just downloaded
     selector = SelectData()
     llm_available = True
     print("✅ LLM classifier ready")
