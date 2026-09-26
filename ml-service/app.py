@@ -398,28 +398,6 @@ def release_memory_after_heavy_requests(_exc):
         _malloc_trim(0)
 
 
-@app.route('/debug/mem', methods=['GET'])  # TEMP diagnostic, test branch only
-def debug_mem():
-    import gc, glob as _g
-    procs = []
-    for st in _g.glob('/proc/[0-9]*/status'):
-        try:
-            txt = open(st).read()
-            name = [l.split()[1] for l in txt.splitlines() if l.startswith('Name:')][0]
-            rss = [int(l.split()[1]) for l in txt.splitlines() if l.startswith('VmRSS:')]
-            cmd = open(st.replace('status', 'cmdline')).read().replace('\0', ' ')[:80]
-            if rss:
-                procs.append({'pid': st.split('/')[2], 'name': name, 'rss_mb': rss[0] // 1024, 'cmd': cmd})
-        except Exception:
-            pass
-    big = []
-    for o in gc.get_objects():
-        if type(o).__name__ == 'ndarray' and getattr(o, 'nbytes', 0) > 5_000_000:
-            big.append(o.nbytes // 1_000_000)
-    return jsonify({'procs': sorted(procs, key=lambda p: -p['rss_mb']), 'big_arrays_mb': big,
-                    'gc_objects': len(gc.get_objects())})
-
-
 @app.route('/health', methods=['GET'])
 def health():
     """Health check endpoint for Railway deployment"""
