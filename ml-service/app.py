@@ -416,7 +416,17 @@ def debug_mem():
     for o in gc.get_objects():
         if type(o).__name__ == 'ndarray' and getattr(o, 'nbytes', 0) > 5_000_000:
             big.append(o.nbytes // 1_000_000)
-    return jsonify({'procs': sorted(procs, key=lambda p: -p['rss_mb']), 'big_arrays_mb': big,
+    cg = {}
+    for f in ('/sys/fs/cgroup/memory.stat', '/sys/fs/cgroup/memory/memory.stat'):
+        try:
+            for l in open(f):
+                k, v = l.split()
+                if k in ('anon', 'file', 'active_file', 'inactive_file', 'shmem', 'rss', 'cache'):
+                    cg[k] = int(v) // 1_000_000
+            break
+        except Exception:
+            pass
+    return jsonify({'cgroup_mb': cg, 'procs': sorted(procs, key=lambda p: -p['rss_mb']), 'big_arrays_mb': big,
                     'gc_objects': len(gc.get_objects())})
 
 
