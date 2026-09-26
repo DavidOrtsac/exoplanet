@@ -31,7 +31,9 @@ fi
 # Start Flask backend with Gunicorn
 echo "🚀 Starting Flask ML service with Gunicorn on port 5001..."
 cd ml-service
-gunicorn --bind 0.0.0.0:5001 --workers 2 --timeout 300 --log-level info --access-logfile '-' --error-logfile '-' --pythonpath . app:app &
+# One worker: each extra worker duplicates the whole pandas/sklearn/openai stack in RAM,
+# and every worker must share SECRET_KEY or session cookies fail across them.
+gunicorn --bind 0.0.0.0:5001 --workers 1 --threads 4 --max-requests 200 --max-requests-jitter 50 --timeout 300 --log-level info --access-logfile '-' --error-logfile '-' --pythonpath . app:app &
 FLASK_PID=$!
 echo "Flask PID: $FLASK_PID"
 cd ..
